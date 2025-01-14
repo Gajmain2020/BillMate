@@ -18,7 +18,7 @@ export default function CustomTextInput({ label, name, ...props }: CustomTextInp
       <TextInput
         {...props}
         className={`rounded border border-gray-200 p-4 ${props.className}`}
-        value={value}
+        value={value?.toString()}
         onChangeText={onChange}
         onBlur={onBlur}
       />

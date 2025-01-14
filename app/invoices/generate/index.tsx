@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { router } from 'expo-router';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { z } from 'zod';
 
 import { Button } from '~/components/Button';
@@ -31,7 +31,7 @@ export default function GenerateInvoice() {
   };
 
   return (
-    <SafeAreaView edges={['bottom']} className="flex-1 p-4">
+    <KeyboardAwareScrollView className="p-4">
       <FormProvider {...form}>
         <Text className="mb-5 text-2xl font-bold">Sender Info</Text>
 
@@ -48,6 +48,6 @@ export default function GenerateInvoice() {
 
         <Button title="Next" className="mt-auto" onPress={form.handleSubmit(onSubmit)} />
       </FormProvider>
-    </SafeAreaView>
+    </KeyboardAwareScrollView>
   );
 }
