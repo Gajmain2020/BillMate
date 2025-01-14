@@ -40,7 +40,7 @@ export default function GenerateInvoice() {
   });
 
   const onSubmit = (data: any) => {
-    router.push('/invoices/generate/recipient');
+    router.push('/invoices/generate/summary');
   };
 
   return (
