@@ -1,12 +1,22 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { z } from 'zod';
 
 import { Button } from '~/components/Button';
 import CustomTextInput from '~/components/CustomTextInput';
 
+const senderInfoSchema = z.object({
+  name: z.string({ required_error: 'Name is required.' }).min(1, 'Name is required'),
+  address: z.string({ required_error: 'Address is required.' }).min(1, 'Address is required'),
+  texId: z.string().optional(),
+});
+
+type SenderInfoType = z.infer<typeof senderInfoSchema>;
+
 export default function GenerateInvoice() {
-  const form = useForm();
+  const form = useForm<SenderInfoType>({ resolver: zodResolver(senderInfoSchema) });
 
   const onSubmit = (data: any) => {
     console.warn('all good go to next step');
