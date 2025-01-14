@@ -1,5 +1,4 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { router } from 'expo-router';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -20,20 +19,20 @@ export default function GenerateInvoice() {
   const form = useForm<SenderInfoType>({
     resolver: zodResolver(senderInfoSchema),
     defaultValues: {
-      name: 'Gajju',
-      address: 'DURG',
-      gst: 'hello',
+      name: 'Gajju rec',
+      address: 'DURG rex',
+      gst: 'hello rec',
     },
   });
 
   const onSubmit = (data: any) => {
-    router.push('/invoices/generate/recipient');
+    console.warn('all good go to next step');
   };
 
   return (
     <SafeAreaView edges={['bottom']} className="flex-1 p-4">
       <FormProvider {...form}>
-        <Text className="mb-5 text-2xl font-bold">Sender Info</Text>
+        <Text className="mb-5 text-2xl font-bold">Recipient Info</Text>
 
         <View className="gap-2">
           <CustomTextInput name="name" label="Name" placeholder="Enter your name" />
