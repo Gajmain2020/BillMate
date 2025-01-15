@@ -21,14 +21,12 @@ export default function Summary() {
           <View className="mt-2 flex-row justify-between">
             <View>
               <Text className="text-sm text-gray-500">Date</Text>
-              <Text className="text-sm text-gray-500">
-                {new Date(invoice?.date || '').toLocaleDateString()}
-              </Text>
+              <Text className="text-sm text-gray-500">{invoice?.date?.toLocaleDateString()}</Text>
             </View>
             <View>
               <Text className="text-sm text-gray-500">Due Date</Text>
               <Text className="text-sm text-gray-500">
-                {new Date(invoice?.dueDate || '').toLocaleDateString()}
+                {invoice?.dueDate?.toLocaleDateString() || ''}
               </Text>
             </View>
           </View>

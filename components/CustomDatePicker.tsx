@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useController } from 'react-hook-form';
-import { Text, TextInput, View } from 'react-native';
+import { Text, View } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 type CustomDatePickerProps = {

@@ -128,8 +128,8 @@ const generateHTML = (invoice: Invoice, subtotal: number, gst: number, total: nu
             <div class="invoice-info">
               <h1>Invoice</h1>
               <p>Invoice #: ${invoice.invoiceNumber}</p>
-              <p>Date: ${new Date(invoice.date).toLocaleDateString()}</p>
-              <p>Due Date: ${new Date(invoice.dueDate).toLocaleDateString()}</p>
+              <p>Date: ${invoice.date.toLocaleDateString()}</p>
+              ${invoice.dueDate && `<p>Due Date: ${invoice?.dueDate?.toLocaleDateString()}</p>`}
             </div>
             <!--
              <div class="company-info">

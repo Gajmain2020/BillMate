@@ -2,10 +2,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { router } from 'expo-router';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Keyboard, Text, View } from 'react-native';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 import { Button } from '~/components/Button';
-import CustomDatePicker from '~/components/CustomDatePicker';
 import CustomTextInput from '~/components/CustomTextInput';
 import KeyboardAwareScrollView from '~/components/KeyboardAwareScrollView';
 import { businessEntitySchema, BusinessEntityType } from '~/schema/invoice';
