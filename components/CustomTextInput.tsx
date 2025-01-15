@@ -1,4 +1,4 @@
-import { Control, useController } from 'react-hook-form';
+import { useController } from 'react-hook-form';
 import { Text, TextInput, TextInputProps, View } from 'react-native';
 
 type CustomTextInputProps = {

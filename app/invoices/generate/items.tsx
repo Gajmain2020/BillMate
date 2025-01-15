@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { router } from 'expo-router';
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form';
-import { Text, View } from 'react-native';
+import { Keyboard, Text, View } from 'react-native';
 import { z } from 'zod';
 
 import { Button } from '~/components/Button';
@@ -33,6 +33,7 @@ export default function GenerateInvoice() {
   });
 
   const onSubmit = (data: any) => {
+    Keyboard.dismiss();
     addItems(data.items);
     router.push('/invoices/generate/summary');
   };

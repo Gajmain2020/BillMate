@@ -23,8 +23,8 @@ export const useStore = create<InvoiceState>((set, get) => ({
     set(() => ({
       newInvoice: {
         items: [{ name: 'Example', quantity: 1, price: 20 }],
-        date: new Date().toLocaleDateString(),
-        dueDate: new Date(new Date().setDate(new Date().getDate() + 14)).toLocaleDateString(),
+        date: new Date(),
+        // dueDate: new Date(new Date().setDate(new Date().getDate() + 14)).toLocaleDateString(),
       },
     })),
   resetNewInvoice: () => set(() => ({ newInvoice: null })),

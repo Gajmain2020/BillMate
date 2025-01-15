@@ -1,9 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { router } from 'expo-router';
 import { FormProvider, useForm } from 'react-hook-form';
-import { Text, View } from 'react-native';
+import { Keyboard, Text, View } from 'react-native';
 
 import { Button } from '~/components/Button';
+import CustomDatePicker from '~/components/CustomDatePicker';
 import CustomTextInput from '~/components/CustomTextInput';
 import KeyboardAwareScrollView from '~/components/KeyboardAwareScrollView';
 import { invoiceInfoSchema, InvoiceInfoType } from '~/schema/invoice';
@@ -23,6 +24,7 @@ export default function GenerateInvoice() {
   });
 
   const onSubmit = (data: any) => {
+    Keyboard.dismiss();
     addInvoiceInfo(data);
     router.push('/invoices/generate/items');
   };
@@ -38,12 +40,8 @@ export default function GenerateInvoice() {
             label="Invoice Number"
             placeholder="Enter invoice number"
           />
-          <CustomTextInput name="date" label="Date" placeholder="Enter date of invoice" multiline />
-          <CustomTextInput
-            name="dueDate"
-            label="Due Date"
-            placeholder="Enter due date of invoice"
-          />
+          <CustomDatePicker name="date" label="Date" />
+          <CustomDatePicker name="dueDate" label="Due Date" />
         </View>
 
         <Button title="Next" className="mt-auto" onPress={form.handleSubmit(onSubmit)} />
