@@ -11,13 +11,14 @@ import { useStore } from '~/store';
 
 export default function GenerateInvoice() {
   const addInvoiceInfo = useStore((data) => data.addInvoiceInfo);
+  const invoice = useStore((data) => data.newInvoice);
 
   const form = useForm<InvoiceInfoType>({
     resolver: zodResolver(invoiceInfoSchema),
     defaultValues: {
-      invoiceNumber: '1234',
-      date: new Date().toISOString(),
-      dueDate: new Date(new Date().setDate(new Date().getDate() + 14)).toISOString(),
+      invoiceNumber: invoice.invoiceNumber,
+      date: invoice.date,
+      dueDate: invoice.dueDate,
     },
   });
 

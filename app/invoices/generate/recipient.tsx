@@ -11,13 +11,14 @@ import { useStore } from '~/store';
 
 export default function GenerateInvoice() {
   const addRecipientInfo = useStore((data) => data.addRecipientInfo);
+  const recipient = useStore((data) => data.newInvoice.recipient);
 
   const form = useForm<BusinessEntityType>({
     resolver: zodResolver(businessEntitySchema),
     defaultValues: {
-      name: 'Gajju rec',
-      address: 'DURG rex',
-      gst: 'hello rec',
+      name: recipient?.name,
+      address: recipient?.address,
+      gst: recipient?.gst,
     },
   });
 

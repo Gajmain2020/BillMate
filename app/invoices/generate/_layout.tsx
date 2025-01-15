@@ -1,6 +1,23 @@
 import { Stack } from 'expo-router';
+import { useEffect } from 'react';
+import { ActivityIndicator } from 'react-native';
+
+import { useStore } from '~/store';
 
 export default function GenerateInvoiceLayout() {
+  const startNewInvoice = useStore((data) => data.startNewInvoice);
+  const newInvoice = useStore((data) => data.newInvoice);
+
+  useEffect(() => {
+    if (!newInvoice) {
+      startNewInvoice();
+    }
+  }, []);
+
+  if (!newInvoice) {
+    return <ActivityIndicator />;
+  }
+
   return (
     <Stack>
       <Stack.Screen name="index" options={{ title: 'Sender Information' }} />
