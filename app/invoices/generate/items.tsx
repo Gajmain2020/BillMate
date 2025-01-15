@@ -18,7 +18,7 @@ export type ItemsType = z.infer<typeof itemsSchema>;
 
 export default function GenerateInvoice() {
   const addItems = useStore((data) => data.addItems);
-  const items = useStore((data) => data.newInvoice.items);
+  const items = useStore((data) => data.newInvoice?.items);
 
   const form = useForm<ItemsType>({
     resolver: zodResolver(itemsSchema),

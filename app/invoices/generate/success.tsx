@@ -15,7 +15,7 @@ export default function Success() {
   const getSubtotal = useStore((data) => data.getSubtotal());
   const getGst = useStore((data) => data.getGst());
   const getTotal = useStore((data) => data.getTotal());
-  const resetInvoice = useStore((data) => data.resetNewInvoice);
+  const resetNewInvoice = useStore((data) => data.resetNewInvoice);
 
   const [isLoading, setIsLoading] = useState(true);
   const [pdfUri, setPdfUri] = useState<string | null>(null);
@@ -92,7 +92,7 @@ export default function Success() {
           title="Go To Home"
           variant="secondary"
           onPress={() => {
-            resetInvoice();
+            resetNewInvoice();
             router.replace('/');
           }}
         />

@@ -1,18 +1,26 @@
-import { PropsWithChildren } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, StatusBar } from 'react-native';
+import React, { PropsWithChildren } from 'react';
+import { KeyboardAvoidingView, Platform, ScrollView, StatusBar, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-export default function KeyboardAwareScrollView({ children }: PropsWithChildren) {
+type KeyboardAwareScrollViewProps = PropsWithChildren<{
+  keyboardVerticalOffset?: number;
+  behavior?: 'padding' | 'height' | 'position';
+  contentContainerStyle?: object;
+}>;
+
+export default function KeyboardAwareScrollView({
+  children,
+  keyboardVerticalOffset = 97,
+  behavior = Platform.OS === 'ios' ? 'padding' : 'height',
+  contentContainerStyle,
+}: KeyboardAwareScrollViewProps) {
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
-      <StatusBar
-        barStyle="dark-content" // Adjust to 'light-content' for light text
-        backgroundColor="white" // Match your app's background color
-      />
+    <SafeAreaView style={styles.safeArea}>
+      <StatusBar barStyle="dark-content" backgroundColor="white" />
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={{ flex: 1 }}
-        keyboardVerticalOffset={97}>
+        behavior={behavior}
+        style={styles.avoidingView}
+        keyboardVerticalOffset={keyboardVerticalOffset}>
         <ScrollView
           contentContainerStyle={{
             flexGrow: 1,
@@ -26,3 +34,19 @@ export default function KeyboardAwareScrollView({ children }: PropsWithChildren)
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: 'white',
+  },
+  avoidingView: {
+    flex: 1,
+  },
+  scrollViewContent: {
+    flexGrow: 1,
+    padding: 10,
+    gap: 5,
+    backgroundColor: 'white',
+  },
+});

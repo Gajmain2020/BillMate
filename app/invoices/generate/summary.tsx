@@ -16,26 +16,26 @@ export default function Summary() {
       <View className="gap-2 shadow">
         {/* INVOICE DETAILS */}
         <View className="mb-3">
-          <Text className="text-4xl font-bold ">#{invoice.invoiceNumber}</Text>
+          <Text className="text-4xl font-bold ">#{invoice?.invoiceNumber}</Text>
 
           <View className="mt-2 flex-row justify-between">
             <View>
               <Text className="text-sm text-gray-500">Date</Text>
               <Text className="text-sm text-gray-500">
-                {new Date(invoice.date || '').toLocaleDateString()}
+                {new Date(invoice?.date || '').toLocaleDateString()}
               </Text>
             </View>
             <View>
               <Text className="text-sm text-gray-500">Due Date</Text>
               <Text className="text-sm text-gray-500">
-                {new Date(invoice.dueDate || '').toLocaleDateString()}
+                {new Date(invoice?.dueDate || '').toLocaleDateString()}
               </Text>
             </View>
           </View>
         </View>
 
         {/* SENDER CARD */}
-        {invoice.sender && (
+        {invoice?.sender && (
           <View>
             <Text className="mb-1 text-lg font-semibold color-slate-500">Sender</Text>
 
@@ -48,7 +48,7 @@ export default function Summary() {
         )}
 
         {/* RECIPIENT CARD */}
-        {invoice.recipient && (
+        {invoice?.recipient && (
           <View>
             <Text className="mb-1 text-lg font-semibold color-slate-500">Recipient</Text>
 
@@ -73,7 +73,7 @@ export default function Summary() {
             </View>
 
             {/* SAMPLE ITEMS */}
-            {invoice.items?.map((item) => (
+            {invoice?.items?.map((item) => (
               <View key={item.name} className="flex-row justify-between">
                 <Text className="flex-1 ">{item.name}</Text>
                 <Text className="w-20 text-right ">{item.quantity}</Text>

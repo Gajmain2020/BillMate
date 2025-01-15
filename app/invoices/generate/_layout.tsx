@@ -15,7 +15,7 @@ export default function GenerateInvoiceLayout() {
   }, []);
 
   if (!newInvoice) {
-    return <ActivityIndicator />;
+    return null;
   }
 
   return (

@@ -16,9 +16,9 @@ export default function GenerateInvoice() {
   const form = useForm<InvoiceInfoType>({
     resolver: zodResolver(invoiceInfoSchema),
     defaultValues: {
-      invoiceNumber: invoice.invoiceNumber,
-      date: invoice.date,
-      dueDate: invoice.dueDate,
+      invoiceNumber: invoice?.invoiceNumber,
+      date: invoice?.date,
+      dueDate: invoice?.dueDate,
     },
   });
 

@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { router } from 'expo-router';
 import { FormProvider, useForm } from 'react-hook-form';
-import { Text, View } from 'react-native';
+import { Keyboard, Text, View } from 'react-native';
 
 import { Button } from '~/components/Button';
 import CustomTextInput from '~/components/CustomTextInput';
@@ -11,7 +11,7 @@ import { useStore } from '~/store';
 
 export default function GenerateInvoice() {
   const addSenderInfo = useStore((data) => data.addSenderInfo);
-  const sender = useStore((data) => data.newInvoice.sender);
+  const sender = useStore((data) => data.newInvoice?.sender);
 
   const form = useForm<BusinessEntityType>({
     resolver: zodResolver(businessEntitySchema),
@@ -23,6 +23,7 @@ export default function GenerateInvoice() {
   });
 
   const onSubmit = (data: any) => {
+    Keyboard.dismiss();
     addSenderInfo(data);
     router.push('/invoices/generate/recipient');
   };
