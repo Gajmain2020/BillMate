@@ -5,16 +5,16 @@ type ButtonVariant = 'primary' | 'secondary' | 'link';
 
 const styles = {
   primary: {
-    button: 'items-center bg-indigo-500 rounded-[28px] shadow-md p-4',
+    button: 'items-center bg-emerald-500 rounded-[28px] shadow-md p-4',
     text: 'text-white text-lg font-semibold text-center',
   },
   secondary: {
-    button: 'items-center border-2 border-indigo-500 rounded-[28px] shadow-md p-4',
-    text: 'text-indigo-500 text-lg font-semibold text-center',
+    button: 'items-center border-2 border-emerald-500 rounded-[28px] shadow-md p-4',
+    text: 'text-emerald-500 text-lg font-semibold text-center',
   },
   link: {
     button: 'items-center p-4',
-    text: 'text-indigo-500 text-lg font-bold text-center',
+    text: 'text-emerald-500 text-lg font-bold text-center',
   },
 };
 type ButtonProps = {

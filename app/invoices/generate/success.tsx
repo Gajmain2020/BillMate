@@ -90,7 +90,7 @@ export default function Success() {
         />
         <Button
           title="Go To Home"
-          variant="secondary"
+          variant="link"
           onPress={() => {
             resetNewInvoice();
             router.replace('/');
