@@ -15,9 +15,10 @@ export default function Summary() {
       <View className="gap-2 shadow">
         {/* SENDER CARD */}
         {invoice.sender && (
-          <View className="rounded bg-gray-50 p-4">
-            <Text className="mb-2 text-lg font-semibold shadow">Sender Info</Text>
-            <View className="gap-1">
+          <View>
+            <Text className="mb-1 text-lg font-semibold color-slate-500">Sender Info</Text>
+
+            <View className="rounded bg-gray-50 px-4 py-2 shadow">
               <Text>{invoice.sender.name}</Text>
               <Text>{invoice.sender.address}</Text>
               <Text>{invoice.sender.gst}</Text>
@@ -27,9 +28,10 @@ export default function Summary() {
 
         {/* RECIPIENT CARD */}
         {invoice.recipient && (
-          <View className="rounded bg-gray-50 p-4 shadow">
-            <Text className="mb-2 text-lg font-semibold">Recipient Info</Text>
-            <View className="gap-1">
+          <View>
+            <Text className="mb-1 text-lg font-semibold color-slate-500">Recipient Info</Text>
+
+            <View className="rounded bg-gray-50 px-4 py-2 shadow">
               <Text>{invoice.recipient.name}</Text>
               <Text>{invoice.recipient.address}</Text>
               <Text>{invoice.recipient.gst}</Text>
@@ -38,9 +40,11 @@ export default function Summary() {
         )}
 
         {/* INVOICE DETAILS */}
-        <View className="rounded bg-gray-50 p-4 shadow">
-          <Text className="mb-2 text-lg font-semibold">Invoice Info</Text>
-          <View className="gap-1">
+
+        <View>
+          <Text className="mb-1 text-lg font-semibold color-slate-500">Invoice Info</Text>
+
+          <View className="rounded bg-gray-50 px-4 py-2 shadow">
             <Text>Invoice #: {invoice.invoiceNumber}</Text>
             <Text>date: {invoice.date}</Text>
             <Text>Due Date: {invoice.dueDate}</Text>
@@ -48,11 +52,11 @@ export default function Summary() {
         </View>
 
         {/* ITEMS CARD */}
-        <View className="rounded bg-gray-50 p-4 shadow">
-          <Text className="mb-2 text-lg font-semibold">Items</Text>
-          <View className="gap-1">
+        <View>
+          <Text className="mb-1 text-lg font-semibold color-slate-500">Items</Text>
+          <View className="rounded bg-gray-50 px-4 py-2 shadow">
             {/* Header */}
-            <View className="flex-row justify-between">
+            <View className="mb-1 flex-row justify-between border-b border-gray-300">
               <Text className="flex-1 font-medium">Item</Text>
               <Text className="w-20 text-right font-medium">Qty</Text>
               <Text className="w-20 text-right font-medium">Price</Text>
@@ -74,9 +78,10 @@ export default function Summary() {
         </View>
 
         {/* TOTALS CARD */}
-        <View className="rounded bg-gray-50 p-4 shadow">
-          <Text className="mb-2 text-lg font-semibold">Totals</Text>
-          <View className="gap-1">
+
+        <View>
+          <Text className="mb-1 text-lg font-semibold color-slate-500">Totals</Text>
+          <View className="rounded bg-gray-50 p-4 shadow">
             <View className="flex-row justify-between">
               <Text>Subtotal</Text>
               <Text className="font-semibold">₹ {getSubtotal}</Text>
