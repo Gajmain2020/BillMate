@@ -1,6 +1,5 @@
 import * as FileSystem from 'expo-file-system';
 import { printToFileAsync } from 'expo-print';
-import { shareAsync } from 'expo-sharing';
 
 import { Invoice } from '~/schema/invoice';
 
@@ -230,10 +229,7 @@ export const generateInvoicePdf = async (
       to: permanentUri,
     });
 
-    console.log('file moved to', permanentUri);
-
-    console.log('File has been saved to:', permanentUri);
-    await shareAsync(permanentUri, { UTI: '.pdf', mimeType: 'application/pdf' });
+    return permanentUri;
   } catch (error) {
     console.log('Failed to generate pdf', error);
   }

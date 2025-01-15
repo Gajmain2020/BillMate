@@ -1,20 +1,15 @@
+import { Link } from 'expo-router';
 import { Text, View } from 'react-native';
 
 import { Button } from '~/components/Button';
 import KeyboardAwareScrollView from '~/components/KeyboardAwareScrollView';
-import { Invoice } from '~/schema/invoice';
 import { useStore } from '~/store';
-import { generateInvoicePdf } from '~/utils/pdf';
 
 export default function Summary() {
   const invoice = useStore((data) => data.newInvoice);
   const getSubtotal = useStore((data) => data.getSubtotal());
   const getGst = useStore((data) => data.getGst());
   const getTotal = useStore((data) => data.getTotal());
-
-  const handleGeneratePdf = () => {
-    generateInvoicePdf(invoice as Invoice, getSubtotal, getGst, getTotal);
-  };
 
   return (
     <KeyboardAwareScrollView>
@@ -115,7 +110,9 @@ export default function Summary() {
 
         {/* GENERATE INVOICE BUTTON */}
       </View>
-      <Button title="Generate Invoice" className="mt-auto" onPress={handleGeneratePdf} />
+      <Link href="/invoices/generate/success" asChild>
+        <Button title="Generate Invoice" className="mt-auto" />
+      </Link>
     </KeyboardAwareScrollView>
   );
 }
