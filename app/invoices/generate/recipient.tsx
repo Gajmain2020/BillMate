@@ -2,10 +2,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { router } from 'expo-router';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Text, View } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import { Button } from '~/components/Button';
 import CustomTextInput from '~/components/CustomTextInput';
+import KeyboardAwareScrollView from '~/components/KeyboardAwareScrollView';
 import { businessEntitySchema, BusinessEntityType } from '~/schema/invoice';
 import { useStore } from '~/store';
 
@@ -27,7 +27,7 @@ export default function GenerateInvoice() {
   };
 
   return (
-    <KeyboardAwareScrollView className="p-4">
+    <KeyboardAwareScrollView>
       <FormProvider {...form}>
         <Text className="mb-5 text-2xl font-bold">Recipient Info</Text>
 

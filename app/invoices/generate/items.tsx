@@ -2,11 +2,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { router } from 'expo-router';
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form';
 import { Text, View } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { z } from 'zod';
 
 import { Button } from '~/components/Button';
 import CustomTextInput from '~/components/CustomTextInput';
+import KeyboardAwareScrollView from '~/components/KeyboardAwareScrollView';
 import { invoiceItemSchema } from '~/schema/invoice';
 import { useStore } from '~/store';
 
@@ -43,7 +43,7 @@ export default function GenerateInvoice() {
   };
 
   return (
-    <KeyboardAwareScrollView className="p-4">
+    <KeyboardAwareScrollView>
       <FormProvider {...form}>
         <View className="gap-3 ">
           {fields.map((_, index) => (

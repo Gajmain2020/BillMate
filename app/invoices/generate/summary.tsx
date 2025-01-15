@@ -1,7 +1,7 @@
 import { Text, View } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import { Button } from '~/components/Button';
+import KeyboardAwareScrollView from '~/components/KeyboardAwareScrollView';
 import { useStore } from '~/store';
 
 export default function Summary() {
@@ -11,12 +11,32 @@ export default function Summary() {
   const getTotal = useStore((data) => data.getTotal());
 
   return (
-    <KeyboardAwareScrollView className="p-4">
+    <KeyboardAwareScrollView>
       <View className="gap-2 shadow">
+        {/* INVOICE DETAILS */}
+        <View className="mb-3">
+          <Text className="text-4xl font-bold ">#{invoice.invoiceNumber}</Text>
+
+          <View className="mt-2 flex-row justify-between">
+            <View>
+              <Text className="text-sm text-gray-500">Date</Text>
+              <Text className="text-sm text-gray-500">
+                {new Date(invoice.date || '').toLocaleDateString()}
+              </Text>
+            </View>
+            <View>
+              <Text className="text-sm text-gray-500">Due Date</Text>
+              <Text className="text-sm text-gray-500">
+                {new Date(invoice.dueDate || '').toLocaleDateString()}
+              </Text>
+            </View>
+          </View>
+        </View>
+
         {/* SENDER CARD */}
         {invoice.sender && (
           <View>
-            <Text className="mb-1 text-lg font-semibold color-slate-500">Sender Info</Text>
+            <Text className="mb-1 text-lg font-semibold color-slate-500">Sender</Text>
 
             <View className="rounded bg-gray-50 px-4 py-2 shadow">
               <Text>{invoice.sender.name}</Text>
@@ -29,7 +49,7 @@ export default function Summary() {
         {/* RECIPIENT CARD */}
         {invoice.recipient && (
           <View>
-            <Text className="mb-1 text-lg font-semibold color-slate-500">Recipient Info</Text>
+            <Text className="mb-1 text-lg font-semibold color-slate-500">Recipient</Text>
 
             <View className="rounded bg-gray-50 px-4 py-2 shadow">
               <Text>{invoice.recipient.name}</Text>
@@ -38,18 +58,6 @@ export default function Summary() {
             </View>
           </View>
         )}
-
-        {/* INVOICE DETAILS */}
-
-        <View>
-          <Text className="mb-1 text-lg font-semibold color-slate-500">Invoice Info</Text>
-
-          <View className="rounded bg-gray-50 px-4 py-2 shadow">
-            <Text>Invoice #: {invoice.invoiceNumber}</Text>
-            <Text>date: {invoice.date}</Text>
-            <Text>Due Date: {invoice.dueDate}</Text>
-          </View>
-        </View>
 
         {/* ITEMS CARD */}
         <View>
@@ -78,10 +86,10 @@ export default function Summary() {
         </View>
 
         {/* TOTALS CARD */}
-
         <View>
           <Text className="mb-1 text-lg font-semibold color-slate-500">Totals</Text>
-          <View className="rounded bg-gray-50 p-4 shadow">
+
+          <View className="rounded bg-gray-50 px-4 py-2 shadow">
             <View className="flex-row justify-between">
               <Text>Subtotal</Text>
               <Text className="font-semibold">₹ {getSubtotal}</Text>
@@ -100,12 +108,8 @@ export default function Summary() {
         </View>
 
         {/* GENRATE INVOICE BUTTON */}
-        <Button
-          title="Generate Invoice"
-          className="mt-auto"
-          onPress={() => console.warn(invoice)}
-        />
       </View>
+      <Button title="Generate Invoice" className="mt-auto" onPress={() => console.warn(invoice)} />
     </KeyboardAwareScrollView>
   );
 }
