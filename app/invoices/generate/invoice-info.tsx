@@ -3,22 +3,15 @@ import { router } from 'expo-router';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { z } from 'zod';
 
 import { Button } from '~/components/Button';
 import CustomTextInput from '~/components/CustomTextInput';
-
-const invoiceInfoSchema = z.object({
-  invoiceNumber: z
-    .string({ required_error: 'Invoice Number is required.' })
-    .min(1, 'Invoice Number is required'),
-  date: z.string({ required_error: 'Date is required.' }).min(1, 'Date is required'),
-  dueDate: z.string({ required_error: 'Due Date is required.' }).min(1, 'Due Date is required'),
-});
-
-type InvoiceInfoType = z.infer<typeof invoiceInfoSchema>;
+import { invoiceInfoSchema, InvoiceInfoType } from '~/schema/invoice';
+import { useStore } from '~/store';
 
 export default function GenerateInvoice() {
+  const addInvoiceInfo = useStore((data) => data.addInvoiceInfo);
+
   const form = useForm<InvoiceInfoType>({
     resolver: zodResolver(invoiceInfoSchema),
     defaultValues: {
@@ -29,6 +22,7 @@ export default function GenerateInvoice() {
   });
 
   const onSubmit = (data: any) => {
+    addInvoiceInfo(data);
     router.push('/invoices/generate/items');
   };
 

@@ -3,22 +3,17 @@ import { router } from 'expo-router';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { z } from 'zod';
 
 import { Button } from '~/components/Button';
 import CustomTextInput from '~/components/CustomTextInput';
-
-const senderInfoSchema = z.object({
-  name: z.string({ required_error: 'Name is required.' }).min(1, 'Name is required'),
-  address: z.string({ required_error: 'Address is required.' }).min(1, 'Address is required'),
-  gst: z.string().optional(),
-});
-
-type SenderInfoType = z.infer<typeof senderInfoSchema>;
+import { businessEntitySchema, BusinessEntityType } from '~/schema/invoice';
+import { useStore } from '~/store';
 
 export default function GenerateInvoice() {
-  const form = useForm<SenderInfoType>({
-    resolver: zodResolver(senderInfoSchema),
+  const addRecipientInfo = useStore((data) => data.addRecipientInfo);
+
+  const form = useForm<BusinessEntityType>({
+    resolver: zodResolver(businessEntitySchema),
     defaultValues: {
       name: 'Gajju rec',
       address: 'DURG rex',
@@ -27,6 +22,7 @@ export default function GenerateInvoice() {
   });
 
   const onSubmit = (data: any) => {
+    addRecipientInfo(data);
     router.push('/invoices/generate/invoice-info');
   };
 

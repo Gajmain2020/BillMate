@@ -7,20 +7,18 @@ import { z } from 'zod';
 
 import { Button } from '~/components/Button';
 import CustomTextInput from '~/components/CustomTextInput';
+import { invoiceItemSchema } from '~/schema/invoice';
+import { useStore } from '~/store';
 
-const invoiceItemSchema = z.object({
-  name: z.string({ required_error: 'Name is required.' }).min(1, 'Name is required.'),
-  quantity: z.number({ required_error: 'Quantity is required.' }).min(1, 'Quantity is required.'),
-  price: z.number({ required_error: 'Price is required.' }).min(1, 'Price is required.'),
+export const itemsSchema = z.object({
+  items: invoiceItemSchema.array(), //TODO: add minimum 1 item
 });
 
-type InvoiceItemType = z.infer<typeof invoiceItemSchema>;
-
-const itemsSchema = z.object({ items: invoiceItemSchema.array() });
-
-type ItemsType = z.infer<typeof itemsSchema>;
+export type ItemsType = z.infer<typeof itemsSchema>;
 
 export default function GenerateInvoice() {
+  const addItems = useStore((data) => data.addItems);
+
   const form = useForm<ItemsType>({
     resolver: zodResolver(itemsSchema),
     defaultValues: {
@@ -40,6 +38,7 @@ export default function GenerateInvoice() {
   });
 
   const onSubmit = (data: any) => {
+    addItems(data.items);
     router.push('/invoices/generate/summary');
   };
 
@@ -63,6 +62,7 @@ export default function GenerateInvoice() {
                     label={`Item ${index + 1} Price`}
                     placeholder="Price"
                     keyboardType="numeric"
+                    isNumeric
                     onChangeText={(value) => {
                       form.setValue(`items.${index}.price`, Number(value));
                     }}
@@ -75,8 +75,9 @@ export default function GenerateInvoice() {
                     label={`Item ${index + 1} Quantity`}
                     placeholder="Quantity"
                     keyboardType="numeric"
+                    isNumeric
                     onChangeText={(value) => {
-                      form.setValue(`items.${index}.price`, Number(value));
+                      form.setValue(`items.${index}.quantity`, Number(value));
                     }}
                   />
                 </View>
