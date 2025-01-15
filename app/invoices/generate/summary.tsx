@@ -2,6 +2,7 @@ import { Text, View } from 'react-native';
 
 import { Button } from '~/components/Button';
 import KeyboardAwareScrollView from '~/components/KeyboardAwareScrollView';
+import { Invoice } from '~/schema/invoice';
 import { useStore } from '~/store';
 import { generateInvoicePdf } from '~/utils/pdf';
 
@@ -12,7 +13,7 @@ export default function Summary() {
   const getTotal = useStore((data) => data.getTotal());
 
   const handleGeneratePdf = () => {
-    generateInvoicePdf();
+    generateInvoicePdf(invoice as Invoice, getSubtotal, getGst, getTotal);
   };
 
   return (
@@ -81,9 +82,9 @@ export default function Summary() {
               <View key={item.name} className="flex-row justify-between">
                 <Text className="flex-1 ">{item.name}</Text>
                 <Text className="w-20 text-right ">{item.quantity}</Text>
-                <Text className="w-20 text-right ">{item.price}</Text>
+                <Text className="w-20 text-right ">{item.price.toFixed(2)}</Text>
                 <Text className="w-24 text-right font-semibold">
-                  ₹ {item.price * item.quantity}
+                  ₹ {(item.price * item.quantity).toFixed()}
                 </Text>
               </View>
             ))}
@@ -97,22 +98,22 @@ export default function Summary() {
           <View className="rounded bg-gray-50 px-4 py-2 shadow">
             <View className="flex-row justify-between">
               <Text>Subtotal</Text>
-              <Text className="font-semibold">₹ {getSubtotal}</Text>
+              <Text className="font-semibold">₹ {getSubtotal.toFixed(2)}</Text>
             </View>
 
             <View className="flex-row justify-between">
               <Text>GST (5%)</Text>
-              <Text className="font-semibold">₹ {getGst}</Text>
+              <Text className="font-semibold">₹ {getGst.toFixed(2)}</Text>
             </View>
 
             <View className="flex-row justify-between border-t border-gray-300">
               <Text>Total</Text>
-              <Text className="font-semibold">₹ {getTotal}</Text>
+              <Text className="font-semibold">₹ {getTotal.toFixed(2)}</Text>
             </View>
           </View>
         </View>
 
-        {/* GENRATE INVOICE BUTTON */}
+        {/* GENERATE INVOICE BUTTON */}
       </View>
       <Button title="Generate Invoice" className="mt-auto" onPress={handleGeneratePdf} />
     </KeyboardAwareScrollView>
