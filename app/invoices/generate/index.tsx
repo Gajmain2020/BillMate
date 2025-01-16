@@ -11,7 +11,7 @@ import { useStore } from '~/store';
 
 export default function GenerateInvoice() {
   const addSenderInfo = useStore((data) => data.addSenderInfo);
-  const sender = useStore((data) => data.newInvoice?.sender);
+  const sender = useStore((data) => data?.newInvoice?.sender);
 
   const form = useForm<BusinessEntityType>({
     resolver: zodResolver(businessEntitySchema),

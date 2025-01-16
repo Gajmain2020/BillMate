@@ -1,4 +1,4 @@
-import { Link } from 'expo-router';
+import { Link, Redirect } from 'expo-router';
 import { Text, View } from 'react-native';
 
 import { Button } from '~/components/Button';
@@ -10,6 +10,8 @@ export default function Summary() {
   const getSubtotal = useStore((data) => data.getSubtotal());
   const getGst = useStore((data) => data.getGst());
   const getTotal = useStore((data) => data.getTotal());
+
+  if (!invoice) return <Redirect href="/" />;
 
   return (
     <KeyboardAwareScrollView>
