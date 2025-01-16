@@ -13,6 +13,7 @@ import {
 import { z } from 'zod';
 
 import { Button } from '~/components/Button';
+import ContextMenu from '~/components/ContextMenu';
 import CustomTextInput from '~/components/CustomTextInput';
 import KeyboardAwareScrollView from '~/components/KeyboardAwareScrollView';
 import { invoiceItemSchema } from '~/schema/invoice';
@@ -29,7 +30,19 @@ export default function GenerateInvoice() {
   const items = useStore((data) => data.newInvoice?.items);
 
   const [visible, setVisible] = useState(false);
+
+  const [menuVisible, setMenuVisible] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+
+  const handleMenuOpen = (index: number) => {
+    setSelectedIndex(index);
+    setMenuVisible(true);
+  };
+
+  const handleMenuClose = () => {
+    setMenuVisible(false);
+    setSelectedIndex(null);
+  };
 
   const form = useForm<ItemsType>({
     resolver: zodResolver(itemsSchema),
@@ -125,7 +138,7 @@ export default function GenerateInvoice() {
                   <View className="flex-row justify-between">
                     <Button
                       title="Cancel"
-                      variant="secondary"
+                      variant="link"
                       className="mr-2 h-10 flex-1 p-1"
                       onPress={() => setVisible(false)}
                     />
