@@ -45,7 +45,8 @@
     "vexo-analytics": "^1.4.5",
     "zeego": "^2.0.4",
     "zod": "^3.24.1",
-    "zustand": "^4.5.1"
+    "zustand": "^4.5.1",
+    "expo-sqlite": "~15.0.6"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
