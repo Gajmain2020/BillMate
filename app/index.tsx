@@ -7,8 +7,14 @@ import { useStore } from '~/store';
 
 export default function Home() {
   const existingNewInvoice = useStore((data) => data.newInvoice);
+  const resetFunction = useStore((data) => data.resetNewInvoice);
 
   const onNewInvoice = () => {
+    router.push('/invoices/generate');
+  };
+
+  const onNewPress = () => {
+    resetFunction();
     router.push('/invoices/generate');
   };
 
@@ -27,10 +33,28 @@ export default function Home() {
             Create and share professional invoices in seconds
           </Text>
         </View>
-        <Button
-          onPress={onNewInvoice}
-          title={existingNewInvoice ? 'Resume Invoicing' : 'New Invoice'}
-        />
+        <View className="gap-5">
+          <Button
+            onPress={onNewInvoice}
+            title={existingNewInvoice ? 'Resume Invoicing' : 'New Invoice'}
+          />
+          {existingNewInvoice && (
+            <View className="items-center justify-center gap-0 ">
+              <Button
+                variant="link"
+                onPress={onNewPress}
+                className="h-8 flex-1 items-center py-0"
+                title="Start New Invoice"
+              />
+              <Button
+                className="h-8 flex-1 items-center py-0"
+                variant="link"
+                onPress={() => resetFunction()}
+                title="Reset"
+              />
+            </View>
+          )}
+        </View>
       </View>
     </KeyboardAwareScrollView>
   );
