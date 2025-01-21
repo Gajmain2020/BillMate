@@ -1,11 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { router } from 'expo-router';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Keyboard, KeyboardAvoidingView, Platform, ScrollView, Text, View } from 'react-native';
 
 import { Button } from '~/components/Button';
 import CustomTextInput from '~/components/CustomTextInput';
-import KeyboardAwareScrollView from '~/components/KeyboardAwareScrollView';
 import { businessEntitySchema, BusinessEntityType } from '~/schema/invoice';
 import { useStore } from '~/store';
 

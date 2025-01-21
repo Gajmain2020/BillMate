@@ -9,8 +9,10 @@ import { Invoice, BusinessEntityType, InvoiceInfoType, InvoiceItemType } from '~
 export type InvoiceState = {
   profile: BusinessEntityType;
   newInvoice: Partial<Invoice> | null;
+  onboardingCompleted: boolean;
 
   setProfile: (profile: BusinessEntityType) => void;
+  setOnboardingCompleted: () => void;
 
   startNewInvoice: () => void;
   resetNewInvoice: () => void;
@@ -32,9 +34,11 @@ export const useStore = create<InvoiceState>()(
         gst: '',
       },
       newInvoice: null,
+      onboardingCompleted: false,
 
       // PROFILE
-      setProfile: (profile) => set(() => ({ profile })),
+      setProfile: (profile) => set(() => ({ profile, onboardingCompleted: false })),
+      setOnboardingCompleted: () => set(() => ({ onboardingCompleted: true })),
 
       // INVOICE
       startNewInvoice: () =>

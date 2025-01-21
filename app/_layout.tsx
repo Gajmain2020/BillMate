@@ -1,5 +1,8 @@
 import { Stack } from 'expo-router';
 import '../global.css';
+import { useEffect, useState } from 'react';
+import { useStore } from '~/store';
+import { ActivityIndicator } from 'react-native';
 
 // import { vexo } from 'vexo-analytics';
 
@@ -9,9 +12,11 @@ import '../global.css';
 
 export default function Layout() {
   return (
-    <Stack>
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      <Stack.Screen name="invoices/generate" options={{ headerShown: false }} />
+    <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="index" options={{ headerShown: false, animation: 'fade' }} />
+      <Stack.Screen name="onboarding" options={{ headerShown: false, animation: 'fade' }} />
+      <Stack.Screen name="(tabs)" options={{ headerShown: false, animation: 'fade' }} />
+      <Stack.Screen name="invoices/generate" options={{ headerShown: false, animation: 'fade' }} />
     </Stack>
   );
 }

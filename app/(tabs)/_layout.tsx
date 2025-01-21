@@ -8,11 +8,11 @@ export default function Layout() {
         tabBarShowLabel: false,
         tabBarStyle: { paddingTop: 6 },
         tabBarActiveTintColor: '#166534',
-        // tabBarInactiveTintColor: '#ddd',
       }}>
       <Tabs.Screen
         name="index"
         options={{
+          headerShown: false,
           title: 'Invoice',
           tabBarIcon: ({ color, size }) => (
             <FontAwesome6 name="file-invoice" size={size} color={color} />
