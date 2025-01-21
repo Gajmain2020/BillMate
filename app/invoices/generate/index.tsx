@@ -4,45 +4,44 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { Keyboard, Text, View } from 'react-native';
 
 import { Button } from '~/components/Button';
+import CustomDatePicker from '~/components/CustomDatePicker';
 import CustomTextInput from '~/components/CustomTextInput';
 import KeyboardAwareScrollView from '~/components/KeyboardAwareScrollView';
-import { businessEntitySchema, BusinessEntityType } from '~/schema/invoice';
+import { invoiceInfoSchema, InvoiceInfoType } from '~/schema/invoice';
 import { useStore } from '~/store';
 
 export default function GenerateInvoice() {
-  const addSenderInfo = useStore((data) => data.addSenderInfo);
-  const sender = useStore((data) => data?.newInvoice?.sender);
+  const addInvoiceInfo = useStore((data) => data.addInvoiceInfo);
+  const invoice = useStore((data) => data.newInvoice);
 
-  const form = useForm<BusinessEntityType>({
-    resolver: zodResolver(businessEntitySchema),
+  const form = useForm<InvoiceInfoType>({
+    resolver: zodResolver(invoiceInfoSchema),
     defaultValues: {
-      name: sender?.name,
-      address: sender?.address,
-      gst: sender?.gst,
+      invoiceNumber: invoice?.invoiceNumber,
+      date: invoice?.date,
+      dueDate: invoice?.dueDate,
     },
   });
 
   const onSubmit = (data: any) => {
     Keyboard.dismiss();
-    addSenderInfo(data);
+    addInvoiceInfo(data);
     router.push('/invoices/generate/recipient');
   };
 
   return (
     <KeyboardAwareScrollView>
       <FormProvider {...form}>
-        <Text className="mb-5 text-2xl font-bold">Sender Info</Text>
+        <Text className="mb-5 text-2xl font-bold">Invoice Info</Text>
 
         <View className="gap-2">
-          <CustomTextInput name="name" label="Name" placeholder="Enter your name" />
           <CustomTextInput
-            name="address"
-            label="Address"
-            placeholder="Enter your address"
-            multiline
+            name="invoiceNumber"
+            label="Invoice Number"
+            placeholder="Enter invoice number"
           />
-
-          <CustomTextInput name="gst" label="GST No." placeholder="Enter your GST number" />
+          <CustomDatePicker name="date" label="Date" />
+          <CustomDatePicker name="dueDate" label="Due Date" />
         </View>
 
         <Button title="Next" className="mt-auto" onPress={form.handleSubmit(onSubmit)} />

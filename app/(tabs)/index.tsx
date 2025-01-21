@@ -7,14 +7,14 @@ import { useStore } from '~/store';
 
 export default function Home() {
   const existingNewInvoice = useStore((data) => data.newInvoice);
-  const resetFunction = useStore((data) => data.resetNewInvoice);
+  const startNewInvoice = useStore((data) => data.startNewInvoice);
 
-  const onNewInvoice = () => {
+  const onResumeInvoice = () => {
     router.push('/invoices/generate');
   };
 
   const onNewPress = () => {
-    resetFunction();
+    startNewInvoice();
     router.push('/invoices/generate');
   };
 
@@ -34,24 +34,11 @@ export default function Home() {
           </Text>
         </View>
         <View className="gap-5">
-          <Button
-            onPress={onNewInvoice}
-            title={existingNewInvoice ? 'Resume Invoicing' : 'New Invoice'}
-          />
+          <Button onPress={onNewPress} title="Start New Invoice" />
+
           {existingNewInvoice && (
             <View className="items-center justify-center gap-0 ">
-              <Button
-                variant="link"
-                onPress={onNewPress}
-                className="h-8 flex-1 items-center py-0"
-                title="Start New Invoice"
-              />
-              <Button
-                className="h-8 flex-1 items-center py-0"
-                variant="link"
-                onPress={() => resetFunction()}
-                title="Reset"
-              />
+              <Button variant="link" onPress={onResumeInvoice} title="Resume Invoice" />
             </View>
           )}
         </View>

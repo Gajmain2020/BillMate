@@ -25,14 +25,18 @@
     "expo-print": "~14.0.3",
     "expo-router": "~4.0.6",
     "expo-sharing": "~13.0.1",
+    "expo-sqlite": "~15.0.6",
     "expo-status-bar": "~2.0.1",
     "expo-system-ui": "~4.0.7",
     "expo-web-browser": "~14.0.2",
     "lottie-react-native": "7.1.0",
+    "lucide": "^0.473.0",
+    "lucide-react": "^0.473.0",
     "nativewind": "latest",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-hook-form": "^7.54.2",
+    "react-icons": "^5.4.0",
     "react-native": "0.76.6",
     "react-native-context-menu-view": "^1.16.0",
     "react-native-gesture-handler": "~2.20.2",
@@ -45,8 +49,7 @@
     "vexo-analytics": "^1.4.5",
     "zeego": "^2.0.4",
     "zod": "^3.24.1",
-    "zustand": "^4.5.1",
-    "expo-sqlite": "~15.0.6"
+    "zustand": "^4.5.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

@@ -7,12 +7,14 @@ import { Invoice, BusinessEntityType, InvoiceInfoType, InvoiceItemType } from '~
 // TODO: ADD TOTAL AND ITS ROUND OFF FUNCTION
 
 export type InvoiceState = {
+  profile: BusinessEntityType;
   newInvoice: Partial<Invoice> | null;
+
+  setProfile: (profile: BusinessEntityType) => void;
 
   startNewInvoice: () => void;
   resetNewInvoice: () => void;
 
-  addSenderInfo: (sender: BusinessEntityType) => void;
   addRecipientInfo: (recipient: BusinessEntityType) => void;
   addInvoiceInfo: (invoiceInfo: InvoiceInfoType) => void;
   addItems: (items: InvoiceItemType[]) => void;
@@ -24,17 +26,27 @@ export type InvoiceState = {
 export const useStore = create<InvoiceState>()(
   persist(
     (set, get) => ({
+      profile: {
+        name: '',
+        address: '',
+        gst: '',
+      },
       newInvoice: null,
+
+      // PROFILE
+      setProfile: (profile) => set(() => ({ profile })),
+
+      // INVOICE
       startNewInvoice: () =>
         set(() => ({
           newInvoice: {
+            sender: get().profile,
             items: [{ name: 'Example', quantity: 1, price: 20 }],
             date: new Date(),
             // dueDate: new Date(new Date().setDate(new Date().getDate() + 14)).toLocaleDateString(),
           },
         })),
       resetNewInvoice: () => set(() => ({ newInvoice: null })),
-      addSenderInfo: (sender) => set((state) => ({ newInvoice: { ...state.newInvoice, sender } })),
       addRecipientInfo: (recipient) =>
         set((state) => ({ newInvoice: { ...state.newInvoice, recipient } })),
       addInvoiceInfo: (invoiceInfo) =>

@@ -25,7 +25,7 @@ export default function GenerateInvoice() {
   const onSubmit = (data: any) => {
     Keyboard.dismiss();
     addRecipientInfo(data);
-    router.push('/invoices/generate/invoice-info');
+    router.push('/invoices/generate/items');
   };
 
   return (
