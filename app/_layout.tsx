@@ -1,5 +1,4 @@
-import { ErrorBoundaryProps, Stack } from 'expo-router';
-import { View, Text } from 'react-native';
+import { Stack } from 'expo-router';
 import '../global.css';
 
 // import { vexo } from 'vexo-analytics';
@@ -11,6 +10,7 @@ import '../global.css';
 export default function Layout() {
   return (
     <Stack>
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       <Stack.Screen name="invoices/generate" options={{ headerShown: false }} />
     </Stack>
   );
