@@ -26,6 +26,7 @@ export default function Layout() {
             <FontAwesome6 name="user-astronaut" size={size} color={color} />
           ),
           title: 'Profile',
+          headerTitleAlign: 'center',
         }}
       />
     </Tabs>
