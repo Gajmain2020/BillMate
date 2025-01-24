@@ -1,3 +1,4 @@
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { View, Text, FlatList, Pressable } from 'react-native';
 
@@ -24,40 +25,32 @@ export default function ContactScreen() {
     router.push('/invoices/generate/items');
   };
 
-  const ListHeader = () => {
-    return (
-      <View className="p-2">
-        <Pressable
-          className="rounded-lg bg-gray-200 px-4 py-3 shadow-md"
-          onPress={() => {
-            addRecipientInfo(null);
-            router.push('/invoices/generate/recipient');
-          }}>
-          <Text className="text-center text-base font-semibold text-gray-900">
-            Create New Contact
-          </Text>
-        </Pressable>
-      </View>
-    );
-  };
-
   return (
-    <FlatList
-      className="flex-1"
-      data={contacts}
-      ListHeaderComponent={ListHeader}
-      contentContainerClassName="p-2 gap-1"
-      keyExtractor={(item, index) => item.name + index}
-      renderItem={({ item: contact }) => (
-        <Pressable
-          onPress={() => onContactPress(contact)}
-          className="mb-2 rounded-lg bg-white px-4 py-2 shadow-sm">
-          <Text className="text-lg font-semibold">{contact.name}</Text>
-          <Text className="text-gray-600">{contact.address}</Text>
-          <Text className="text-gray-600">{contact.id}</Text>
-          {/* {item.gst && <Text className="text-gray-600">GST No.: {item.gst}</Text>} */}
-        </Pressable>
-      )}
-    />
+    <>
+      <Pressable
+        onPress={() => {
+          addRecipientInfo(null);
+          router.push('/invoices/generate/new-contact');
+        }}
+        className="absolute bottom-8 right-8 z-10 h-14 w-14 items-center justify-center rounded-full bg-emerald-600 shadow-lg">
+        <MaterialCommunityIcons name="plus" size={32} color="white" />
+      </Pressable>
+      <FlatList
+        className="flex-1"
+        data={contacts}
+        contentContainerClassName="p-2 gap-1"
+        keyExtractor={(item, index) => item.name + index}
+        renderItem={({ item: contact }) => (
+          <Pressable
+            onPress={() => onContactPress(contact)}
+            className="mb-2 rounded-lg bg-white px-4 py-2 shadow-sm">
+            <Text className="text-lg font-semibold">{contact.name}</Text>
+            <Text className="text-gray-600">{contact.address}</Text>
+            <Text className="text-gray-600">{contact.id}</Text>
+            {/* {item.gst && <Text className="text-gray-600">GST No.: {item.gst}</Text>} */}
+          </Pressable>
+        )}
+      />
+    </>
   );
 }

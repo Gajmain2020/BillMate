@@ -13,6 +13,7 @@ import { useStore } from '~/store';
 export default function GenerateInvoice() {
   const addInvoiceInfo = useStore((data) => data.addInvoiceInfo);
   const invoice = useStore((data) => data.newInvoice);
+  const numberOfContacts = useStore((data) => data.contacts.length);
 
   const form = useForm<InvoiceInfoType>({
     resolver: zodResolver(invoiceInfoSchema),
@@ -26,7 +27,11 @@ export default function GenerateInvoice() {
   const onSubmit = (data: any) => {
     Keyboard.dismiss();
     addInvoiceInfo(data);
-    router.push('/invoices/generate/contact');
+    if (numberOfContacts === 0) {
+      router.push('/invoices/generate/new-contact');
+    } else {
+      router.push('/invoices/generate/contact');
+    }
   };
 
   return (

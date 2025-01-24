@@ -33,7 +33,7 @@ export default function GenerateInvoice() {
   return (
     <KeyboardAwareScrollView>
       <FormProvider {...form}>
-        <Text className="mb-5 text-2xl font-bold">Recipient Info</Text>
+        <Text className="mb-5 text-2xl font-bold">New Contact</Text>
 
         <View className="gap-2">
           <CustomTextInput name="name" label="Name" placeholder="Enter your name" />
