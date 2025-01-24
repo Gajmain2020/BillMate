@@ -27,6 +27,12 @@ export default function GenerateInvoice() {
   const onSubmit = (data: any) => {
     Keyboard.dismiss();
     addInvoiceInfo(data);
+
+    if (invoice?.recipient) {
+      router.push('/invoices/generate/items');
+      return;
+    }
+
     if (numberOfContacts === 0) {
       router.push('/invoices/generate/new-contact');
     } else {
