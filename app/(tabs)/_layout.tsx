@@ -20,6 +20,16 @@ export default function Layout() {
         }}
       />
       <Tabs.Screen
+        name="contacts"
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <FontAwesome6 name="contact-book" size={size} color={color} />
+          ),
+          title: 'Contacts',
+          headerTitleAlign: 'center',
+        }}
+      />
+      <Tabs.Screen
         name="profile"
         options={{
           tabBarIcon: ({ color, size }) => (

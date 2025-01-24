@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import * as Crypto from 'expo-crypto';
 import { router } from 'expo-router';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Keyboard, Text, View } from 'react-native';
@@ -16,6 +17,7 @@ export default function GenerateInvoice() {
   const form = useForm<BusinessEntityType>({
     resolver: zodResolver(businessEntitySchema),
     defaultValues: {
+      id: recipient?.id || Crypto.randomUUID(),
       name: recipient?.name,
       address: recipient?.address,
       gst: recipient?.gst,

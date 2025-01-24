@@ -4,6 +4,7 @@ import { shareAsync } from 'expo-sharing';
 import LottieView from 'lottie-react-native';
 import { useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import * as StoreReview from 'expo-store-review';
 
 import { Button } from '~/components/Button';
 import { Invoice } from '~/schema/invoice';
@@ -43,6 +44,7 @@ export default function Success() {
     if (!pdfUri) {
       return;
     }
+
     await shareAsync(pdfUri, { UTI: '.pdf', mimeType: 'application/pdf' });
   };
 

@@ -3,6 +3,10 @@ import { useEffect } from 'react';
 
 import { useStore } from '~/store';
 
+export const unstable_settings = {
+  initialRouteName: 'index',
+};
+
 export default function GenerateInvoiceLayout() {
   const startNewInvoice = useStore((data) => data.startNewInvoice);
   const newInvoice = useStore((data) => data.newInvoice);

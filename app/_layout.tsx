@@ -11,6 +11,25 @@ import { ActivityIndicator } from 'react-native';
 // }
 
 export default function Layout() {
+  // const [hydrationFinished, setHydrationFinished] = useState(false);
+
+  // useEffect(() => {
+  //   if (useStore.persist.hasHydrated()) {
+  //     setHydrationFinished(true);
+  //     return;
+  //   }
+  //   const unsub = useStore.persist.onFinishHydration((state: any) => {
+  //     console.log('Hydration finished', state);
+  //     setHydrationFinished(true);
+  //   });
+
+  //   return () => unsub();
+  // }, []);
+
+  // if (hydrationFinished) {
+  //   return null;
+  // }
+
   return (
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="index" options={{ headerShown: false, animation: 'fade' }} />

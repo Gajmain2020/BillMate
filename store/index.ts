@@ -1,6 +1,7 @@
 import Storage from 'expo-sqlite/kv-store';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import * as Crypto from 'expo-crypto';
 
 import { Invoice, BusinessEntityType, InvoiceInfoType, InvoiceItemType } from '~/schema/invoice';
 
@@ -11,13 +12,17 @@ export type InvoiceState = {
   newInvoice: Partial<Invoice> | null;
   onboardingCompleted: boolean;
 
+  // contacts
+  contacts: BusinessEntityType[];
+  addContact: (contact: BusinessEntityType) => void;
+
   setProfile: (profile: BusinessEntityType) => void;
   setOnboardingCompleted: () => void;
 
   startNewInvoice: () => void;
   resetNewInvoice: () => void;
 
-  addRecipientInfo: (recipient: BusinessEntityType) => void;
+  addRecipientInfo: (recipient: BusinessEntityType | null) => void;
   addInvoiceInfo: (invoiceInfo: InvoiceInfoType) => void;
   addItems: (items: InvoiceItemType[]) => void;
   getSubtotal: () => number;
@@ -29,6 +34,7 @@ export const useStore = create<InvoiceState>()(
   persist(
     (set, get) => ({
       profile: {
+        id: Crypto.randomUUID(),
         name: '',
         address: '',
         gst: '',
@@ -36,8 +42,14 @@ export const useStore = create<InvoiceState>()(
       newInvoice: null,
       onboardingCompleted: false,
 
+      contacts: [],
+
       // PROFILE
-      setProfile: (profile) => set(() => ({ profile, onboardingCompleted: false })),
+      setProfile: (profile) =>
+        set(() => ({
+          profile: { ...profile, gst: profile.gst || '' },
+          onboardingCompleted: false,
+        })),
       setOnboardingCompleted: () => set(() => ({ onboardingCompleted: true })),
 
       // INVOICE
@@ -52,7 +64,9 @@ export const useStore = create<InvoiceState>()(
         })),
       resetNewInvoice: () => set(() => ({ newInvoice: null })),
       addRecipientInfo: (recipient) =>
-        set((state) => ({ newInvoice: { ...state.newInvoice, recipient } })),
+        set((state) => ({
+          newInvoice: { ...state.newInvoice, recipient: recipient || undefined },
+        })),
       addInvoiceInfo: (invoiceInfo) =>
         set((state) => ({ newInvoice: { ...state.newInvoice, ...invoiceInfo } })),
       addItems: (items) => set((state) => ({ newInvoice: { ...state.newInvoice, items } })), //todo: may be we should append items
@@ -70,6 +84,16 @@ export const useStore = create<InvoiceState>()(
         const subtotal = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
         return subtotal + subtotal * 0.05;
       },
+
+      //contact
+      addContact: (contact) =>
+        set((state) => {
+          const contactExists = state.contacts.some((c) => c.id === contact.id);
+          if (contactExists) {
+            return state;
+          }
+          return { contacts: [contact, ...state.contacts] };
+        }),
     }),
     { name: 'billmate-store', getStorage: () => Storage }
   )

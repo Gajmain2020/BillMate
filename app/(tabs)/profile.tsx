@@ -38,7 +38,11 @@ export default function Profile() {
           gap: 5,
         }}>
         <FormProvider {...form}>
-          <Text className="mb-5 text-2xl font-bold">My Profile</Text>
+          <Text className="mb-1 text-2xl font-bold">My Business</Text>
+          <Text className="mb-4 text-gray-600">
+            This information will appear on all your invoices as the sender's details. Make sure
+            it's accurate and up to date
+          </Text>
 
           <View className="gap-2">
             <CustomTextInput name="name" label="Name" placeholder="Enter your name" />

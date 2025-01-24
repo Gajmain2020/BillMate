@@ -1,4 +1,4 @@
-import { Link, Redirect } from 'expo-router';
+import { Link, Redirect, router } from 'expo-router';
 import { Text, View } from 'react-native';
 
 import { Button } from '~/components/Button';
@@ -11,7 +11,20 @@ export default function Summary() {
   const getGst = useStore((data) => data.getGst());
   const getTotal = useStore((data) => data.getTotal());
 
+  const addContact = useStore((data) => data.addContact);
+  // const saveInvoice = useStore((data) => data.saveInvoice);
+
   if (!invoice) return <Redirect href="/" />;
+
+  const handleGenerateInvoice = () => {
+    // save invoice to database
+
+    if (invoice?.recipient) {
+      addContact(invoice.recipient);
+    }
+
+    router.push('/invoices/generate/success');
+  };
 
   return (
     <KeyboardAwareScrollView>
@@ -109,10 +122,9 @@ export default function Summary() {
         </View>
 
         {/* GENERATE INVOICE BUTTON */}
+
+        <Button title="Generate Invoice" className="mt-auto" onPress={handleGenerateInvoice} />
       </View>
-      <Link href="/invoices/generate/success" asChild>
-        <Button title="Generate Invoice" className="mt-auto" />
-      </Link>
     </KeyboardAwareScrollView>
   );
 }

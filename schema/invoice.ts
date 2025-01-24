@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 export const businessEntitySchema = z.object({
+  id: z.string().uuid(),
   name: z.string({ required_error: 'Name is required.' }).min(1, 'Name is required'),
   address: z.string({ required_error: 'Address is required.' }).min(1, 'Address is required'),
   gst: z.string().optional(),
