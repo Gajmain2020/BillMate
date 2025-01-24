@@ -1,13 +1,27 @@
+import { FontAwesome6 } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { View, Text, FlatList } from 'react-native';
+import { useState } from 'react';
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  Modal,
+  TouchableWithoutFeedback,
+} from 'react-native';
 
+import { Button } from '~/components/Button';
 import { BusinessEntityType } from '~/schema/invoice';
 import { useStore } from '~/store';
 
 function ContactListItem({ contact }: { contact: BusinessEntityType }) {
   const startNewInvoice = useStore((data) => data.startNewInvoice);
   const addRecipientInfo = useStore((data) => data.addRecipientInfo);
+  const deleteContact = useStore((data) => data.deleteContact);
   const router = useRouter();
+
+  const [selectedIndex, setSelectedIndex] = useState<string | null>(null);
+  const [visible, setVisible] = useState(false);
 
   const onNewInvoicePressed = () => {
     startNewInvoice();
@@ -16,15 +30,54 @@ function ContactListItem({ contact }: { contact: BusinessEntityType }) {
   };
 
   return (
-    <View className="flex-row items-center justify-between rounded-lg bg-white p-4 shadow-md">
-      <View>
-        <Text className="text-lg font-semibold">{contact.name}</Text>
-        <Text className="text-gray-600">{contact.address}</Text>
-      </View>
-      <Text onPress={onNewInvoicePressed} className="font-medium text-emerald-600">
-        New Invoice
-      </Text>
-    </View>
+    <>
+      <TouchableOpacity
+        onLongPress={() => {
+          setSelectedIndex(contact.id);
+          setVisible(true);
+        }}
+        className="flex-row items-center justify-between rounded-lg bg-white p-4 shadow-md">
+        <View>
+          <Text className="text-lg font-semibold">{contact.name}</Text>
+          <Text className="text-gray-600">{contact.address}</Text>
+        </View>
+        <FontAwesome6 onPress={onNewInvoicePressed} name="file-invoice" color="dimgray" size={20} />
+      </TouchableOpacity>
+
+      <Modal transparent visible={visible} onRequestClose={() => setVisible(false)}>
+        <TouchableWithoutFeedback onPress={() => setVisible(false)}>
+          <View className=" flex-1 items-center justify-center bg-gray-800/50">
+            <TouchableWithoutFeedback>
+              <View className="w-4/5 rounded-lg bg-white p-6 shadow-lg">
+                <Text className="mb-4 text-center text-lg font-semibold">Are you sure?</Text>
+                <Text className="mb-6 text-center text-gray-500">
+                  Do you want to delete contact?
+                </Text>
+                <View className="flex-row justify-between">
+                  <Button
+                    className="h-10 flex-1 items-center justify-center py-0 "
+                    title="Cancel"
+                    variant="link"
+                    onPress={() => setVisible(false)}
+                  />
+                  <Button
+                    title="Delete"
+                    className="h-10 flex-1 items-center justify-center bg-red-400 py-0"
+                    onPress={() => {
+                      if (selectedIndex !== null) {
+                        deleteContact(contact.id);
+                        setSelectedIndex(null);
+                      }
+                      setVisible(false);
+                    }}
+                  />
+                </View>
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
+    </>
   );
 }
 

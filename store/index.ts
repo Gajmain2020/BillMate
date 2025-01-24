@@ -15,6 +15,7 @@ export type InvoiceState = {
   // contacts
   contacts: BusinessEntityType[];
   addContact: (contact: BusinessEntityType) => void;
+  deleteContact: (id: string) => void;
 
   setProfile: (profile: BusinessEntityType) => void;
   setOnboardingCompleted: () => void;
@@ -94,6 +95,11 @@ export const useStore = create<InvoiceState>()(
           }
           return { contacts: [contact, ...state.contacts] };
         }),
+      deleteContact: (id) => {
+        set((state) => ({
+          contacts: state.contacts.filter((c) => c.id !== id),
+        }));
+      },
     }),
     { name: 'billmate-store', getStorage: () => Storage }
   )
