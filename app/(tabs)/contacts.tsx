@@ -9,6 +9,7 @@ import {
   Modal,
   TouchableWithoutFeedback,
 } from 'react-native';
+import Animated, { FadeIn, FadeOut, LinearTransition } from 'react-native-reanimated';
 
 import { Button } from '~/components/Button';
 import { BusinessEntityType } from '~/schema/invoice';
@@ -96,12 +97,13 @@ export default function ContactScreen() {
   }
 
   return (
-    <FlatList
+    <Animated.FlatList
       className="flex-1"
       data={contacts}
       contentContainerClassName="p-2 gap-2"
       keyExtractor={(item, index) => item.name + index}
       renderItem={({ item }) => <ContactListItem contact={item} />}
+      itemLayoutAnimation={LinearTransition}
     />
   );
 }
