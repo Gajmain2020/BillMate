@@ -22,6 +22,7 @@ export default function Layout() {
       <Tabs.Screen
         name="contacts"
         options={{
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <FontAwesome6 name="contact-book" size={size} color={color} />
           ),

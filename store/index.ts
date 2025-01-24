@@ -16,6 +16,7 @@ export type InvoiceState = {
   contacts: BusinessEntityType[];
   addContact: (contact: BusinessEntityType) => void;
   deleteContact: (id: string) => void;
+  updateContact: (contact: BusinessEntityType) => void;
 
   setProfile: (profile: BusinessEntityType) => void;
   setOnboardingCompleted: () => void;
@@ -98,6 +99,11 @@ export const useStore = create<InvoiceState>()(
       deleteContact: (id) => {
         set((state) => ({
           contacts: state.contacts.filter((c) => c.id !== id),
+        }));
+      },
+      updateContact: (contact) => {
+        set((state) => ({
+          contacts: state.contacts.map((c) => (c.id === contact.id ? contact : c)),
         }));
       },
     }),

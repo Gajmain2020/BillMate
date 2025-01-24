@@ -42,7 +42,22 @@ function ContactListItem({ contact }: { contact: BusinessEntityType }) {
           <Text className="text-lg font-semibold">{contact.name}</Text>
           <Text className="text-gray-600">{contact.address}</Text>
         </View>
-        <FontAwesome6 onPress={onNewInvoicePressed} name="file-invoice" color="dimgray" size={20} />
+        <View className="flex-row gap-6">
+          <FontAwesome6
+            onPress={() => {
+              router.push(`/contacts/${contact.id}/edit`);
+            }}
+            name="edit"
+            color="dimgray"
+            size={20}
+          />
+          <FontAwesome6
+            onPress={onNewInvoicePressed}
+            name="file-invoice"
+            color="dimgray"
+            size={20}
+          />
+        </View>
       </TouchableOpacity>
 
       <Modal transparent visible={visible} onRequestClose={() => setVisible(false)}>
@@ -97,13 +112,12 @@ export default function ContactScreen() {
   }
 
   return (
-    <Animated.FlatList
+    <FlatList
       className="flex-1"
       data={contacts}
       contentContainerClassName="p-2 gap-2"
       keyExtractor={(item, index) => item.name + index}
       renderItem={({ item }) => <ContactListItem contact={item} />}
-      itemLayoutAnimation={LinearTransition}
     />
   );
 }
