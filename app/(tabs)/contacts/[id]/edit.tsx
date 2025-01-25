@@ -1,5 +1,4 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import * as Crypto from 'expo-crypto';
 import { router, useLocalSearchParams } from 'expo-router';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Keyboard, Text, View } from 'react-native';
@@ -35,7 +34,7 @@ export default function EditContactScreen() {
   return (
     <KeyboardAwareScrollView>
       <FormProvider {...form}>
-        <Text className="mb-5 text-2xl font-bold">New Contact</Text>
+        <Text className="mb-5 text-2xl font-bold">Edit Contact</Text>
 
         <View className="gap-2">
           <CustomTextInput name="name" label="Name" placeholder="Enter your name" />
@@ -48,7 +47,7 @@ export default function EditContactScreen() {
           <CustomTextInput name="gst" label="GST No." placeholder="Enter your GST number" />
         </View>
 
-        <Button title="Next" className="mt-auto" onPress={form.handleSubmit(onSubmit)} />
+        <Button title="Save" className="mt-auto" onPress={form.handleSubmit(onSubmit)} />
       </FormProvider>
     </KeyboardAwareScrollView>
   );

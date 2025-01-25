@@ -1,15 +1,15 @@
 import { FontAwesome6 } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import {
-  View,
-  Text,
-  FlatList,
-  TouchableOpacity,
-  Modal,
-  TouchableWithoutFeedback,
-} from 'react-native';
-import Animated, { FadeIn, FadeOut, LinearTransition } from 'react-native-reanimated';
+import { View, Text, TouchableOpacity, Modal, TouchableWithoutFeedback } from 'react-native';
+import Animated, {
+  FadeIn,
+  FadeOut,
+  SlideInRight,
+  SlideOutLeft,
+  ZoomIn,
+  ZoomOut,
+} from 'react-native-reanimated';
 
 import { Button } from '~/components/Button';
 import { BusinessEntityType } from '~/schema/invoice';
@@ -32,39 +32,47 @@ function ContactListItem({ contact }: { contact: BusinessEntityType }) {
 
   return (
     <>
-      <TouchableOpacity
-        onLongPress={() => {
-          setSelectedIndex(contact.id);
-          setVisible(true);
-        }}
-        className="flex-row items-center justify-between rounded-lg bg-white p-4 shadow-md">
-        <View>
-          <Text className="text-lg font-semibold">{contact.name}</Text>
-          <Text className="text-gray-600">{contact.address}</Text>
-        </View>
-        <View className="flex-row gap-6">
-          <FontAwesome6
-            onPress={() => {
-              router.push(`/contacts/${contact.id}/edit`);
-            }}
-            name="edit"
-            color="dimgray"
-            size={20}
-          />
-          <FontAwesome6
-            onPress={onNewInvoicePressed}
-            name="file-invoice"
-            color="dimgray"
-            size={20}
-          />
-        </View>
-      </TouchableOpacity>
+      <Animated.View
+        entering={FadeIn.duration(500)} // Fade in when the item appears
+        exiting={FadeOut.duration(500)} // Fade out when the item is removed
+      >
+        <TouchableOpacity
+          onLongPress={() => {
+            setSelectedIndex(contact.id);
+            setVisible(true);
+          }}
+          className="flex-row items-center justify-between rounded-lg bg-white p-4 shadow-md">
+          <View>
+            <Text className="text-lg font-semibold">{contact.name}</Text>
+            <Text className="text-gray-600">{contact.address}</Text>
+          </View>
+          <View className="flex-row gap-6">
+            <FontAwesome6
+              onPress={() => {
+                router.push(`/contacts/${contact.id}/edit`);
+              }}
+              name="edit"
+              color="dimgray"
+              size={20}
+            />
+            <FontAwesome6
+              onPress={onNewInvoicePressed}
+              name="file-invoice"
+              color="dimgray"
+              size={20}
+            />
+          </View>
+        </TouchableOpacity>
+      </Animated.View>
 
       <Modal transparent visible={visible} onRequestClose={() => setVisible(false)}>
         <TouchableWithoutFeedback onPress={() => setVisible(false)}>
           <View className=" flex-1 items-center justify-center bg-gray-800/50">
             <TouchableWithoutFeedback>
-              <View className="w-4/5 rounded-lg bg-white p-6 shadow-lg">
+              <Animated.View
+                entering={ZoomIn.duration(400)} // Scale the modal in
+                exiting={ZoomOut.duration(400)} // Scale the modal out
+                className="w-4/5 rounded-lg bg-white p-6 shadow-lg">
                 <Text className="mb-4 text-center text-lg font-semibold">Are you sure?</Text>
                 <Text className="mb-6 text-center text-gray-500">
                   Do you want to delete contact?
@@ -88,7 +96,7 @@ function ContactListItem({ contact }: { contact: BusinessEntityType }) {
                     }}
                   />
                 </View>
-              </View>
+              </Animated.View>
             </TouchableWithoutFeedback>
           </View>
         </TouchableWithoutFeedback>
@@ -112,12 +120,14 @@ export default function ContactScreen() {
   }
 
   return (
-    <FlatList
+    <Animated.FlatList
       className="flex-1"
       data={contacts}
       contentContainerClassName="p-2 gap-2"
       keyExtractor={(item, index) => item.name + index}
       renderItem={({ item }) => <ContactListItem contact={item} />}
+      entering={SlideInRight.duration(600)} // Slide in the list
+      exiting={SlideOutLeft.duration(600)} // Slide out the list
     />
   );
 }
