@@ -5,7 +5,7 @@
   "scripts": {
     "android": "expo run:android",
     "ios": "expo run:ios",
-    "start": "expo start --no-dev --minify",
+    "start": "expo start ",
     "prebuild": "expo prebuild",
     "lint": "eslint \"**/*.{js,jsx,ts,tsx}\" && prettier -c \"**/*.{js,jsx,ts,tsx,json}\"",
     "format": "eslint \"**/*.{js,jsx,ts,tsx}\" --fix && prettier \"**/*.{js,jsx,ts,tsx,json}\" --write",
@@ -17,7 +17,7 @@
     "@radix-ui/react-slot": "^1.1.1",
     "@react-native-community/datetimepicker": "8.2.0",
     "@react-navigation/native": "^7.0.3",
-    "expo": "^52.0.25",
+    "expo": "^52.0.27",
     "expo-build-properties": "~0.13.2",
     "expo-constants": "~17.0.4",
     "expo-crypto": "~14.0.2",
