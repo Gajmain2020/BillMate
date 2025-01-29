@@ -1,4 +1,4 @@
-import { Link, Redirect, router } from 'expo-router';
+import { Redirect, router } from 'expo-router';
 import { Text, View } from 'react-native';
 
 import { Button } from '~/components/Button';
@@ -11,7 +11,7 @@ export default function Summary() {
   const getGst = useStore((data) => data.getGst());
   const getTotal = useStore((data) => data.getTotal());
 
-  const addContact = useStore((data) => data.addContact);
+  const saveInvoice = useStore((data) => data.saveInvoice);
   // const saveInvoice = useStore((data) => data.saveInvoice);
 
   if (!invoice) return <Redirect href="/" />;
@@ -20,10 +20,10 @@ export default function Summary() {
     // save invoice to database
 
     if (invoice?.recipient) {
-      addContact(invoice.recipient);
+      saveInvoice();
     }
 
-    router.push('/invoices/generate/success');
+    router.push(`/invoices/${invoice?.id}/success`);
   };
 
   return (

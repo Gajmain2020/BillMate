@@ -1,7 +1,7 @@
+import * as Crypto from 'expo-crypto';
 import Storage from 'expo-sqlite/kv-store';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import * as Crypto from 'expo-crypto';
 
 import { Invoice, BusinessEntityType, InvoiceInfoType, InvoiceItemType } from '~/schema/invoice';
 
@@ -9,8 +9,10 @@ import { Invoice, BusinessEntityType, InvoiceInfoType, InvoiceItemType } from '~
 
 export type InvoiceState = {
   profile: BusinessEntityType;
-  newInvoice: Partial<Invoice> | null;
   onboardingCompleted: boolean;
+
+  newInvoice: Partial<Invoice> | null;
+  invoices: Invoice[];
 
   // contacts
   contacts: BusinessEntityType[];
@@ -23,6 +25,7 @@ export type InvoiceState = {
 
   startNewInvoice: () => void;
   resetNewInvoice: () => void;
+  saveInvoice: () => void;
 
   addRecipientInfo: (recipient: BusinessEntityType | null) => void;
   addInvoiceInfo: (invoiceInfo: InvoiceInfoType) => void;
@@ -41,8 +44,10 @@ export const useStore = create<InvoiceState>()(
         address: '',
         gst: '',
       },
-      newInvoice: null,
       onboardingCompleted: false,
+
+      newInvoice: null,
+      invoices: [],
 
       contacts: [],
 
@@ -58,6 +63,7 @@ export const useStore = create<InvoiceState>()(
       startNewInvoice: () =>
         set(() => ({
           newInvoice: {
+            id: Crypto.randomUUID(),
             sender: get().profile,
             items: [{ name: 'Example', quantity: 1, price: 20 }],
             date: new Date(),
@@ -65,6 +71,17 @@ export const useStore = create<InvoiceState>()(
           },
         })),
       resetNewInvoice: () => set(() => ({ newInvoice: null })),
+      saveInvoice: () => {
+        const newInvoice = get().newInvoice as Invoice; //TODO: fix this
+        if (!newInvoice) return;
+
+        set((state) => ({
+          invoices: [newInvoice, ...state.invoices],
+          newInvoice: null,
+        }));
+        if (newInvoice?.recipient) get().addContact(newInvoice.recipient);
+      },
+
       addRecipientInfo: (recipient) =>
         set((state) => ({
           newInvoice: { ...state.newInvoice, recipient: recipient || undefined },

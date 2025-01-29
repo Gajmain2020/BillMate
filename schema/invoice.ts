@@ -34,6 +34,7 @@ export type InvoiceItemType = z.infer<typeof invoiceItemSchema>;
 // export type ItemsType = z.infer<typeof itemsSchema>;
 
 export type Invoice = InvoiceInfoType & {
+  id: string;
   sender: BusinessEntityType;
   recipient: BusinessEntityType;
   items: InvoiceItemType[];

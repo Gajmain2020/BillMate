@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { shareAsync } from 'expo-sharing';
 import LottieView from 'lottie-react-native';
 import { useEffect, useRef, useState } from 'react';
@@ -12,7 +12,11 @@ import { useStore } from '~/store';
 import { generateInvoicePdf } from '~/utils/pdf';
 
 export default function Success() {
-  const invoice = useStore((data) => data.newInvoice);
+  const { id } = useLocalSearchParams<{ id: string }>();
+
+  const invoice = useStore((data) => data.invoices.find((invoice) => invoice.id === id));
+
+  //TODO: fix no longer working with invoice
   const getSubtotal = useStore((data) => data.getSubtotal());
   const getGst = useStore((data) => data.getGst());
   const getTotal = useStore((data) => data.getTotal());
