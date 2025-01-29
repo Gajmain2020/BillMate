@@ -1,10 +1,17 @@
-import { FontAwesome6 } from '@expo/vector-icons';
+import { FontAwesome6, Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { View, Text, TouchableOpacity, Modal, TouchableWithoutFeedback } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Modal,
+  TouchableWithoutFeedback,
+  TextInput,
+} from 'react-native';
 import Animated, {
   FadeIn,
-  FadeOut,
+  LinearTransition,
   SlideInRight,
   SlideOutLeft,
   ZoomIn,
@@ -33,8 +40,8 @@ function ContactListItem({ contact }: { contact: BusinessEntityType }) {
   return (
     <>
       <Animated.View
-        entering={FadeIn.duration(500)} // Fade in when the item appears
-        exiting={FadeOut.duration(500)} // Fade out when the item is removed
+        entering={SlideInRight.duration(300)} // Fade in when the item appears
+        exiting={SlideOutLeft.duration(300)} // Fade out when the item is removed
       >
         <TouchableOpacity
           onLongPress={() => {
@@ -108,26 +115,52 @@ function ContactListItem({ contact }: { contact: BusinessEntityType }) {
 export default function ContactScreen() {
   const contacts = useStore((data) => data.contacts);
 
-  if (contacts.length === 0) {
-    return (
-      <View className="flex-1 items-center justify-center p-4">
-        <Text className="mb-2 text-xl font-bold">No Contacts Yet</Text>
-        <Text className="mb-8 text-center text-gray-600">
-          Your contacts will appear here after you create invoices.
-        </Text>
-      </View>
-    );
-  }
+  const [search, setSearch] = useState<string>('');
+
+  // Handle search input changes
+  const handleSearchValueChange = (text: string) => {
+    setSearch(text);
+  };
 
   return (
-    <Animated.FlatList
-      className="flex-1"
-      data={contacts}
-      contentContainerClassName="p-2 gap-2"
-      keyExtractor={(item, index) => item.name + index}
-      renderItem={({ item }) => <ContactListItem contact={item} />}
-      entering={SlideInRight.duration(600)} // Slide in the list
-      exiting={SlideOutLeft.duration(600)} // Slide out the list
-    />
+    <>
+      <View className="flex-row items-center rounded border border-gray-300 p-2 ">
+        <TextInput
+          value={search}
+          onChangeText={handleSearchValueChange}
+          placeholder="Search contacts..."
+          className="flex-1 rounded border border-gray-300 py-2"
+        />
+        {search.length > 0 && (
+          <TouchableOpacity onPress={() => setSearch('')} className="ml-2">
+            <Ionicons name="close-circle" size={20} color="gray" />
+          </TouchableOpacity>
+        )}
+      </View>
+      <Animated.FlatList
+        className="flex-1"
+        data={contacts.filter((contact) =>
+          contact.name.toLowerCase().includes(search.toLowerCase())
+        )}
+        itemLayoutAnimation={LinearTransition}
+        contentContainerClassName="p-2 gap-2"
+        keyExtractor={(item, index) => item.name + index}
+        renderItem={({ item }) => <ContactListItem contact={item} />}
+        ListEmptyComponent={
+          <Animated.View
+            entering={FadeIn.duration(300)}
+            className="flex-1 items-center justify-center p-4">
+            <Text className="mb-2 text-xl font-bold">
+              {search.length > 0 ? 'No Contacts Found' : 'No Contacts Yet'}
+            </Text>
+            <Text className="mb-8 text-center text-gray-600">
+              Your contacts will appear here after you create invoices.
+            </Text>{' '}
+          </Animated.View>
+        }
+        entering={SlideInRight.duration(300)} // Slide in the list
+        exiting={SlideOutLeft.duration(300)} // Slide out the list
+      />
+    </>
   );
 }

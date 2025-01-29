@@ -1,38 +1,17 @@
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Redirect, router, useNavigation } from 'expo-router';
-import { useLayoutEffect, useState } from 'react';
-import { Text, FlatList, Pressable, View, TextInput } from 'react-native';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Redirect, router } from 'expo-router';
+import { useState } from 'react';
+import { Text, Pressable, View, TextInput, TouchableOpacity } from 'react-native';
+import Animated, { LinearTransition } from 'react-native-reanimated';
 
 import { BusinessEntityType } from '~/schema/invoice';
 import { useStore } from '~/store';
 
 export default function ContactScreen() {
-  const navigation = useNavigation(); // Access navigation object
   const contacts = useStore((data) => data.contacts);
   const addRecipientInfo = useStore((data) => data.addRecipientInfo);
 
   const [search, setSearch] = useState<string>('');
-
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      title: 'Contacts',
-      headerRight: () => (
-        <Pressable
-          onPress={() => {
-            addRecipientInfo(null);
-            router.push('/invoices/generate/new-contact');
-          }}
-          style={{
-            marginRight: 16,
-            flexDirection: 'row',
-            alignItems: 'center',
-          }}>
-          <MaterialCommunityIcons name="plus" size={24} color="blue" />
-          <Text style={{ color: 'blue', marginLeft: 8 }}>Add</Text>
-        </Pressable>
-      ),
-    });
-  }, [navigation]);
 
   // Handle search input changes
   const handleSearchValueChange = (text: string) => {
@@ -51,16 +30,31 @@ export default function ContactScreen() {
 
   return (
     <>
-      <View className="p-2">
+      <View className="flex-row items-center rounded border border-gray-300 p-2 ">
         <TextInput
           value={search}
           onChangeText={handleSearchValueChange}
           placeholder="Search contacts..."
-          className="rounded border border-gray-300 p-2"
+          className="flex-1 rounded border border-gray-300 py-2"
         />
+        {search.length > 0 && (
+          <TouchableOpacity onPress={() => setSearch('')} className="ml-2">
+            <Ionicons name="close-circle" size={20} color="gray" />
+          </TouchableOpacity>
+        )}
       </View>
 
-      <FlatList
+      <Pressable
+        onPress={() => {
+          addRecipientInfo(null);
+          router.push('/invoices/generate/new-contact');
+        }}
+        className="absolute bottom-8 right-8 z-10 h-14 w-14 items-center justify-center rounded-full bg-emerald-600 shadow-lg">
+        <MaterialCommunityIcons name="plus" size={32} color="white" />
+      </Pressable>
+
+      <Animated.FlatList
+        itemLayoutAnimation={LinearTransition}
         className="flex-1"
         data={contacts.filter((contact) =>
           contact.name.toLowerCase().includes(search.toLowerCase())
@@ -75,6 +69,11 @@ export default function ContactScreen() {
             <Text className="text-gray-600">{contact.address}</Text>
           </Pressable>
         )}
+        ListEmptyComponent={
+          <View className="flex-1 items-center justify-center p-4">
+            <Text className="mb-2 text-xl font-bold">No Contacts Found</Text>
+          </View>
+        }
       />
     </>
   );
