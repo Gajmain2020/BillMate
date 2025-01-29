@@ -30,9 +30,6 @@ export type InvoiceState = {
   addRecipientInfo: (recipient: BusinessEntityType | null) => void;
   addInvoiceInfo: (invoiceInfo: InvoiceInfoType) => void;
   addItems: (items: InvoiceItemType[]) => void;
-  getSubtotal: () => number;
-  getGst: () => number;
-  getTotal: () => number;
 };
 
 export const useStore = create<InvoiceState>()(
@@ -89,20 +86,6 @@ export const useStore = create<InvoiceState>()(
       addInvoiceInfo: (invoiceInfo) =>
         set((state) => ({ newInvoice: { ...state.newInvoice, ...invoiceInfo } })),
       addItems: (items) => set((state) => ({ newInvoice: { ...state.newInvoice, items } })), //todo: may be we should append items
-      getSubtotal: () => {
-        const items = get().newInvoice?.items || [];
-        return items.reduce((acc, item) => acc + item.price * item.quantity, 0);
-      },
-      getGst: () => {
-        const items = get().newInvoice?.items || [];
-        const subtotal = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
-        return subtotal * 0.05;
-      },
-      getTotal: () => {
-        const items = get().newInvoice?.items || [];
-        const subtotal = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
-        return subtotal + subtotal * 0.05;
-      },
 
       //contact
       addContact: (contact) =>

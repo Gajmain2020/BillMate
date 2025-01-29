@@ -4,12 +4,12 @@ import { Text, View } from 'react-native';
 import { Button } from '~/components/Button';
 import KeyboardAwareScrollView from '~/components/KeyboardAwareScrollView';
 import { useStore } from '~/store';
+import { getTotals } from '~/utils/invoice';
 
 export default function Summary() {
   const invoice = useStore((data) => data.newInvoice);
-  const getSubtotal = useStore((data) => data.getSubtotal());
-  const getGst = useStore((data) => data.getGst());
-  const getTotal = useStore((data) => data.getTotal());
+
+  const { subtotal, gst, total } = getTotals(invoice || {});
 
   const saveInvoice = useStore((data) => data.saveInvoice);
   // const saveInvoice = useStore((data) => data.saveInvoice);
@@ -106,17 +106,17 @@ export default function Summary() {
           <View className="rounded bg-gray-50 px-4 py-2 shadow">
             <View className="flex-row justify-between">
               <Text>Subtotal</Text>
-              <Text className="font-semibold">₹ {getSubtotal.toFixed(2)}</Text>
+              <Text className="font-semibold">₹ {subtotal.toFixed(2)}</Text>
             </View>
 
             <View className="flex-row justify-between">
               <Text>GST (5%)</Text>
-              <Text className="font-semibold">₹ {getGst.toFixed(2)}</Text>
+              <Text className="font-semibold">₹ {gst.toFixed(2)}</Text>
             </View>
 
             <View className="flex-row justify-between border-t border-gray-300">
               <Text>Total</Text>
-              <Text className="font-semibold">₹ {getTotal.toFixed(2)}</Text>
+              <Text className="font-semibold">₹ {total.toFixed(2)}</Text>
             </View>
           </View>
         </View>

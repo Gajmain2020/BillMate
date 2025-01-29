@@ -4,12 +4,12 @@ import { shareAsync } from 'expo-sharing';
 import LottieView from 'lottie-react-native';
 import { useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import * as StoreReview from 'expo-store-review';
 
 import { Button } from '~/components/Button';
 import { Invoice } from '~/schema/invoice';
 import { useStore } from '~/store';
 import { generateInvoicePdf } from '~/utils/pdf';
+import { getTotals } from '~/utils/invoice';
 
 export default function Success() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -17,9 +17,8 @@ export default function Success() {
   const invoice = useStore((data) => data.invoices.find((invoice) => invoice.id === id));
 
   //TODO: fix no longer working with invoice
-  const getSubtotal = useStore((data) => data.getSubtotal());
-  const getGst = useStore((data) => data.getGst());
-  const getTotal = useStore((data) => data.getTotal());
+  const { subtotal, gst, total } = getTotals(invoice || {});
+
   const resetNewInvoice = useStore((data) => data.resetNewInvoice);
 
   const [isLoading, setIsLoading] = useState(true);
@@ -33,7 +32,7 @@ export default function Success() {
 
   const handleGeneratePdf = async () => {
     setIsLoading(true);
-    const uri = await generateInvoicePdf(invoice as Invoice, getSubtotal, getGst, getTotal);
+    const uri = await generateInvoicePdf(invoice as Invoice, subtotal, gst, total);
     if (uri) {
       setPdfUri(uri);
       animation.current?.play();
