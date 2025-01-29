@@ -26,6 +26,7 @@ export type InvoiceState = {
   startNewInvoice: () => void;
   resetNewInvoice: () => void;
   saveInvoice: () => void;
+  deleteInvoice: (id: string) => void;
 
   addRecipientInfo: (recipient: BusinessEntityType | null) => void;
   addInvoiceInfo: (invoiceInfo: InvoiceInfoType) => void;
@@ -77,6 +78,11 @@ export const useStore = create<InvoiceState>()(
           newInvoice: null,
         }));
         if (newInvoice?.recipient) get().addContact(newInvoice.recipient);
+      },
+      deleteInvoice: (id) => {
+        set((state) => ({
+          invoices: state.invoices.filter((i) => i.id !== id),
+        }));
       },
 
       addRecipientInfo: (recipient) =>

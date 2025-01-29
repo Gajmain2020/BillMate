@@ -8,8 +8,8 @@ import { StyleSheet, Text, View } from 'react-native';
 import { Button } from '~/components/Button';
 import { Invoice } from '~/schema/invoice';
 import { useStore } from '~/store';
-import { generateInvoicePdf } from '~/utils/pdf';
 import { getTotals } from '~/utils/invoice';
+import { generateInvoicePdf } from '~/utils/pdf';
 
 export default function Success() {
   const { id } = useLocalSearchParams<{ id: string }>();
