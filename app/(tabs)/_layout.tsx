@@ -1,4 +1,4 @@
-import { FontAwesome6 } from '@expo/vector-icons';
+import { Feather, FontAwesome6 } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
 
 export default function Layout() {
@@ -13,10 +13,18 @@ export default function Layout() {
         name="index"
         options={{
           headerShown: false,
-          title: 'Invoice',
+          title: 'Home',
+          tabBarIcon: ({ color, size }) => <Feather name="home" size={size} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="invoices"
+        options={{
+          title: 'Invoices',
           tabBarIcon: ({ color, size }) => (
             <FontAwesome6 name="file-invoice" size={size} color={color} />
           ),
+          headerTitleAlign: 'center',
         }}
       />
       <Tabs.Screen
