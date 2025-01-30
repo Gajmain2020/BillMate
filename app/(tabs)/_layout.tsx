@@ -39,11 +39,9 @@ export default function Layout() {
         }}
       />
       <Tabs.Screen
-        name="profile"
+        name="settings"
         options={{
-          tabBarIcon: ({ color, size }) => (
-            <FontAwesome6 name="user-astronaut" size={size} color={color} />
-          ),
+          tabBarIcon: ({ color, size }) => <Feather name="settings" size={size} color={color} />,
           headerShown: false,
         }}
       />

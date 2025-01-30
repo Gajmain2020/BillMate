@@ -4,15 +4,27 @@ import { useState } from 'react';
 import { Pressable, Text, View, Modal, ActivityIndicator } from 'react-native';
 
 import { Button } from '~/components/Button';
+import ReviewModal from '~/components/Review';
 import { useStore } from '~/store';
 
-function ListItem({ title, onPress }: { title: string; onPress: () => void }) {
+function ListItem({
+  title,
+  labelRight = '',
+  onPress,
+}: {
+  title: string;
+  labelRight: string;
+  onPress: () => void;
+}) {
   return (
     <Pressable
       onPress={onPress}
-      className="flex-row items-center justify-between border-b border-gray-200 bg-white px-4 py-2">
-      <Text className="text-base">{title}</Text>
-      <Entypo name="chevron-right" size={24} color="gray" />
+      className="flex-row items-center justify-between border-b border-gray-200 bg-white p-4">
+      <Text className="text-lg">{title}</Text>
+      <View className="flex-row items-center gap-2">
+        <Text className="text-base text-gray-500">{labelRight}</Text>
+        <Entypo name="chevron-right" size={24} color="gray" />
+      </View>
     </Pressable>
   );
 }
@@ -20,8 +32,11 @@ function ListItem({ title, onPress }: { title: string; onPress: () => void }) {
 export default function ProfileScreen() {
   const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [reviewModalVisible, setReviewModalVisible] = useState(false);
+
   const profile = useStore((data) => data.profile);
   const deleteAccount = useStore((data) => data.deleteAccount);
+  const invoiceNumberFormat = useStore((data) => data.invoiceNumberFormat);
 
   function handleConfirmDelete() {
     setLoading(true);
@@ -36,19 +51,44 @@ export default function ProfileScreen() {
 
   return (
     <>
-      <View className="flex-1 bg-gray-50 p-4">
-        <View className="mb-1 border-b border-gray-200 pb-4 pt-2">
+      <View className="flex-1  bg-gray-50 p-4">
+        <View className="mb-1 py-8">
           <Text className="text-3xl font-bold ">{profile?.name || 'My Business'}</Text>
           <Text className="mt-1 text-gray-500">GST No.: {profile.gst}</Text>
         </View>
-        <View className="overflow-hidden rounded-lg">
-          <ListItem title="Edit Business Details" onPress={() => router.push('/profile/edit')} />
-          <ListItem
-            title="Edit Invoice Number Format"
-            onPress={() => router.push('/profile/invoice-format')}
-          />
+
+        <View className="gap-5">
+          <View>
+            <Text className="mb-2 ml-2 font-medium text-gray-400">SETTINGS</Text>
+            <View className="overflow-hidden rounded-lg">
+              <ListItem
+                title="Edit Business Details"
+                onPress={() => router.push('/settings/edit')}
+                labelRight=""
+              />
+              <ListItem
+                labelRight={invoiceNumberFormat}
+                title="Invoice Number"
+                onPress={() => router.push('/settings/invoice-format')}
+              />
+            </View>
+          </View>
+          <View>
+            <View className="overflow-hidden rounded-lg">
+              <ListItem
+                title="Review App"
+                onPress={() => setReviewModalVisible(true)}
+                labelRight=""
+              />
+              <ReviewModal
+                visible={reviewModalVisible}
+                onClose={() => setReviewModalVisible(false)}
+              />
+            </View>
+          </View>
         </View>
       </View>
+
       <View className="px-2">
         <Button
           className="mb-2 py-3"
