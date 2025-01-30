@@ -4,6 +4,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 import { Invoice, BusinessEntityType, InvoiceInfoType, InvoiceItemType } from '~/schema/invoice';
+import { generateInvoiceNumber } from '~/utils/invoice';
 
 // TODO: ADD TOTAL AND ITS ROUND OFF FUNCTION
 
@@ -62,6 +63,7 @@ export const useStore = create<InvoiceState>()(
         set(() => ({
           newInvoice: {
             id: Crypto.randomUUID(),
+            invoiceNumber: generateInvoiceNumber(),
             sender: get().profile,
             items: [{ name: 'Example', quantity: 1, price: 20 }],
             date: new Date(),

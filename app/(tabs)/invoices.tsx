@@ -8,7 +8,13 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import Animated, { SlideInRight, SlideOutLeft, ZoomIn, ZoomOut } from 'react-native-reanimated';
+import Animated, {
+  LinearTransition,
+  SlideInRight,
+  SlideOutLeft,
+  ZoomIn,
+  ZoomOut,
+} from 'react-native-reanimated';
 
 import { Button } from '~/components/Button';
 import { Invoice } from '~/schema/invoice';
@@ -97,7 +103,9 @@ function RenderInvoiceItem({ item }: { item: Invoice }) {
 }
 
 export default function InvoicesScreen() {
-  const invoices = useStore((state) => state.invoices);
+  const invoices = useStore((state) =>
+    state.invoices.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+  );
   const startNewInvoice = useStore((state) => state.startNewInvoice);
 
   const handleNewInvoice = () => {
@@ -107,10 +115,11 @@ export default function InvoicesScreen() {
 
   return (
     <View className="flex-1 p-2">
-      <FlatList
+      <Animated.FlatList
         data={invoices}
         renderItem={({ item }) => <RenderInvoiceItem item={item} />}
         keyExtractor={(item) => item.id}
+        itemLayoutAnimation={LinearTransition}
         ListEmptyComponent={
           <View className="flex-1 items-center justify-center p-4">
             <Text className="mb-2 text-2xl text-gray-600">No Invoices Yet</Text>
