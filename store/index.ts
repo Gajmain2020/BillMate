@@ -4,13 +4,14 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 import { Invoice, BusinessEntityType, InvoiceInfoType, InvoiceItemType } from '~/schema/invoice';
-import { generateInvoiceNumber } from '~/utils/invoice';
+import { generateInvoiceNumber, getLastInvoice } from '~/utils/invoice';
 
 // TODO: ADD TOTAL AND ITS ROUND OFF FUNCTION
 
 export type InvoiceState = {
   profile: BusinessEntityType;
   onboardingCompleted: boolean;
+  invoiceNumberFormat: string;
 
   newInvoice: Partial<Invoice> | null;
   invoices: Invoice[];
@@ -23,6 +24,7 @@ export type InvoiceState = {
 
   setProfile: (profile: BusinessEntityType) => void;
   setOnboardingCompleted: () => void;
+  setInvoiceNumberFormat: (format: string) => void;
 
   startNewInvoice: () => void;
   resetNewInvoice: () => void;
@@ -44,6 +46,7 @@ export const useStore = create<InvoiceState>()(
         gst: '',
       },
       onboardingCompleted: false,
+      invoiceNumberFormat: 'INV-XXX',
 
       newInvoice: null,
       invoices: [],
@@ -57,19 +60,23 @@ export const useStore = create<InvoiceState>()(
           onboardingCompleted: false,
         })),
       setOnboardingCompleted: () => set(() => ({ onboardingCompleted: true })),
+      setInvoiceNumberFormat: (format) => set(() => ({ invoiceNumberFormat: format })),
 
       // INVOICE
-      startNewInvoice: () =>
+      startNewInvoice: () => {
+        const lastInvoice = getLastInvoice(get().invoices);
+        const invoiceNumberFormat = get().invoiceNumberFormat;
         set(() => ({
           newInvoice: {
             id: Crypto.randomUUID(),
-            invoiceNumber: generateInvoiceNumber(),
+            invoiceNumber: generateInvoiceNumber(lastInvoice, invoiceNumberFormat),
             sender: get().profile,
             items: [{ name: 'Example', quantity: 1, price: 20 }],
             date: new Date(),
             // dueDate: new Date(new Date().setDate(new Date().getDate() + 14)).toLocaleDateString(),
           },
-        })),
+        }));
+      },
       resetNewInvoice: () => set(() => ({ newInvoice: null })),
       saveInvoice: () => {
         const newInvoice = get().newInvoice as Invoice; //TODO: fix this
@@ -115,7 +122,6 @@ export const useStore = create<InvoiceState>()(
         }));
       },
     }),
-    //testing dev
 
     { name: 'billmate-store', getStorage: () => Storage }
   )

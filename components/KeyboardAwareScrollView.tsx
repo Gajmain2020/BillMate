@@ -10,23 +10,25 @@ type KeyboardAwareScrollViewProps = PropsWithChildren<{
 
 export default function KeyboardAwareScrollView({
   children,
-  keyboardVerticalOffset = 97,
+  keyboardVerticalOffset = 130,
   behavior = Platform.OS === 'ios' ? 'padding' : 'height',
-  contentContainerStyle,
+  contentContainerStyle = {},
 }: KeyboardAwareScrollViewProps) {
   return (
     <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="dark-content" backgroundColor="white" />
+      <StatusBar
+        barStyle={Platform.select({ ios: 'dark-content', android: 'dark-content' })}
+        backgroundColor="white"
+      />
       <KeyboardAvoidingView
         behavior={behavior}
         style={styles.avoidingView}
         keyboardVerticalOffset={keyboardVerticalOffset}>
         <ScrollView
-          contentContainerStyle={{
-            flexGrow: 1,
-            padding: 10,
-            gap: 5,
-          }}
+          contentContainerStyle={StyleSheet.flatten([
+            styles.scrollViewContent,
+            contentContainerStyle,
+          ])}
           keyboardShouldPersistTaps="handled">
           {children}
         </ScrollView>
@@ -47,6 +49,5 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     padding: 10,
     gap: 5,
-    backgroundColor: 'white',
   },
 });

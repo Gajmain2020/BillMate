@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { router } from 'expo-router';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Keyboard, KeyboardAvoidingView, Platform, ScrollView, Text, View } from 'react-native';
 
@@ -52,8 +53,17 @@ export default function Profile() {
               placeholder="Enter your address"
               multiline
             />
-
             <CustomTextInput name="gst" label="GST No." placeholder="Enter your GST number" />
+
+            <View className="mb-8">
+              <Text className="mb-2 font-bold">Invoice Number Format</Text>
+              <Button
+                variant="secondary"
+                className="py-2.5"
+                title="Configure Invoice Number Format"
+                onPress={() => router.push('/profile/invoice-format')}
+              />
+            </View>
           </View>
 
           <Button title="Save" className="mt-auto" onPress={form.handleSubmit(onSubmit)} />

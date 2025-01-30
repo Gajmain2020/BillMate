@@ -15,8 +15,8 @@ export const getTotals = (invoice: Partial<Invoice>) => {
   return { subtotal, gst, total: subtotal + gst };
 };
 
-const getLastInvoice = (): Invoice | null => {
-  const invoices = useStore.getState().invoices || [];
+export const getLastInvoice = (invoices: Invoice[]): Invoice | null => {
+  // const invoices = useStore.getState().invoices || [];
 
   return invoices.reduce(
     (latest: Invoice | null, curr: Invoice) =>
@@ -25,11 +25,31 @@ const getLastInvoice = (): Invoice | null => {
   );
 };
 
-export const generateInvoiceNumber = (): string => {
-  const lastInvoice = getLastInvoice();
+export const generateInvoiceNumber = (
+  lastInvoice: Invoice | null,
+  invoiceNumberFormat: string
+): string => {
+  const lastInvoiceNumber = lastInvoice?.invoiceNumber || '';
 
-  const lastInvoiceNumber = lastInvoice?.invoiceNumber;
-  const lastInvoiceNumberInt = parseInt(lastInvoiceNumber?.split('-')[1] || '0', 10);
+  // Split the format into parts based on "XXX"
+  const parts = invoiceNumberFormat.split('XXX');
+  const staticPrefix = parts[0] || ''; // Prefix before "XXX"
+  const staticSuffix = parts.length > 1 ? parts.slice(1).join('XXX') : ''; // Suffix after "XXX"
 
-  return `INV-${lastInvoiceNumberInt + 1}`;
+  // Extract numeric part by removing prefix and suffix
+  const lastInvoiceNumberSeq = lastInvoiceNumber
+    .replace(staticPrefix, '')
+    .replace(staticSuffix, '');
+
+  // Convert to number and increment
+  let lastInvoiceNumberInt = parseInt(lastInvoiceNumberSeq || '0', 10);
+  if (isNaN(lastInvoiceNumberInt)) {
+    lastInvoiceNumberInt = 0;
+  }
+
+  // Format with zero-padding
+  const paddedNumber = (lastInvoiceNumberInt + 1).toString().padStart(3, '0');
+
+  // Return new invoice number
+  return `${staticPrefix}${paddedNumber}${staticSuffix}`;
 };

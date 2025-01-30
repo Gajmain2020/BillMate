@@ -44,8 +44,7 @@ export default function Layout() {
           tabBarIcon: ({ color, size }) => (
             <FontAwesome6 name="user-astronaut" size={size} color={color} />
           ),
-          title: 'Profile',
-          headerTitleAlign: 'center',
+          headerShown: false,
         }}
       />
     </Tabs>
