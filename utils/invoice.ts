@@ -26,7 +26,7 @@ export const getLastInvoice = (invoices: Invoice[]): Invoice | null => {
 };
 
 export const generateInvoiceNumber = (
-  lastInvoice: Invoice | null,
+  lastInvoice: Pick<Invoice, 'invoiceNumber'> | null,
   invoiceNumberFormat: string
 ): string => {
   const lastInvoiceNumber = lastInvoice?.invoiceNumber || '';

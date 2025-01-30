@@ -25,6 +25,7 @@ export type InvoiceState = {
   setProfile: (profile: BusinessEntityType) => void;
   setOnboardingCompleted: () => void;
   setInvoiceNumberFormat: (format: string) => void;
+  deleteAccount: () => void;
 
   startNewInvoice: () => void;
   resetNewInvoice: () => void;
@@ -119,6 +120,23 @@ export const useStore = create<InvoiceState>()(
       updateContact: (contact) => {
         set((state) => ({
           contacts: state.contacts.map((c) => (c.id === contact.id ? contact : c)),
+        }));
+      },
+
+      // function to reset the app
+      deleteAccount: () => {
+        set(() => ({
+          profile: {
+            id: Crypto.randomUUID(),
+            name: '',
+            address: '',
+            gst: '',
+          },
+          onboardingCompleted: false,
+          invoiceNumberFormat: 'INV-XXX',
+          newInvoice: null,
+          invoices: [],
+          contacts: [],
         }));
       },
     }),

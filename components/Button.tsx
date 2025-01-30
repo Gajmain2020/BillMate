@@ -1,7 +1,7 @@
 import { forwardRef } from 'react';
 import { Text, TouchableOpacity, TouchableOpacityProps, View } from 'react-native';
 
-type ButtonVariant = 'primary' | 'secondary' | 'link';
+type ButtonVariant = 'primary' | 'secondary' | 'link' | 'danger';
 
 const styles = {
   primary: {
@@ -15,6 +15,11 @@ const styles = {
   link: {
     button: 'items-center p-4',
     text: 'text-emerald-500 text-lg font-bold text-center',
+  },
+  danger: {
+    button:
+      'items-center justify-center border-2 border-red-500 rounded-[28px] bg-red-50 shadow-md px-4',
+    text: 'text-red-500 text-lg font-bold text-center',
   },
 };
 type ButtonProps = {
