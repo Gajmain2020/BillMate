@@ -222,7 +222,8 @@ export const generateInvoicePdf = async (
     // On iOS/android prints the given html. On web prints the HTML from the current page.
     const { uri } = await printToFileAsync({ html: generateHTML(invoice, subtotal, gst, total) });
 
-    const permanentUri = FileSystem.documentDirectory + `invoice-${invoice.invoiceNumber}.pdf`;
+    const safeInvoiceNumber = invoice.invoiceNumber.replace(/[\/\\:*?"<>|]/g, '-');
+    const permanentUri = FileSystem.documentDirectory + `invoice-${safeInvoiceNumber}.pdf`;
     // MOVE TO DOCUMENT DIRECTORY
     await FileSystem.moveAsync({
       from: uri,
