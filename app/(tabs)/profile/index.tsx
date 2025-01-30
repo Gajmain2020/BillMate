@@ -1,6 +1,6 @@
-import { useState } from 'react';
 import { Entypo } from '@expo/vector-icons';
 import { router } from 'expo-router';
+import { useState } from 'react';
 import { Pressable, Text, View, Modal, ActivityIndicator } from 'react-native';
 
 import { Button } from '~/components/Button';
@@ -60,7 +60,7 @@ export default function ProfileScreen() {
 
       {/* Confirmation Modal */}
       <Modal
-        transparent={true}
+        transparent
         visible={modalVisible}
         animationType="slide"
         onRequestClose={() => setModalVisible(false)}>
