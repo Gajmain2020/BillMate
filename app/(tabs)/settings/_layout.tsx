@@ -12,6 +12,10 @@ export default function ProfileLayout() {
         name="invoice-format"
         options={{ title: 'Invoice Number Format', headerTitleAlign: 'center' }}
       />
+      <Stack.Screen
+        name="help"
+        options={{ title: 'Help & Contacts', headerTitleAlign: 'center' }}
+      />
     </Stack>
   );
 }

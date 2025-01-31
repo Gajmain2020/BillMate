@@ -122,6 +122,19 @@ export default function ContactScreen() {
     setSearch(text);
   };
 
+  if (contacts.length === 0) {
+    return (
+      <Animated.View
+        entering={FadeIn.duration(300)}
+        className="flex-1 items-center justify-center p-4">
+        <Text className="mb-2 text-xl font-bold">No Contacts Yet</Text>
+        <Text className="mb-8 text-center text-gray-600">
+          Your contacts will appear here after you create invoices.
+        </Text>
+      </Animated.View>
+    );
+  }
+
   return (
     <>
       <View className="flex-row items-center rounded border border-gray-300 p-2 ">
