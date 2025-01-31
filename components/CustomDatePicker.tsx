@@ -23,11 +23,17 @@ export default function CustomDatePicker({ name, label }: CustomDatePickerProps)
 
         <Text
           onPress={() => setIsDatePickerVisible(true)}
-          className={'rounded border border-gray-200 p-4 ' + (!value ? 'text-gray-500' : '')}>
-          {value ? new Date(value).toLocaleDateString() : 'Please choose date'}
+          className={'rounded border border-gray-200 p-2 ' + (!value ? 'text-gray-500' : '')}>
+          {value
+            ? new Date(value).toLocaleDateString('en-GB', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+              })
+            : 'Please choose date'}
         </Text>
 
-        <Text className="text-red-500">{error?.message}</Text>
+        {error?.message && <Text className="text-red-500">{error?.message}</Text>}
       </View>
       <DateTimePickerModal
         isVisible={isDatePickerVisible}

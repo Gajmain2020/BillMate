@@ -113,6 +113,14 @@ export default function InvoicesScreen() {
     router.push('/invoices/generate');
   };
 
+  if (invoices.length === 0) {
+    return (
+      <View className="flex-1 items-center justify-center p-4">
+        <Text className="mb-2 text-2xl font-semibold text-gray-800">No Invoices Yet</Text>
+        <Text className="text-center text-gray-500">Create your first invoice to get started.</Text>
+      </View>
+    );
+  }
   return (
     <View className="flex-1 p-2">
       <Animated.FlatList

@@ -41,7 +41,11 @@ export default function Summary() {
             <View>
               <Text className="text-sm text-gray-500">Due Date</Text>
               <Text className="text-sm text-gray-500">
-                {invoice?.dueDate?.toLocaleDateString() || ''}
+                {invoice?.dueDate?.toLocaleDateString('en-GB', {
+                  day: '2-digit',
+                  month: '2-digit',
+                  year: 'numeric',
+                }) || ''}
               </Text>
             </View>
           </View>

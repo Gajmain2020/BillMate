@@ -127,8 +127,8 @@ export default function ContactScreen() {
       <Animated.View
         entering={FadeIn.duration(300)}
         className="flex-1 items-center justify-center p-4">
-        <Text className="mb-2 text-xl font-bold">No Contacts Yet</Text>
-        <Text className="mb-8 text-center text-gray-600">
+        <Text className="mb-2 text-2xl font-semibold text-gray-800">No Contacts Yet</Text>
+        <Text className="text-center text-gray-600">
           Your contacts will appear here after you create invoices.
         </Text>
       </Animated.View>

@@ -89,7 +89,7 @@ export default function ContactScreen() {
       <View className="overflow-hidden rounded-lg">
         <ListItem title="Email Support" icon="mail" onPress={handleEmail} />
         <ListItem title="Call Support" icon="phone" onPress={handleCall} />
-        <ListItem title="Address" icon="location-pin" onPress={() => console.log('hello')} />
+        {/* <ListItem title="Address" icon="location-pin" onPress={() => console.log('hello')} /> */}
         <ListItem title="Raise a Request" icon="bell" onPress={() => setModalVisible(true)} />
       </View>
 

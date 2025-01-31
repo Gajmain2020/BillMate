@@ -54,10 +54,12 @@ function DeleteConfirmationModal({ visible, loading, onCancel, onConfirm }: Dele
 
 function ListItem({
   title,
+  icon,
   labelRight = '',
   onPress,
 }: {
   title: string;
+  icon: any;
   labelRight: string;
   onPress: () => void;
 }) {
@@ -65,14 +67,39 @@ function ListItem({
     <Pressable
       onPress={onPress}
       className="flex-row items-center justify-between border-b border-gray-200 bg-white p-4">
-      <Text className="text-lg">{title}</Text>
       <View className="flex-row items-center gap-2">
+        <Entypo name={icon} size={18} color="gray" />
+        <Text className="text-lg">{title}</Text>
+      </View>
+      <View className="flex-row items-center gap-1">
         <Text className="text-base text-gray-500">{labelRight}</Text>
         <Entypo name="chevron-right" size={24} color="gray" />
       </View>
     </Pressable>
   );
 }
+
+// function ListItem({
+//   title,
+//   labelRight = '',
+//   onPress,
+// }: {
+//   title: string;
+//   labelRight: string;
+//   onPress: () => void;
+// }) {
+//   return (
+//     <Pressable
+//       onPress={onPress}
+//       className="flex-row items-center justify-between border-b border-gray-200 bg-white p-4">
+//       <Text className="text-lg">{title}</Text>
+//       <View className="flex-row items-center gap-2">
+//         <Text className="text-base text-gray-500">{labelRight}</Text>
+//         <Entypo name="chevron-right" size={24} color="gray" />
+//       </View>
+//     </Pressable>
+//   );
+// }
 
 export default function ProfileScreen() {
   const [modalVisible, setModalVisible] = useState(false);
@@ -107,11 +134,13 @@ export default function ProfileScreen() {
             <View className="overflow-hidden rounded-lg">
               <ListItem
                 title="Edit Business Details"
+                icon="briefcase"
                 onPress={() => router.push('/settings/edit')}
                 labelRight=""
               />
               <ListItem
                 labelRight={invoiceNumberFormat}
+                icon="new-message"
                 title="Invoice Number"
                 onPress={() => router.push('/settings/invoice-format')}
               />
@@ -122,11 +151,13 @@ export default function ProfileScreen() {
             <View className="overflow-hidden rounded-lg">
               <ListItem
                 title="Review App"
+                icon="sound"
                 onPress={() => setReviewModalVisible(true)}
                 labelRight=""
               />
               <ListItem
                 title="Help & Contacts"
+                icon="help"
                 onPress={() => router.push('/settings/help')}
                 labelRight=""
               />

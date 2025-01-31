@@ -12,25 +12,30 @@ const generateHTML = (invoice: Invoice, subtotal: number, gst: number, total: nu
           name="viewport"
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
         <style>
+          @page {
+            size: A5;
+            margin: 0.5in;
+          }
+
           body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
             font-size: 12px;
             background-color: #f4f4f9;
             color: #333;
+            margin: 0;
+            padding: 0;
           }
+
           .invoice-container {
-            width: 210mm;
-            height: 297mm;
-            margin: 0 auto;
-            padding: 15mm;
+            width: 100%;
+            max-width: 5.8in;
+            min-height: 8.3in;
             background-color: #fff;
+            padding: 0.5in;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            position: relative;
             box-sizing: border-box;
           }
+
           .invoice-header {
             display: flex;
             justify-content: space-between;
@@ -39,59 +44,75 @@ const generateHTML = (invoice: Invoice, subtotal: number, gst: number, total: nu
             padding-bottom: 10px;
             margin-bottom: 10px;
           }
+
           .invoice-header h1 {
             font-size: 20px;
             margin: 0;
           }
+
           .company-logo {
             width: 100px;
             height: auto;
           }
+
           .info {
             display: flex;
             justify-content: space-between;
             margin-bottom: 20px;
           }
+
           .info h1 {
             font-size: 16px;
             margin-bottom: 8px;
           }
+
           .info p {
             margin: 3px 0;
           }
+
           .invoice-table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 15px;
+            page-break-inside: avoid;
           }
+
           .invoice-table th,
           .invoice-table td {
             padding: 6px;
             text-align: left;
             border: 1px solid #ddd;
           }
+
           .invoice-table th {
             background-color: #575757;
             color: #fff;
             font-weight: bold;
           }
+
           .invoice-table tr:nth-child(even) {
             background-color: #f9f9f9;
           }
+
           .totals {
             float: right;
-            width: 300px;
+            width: 100%;
+            max-width: 300px;
             font-size: 14px;
             margin-top: 10px;
+            page-break-before: always;
           }
+
           .totals .totals-row {
             display: flex;
             justify-content: space-between;
             padding: 6px 0;
           }
+
           .totals .totals-row span:last-child {
             font-weight: bold;
           }
+
           .signature {
             border-top: 1px solid gray;
             position: absolute;
@@ -99,23 +120,28 @@ const generateHTML = (invoice: Invoice, subtotal: number, gst: number, total: nu
             right: 20mm;
             text-align: right;
           }
+
           .signature h3 {
             margin: 0;
             font-size: 14px;
           }
+
           .signature p {
             margin: 5px 0 0;
             font-size: 12px;
             color: #555;
           }
+
           .footer {
-            position: absolute;
-            bottom: 20mm;
+            position: relative;
+            bottom: 0;
             font-size: 10px;
             color: #888;
             border-top: 1px solid #ddd;
             padding-top: 10px;
+            page-break-before: always;
           }
+
           .footer h3 {
             font-size: 12px;
             margin-bottom: 8px;
@@ -129,7 +155,14 @@ const generateHTML = (invoice: Invoice, subtotal: number, gst: number, total: nu
               <h1>Invoice</h1>
               <p>Invoice #: ${invoice.invoiceNumber}</p>
               <p>Date: ${invoice.date.toLocaleDateString()}</p>
-              ${invoice.dueDate && `<p>Due Date: ${invoice?.dueDate?.toLocaleDateString()}</p>`}
+              ${
+                invoice.dueDate &&
+                `<p>Due Date: ${invoice?.dueDate?.toLocaleDateString('en-GB', {
+                  day: '2-digit',
+                  month: '2-digit',
+                  year: 'numeric',
+                })}</p>`
+              }
             </div>
             <!--
              <div class="company-info">
@@ -163,15 +196,24 @@ const generateHTML = (invoice: Invoice, subtotal: number, gst: number, total: nu
               </tr>
             </thead>
             <tbody>
-                ${invoice.items.map(
-                  (item) => `<tr>
-                                <td>${item.name}</td>
-                                <td>${item.quantity}</td>
-                                <td>$ ${item.price}</td>
-                                <td>$ ${item.price * item.quantity}</td>
-                            </tr>`
-                )}
-              
+                ${invoice.items
+                  .map(
+                    (item, index) => `
+                      <tr>
+                        <td>${item.name}</td>
+                        <td>${item.quantity}</td>
+                        <td>$ ${item.price}</td>
+                        <td>$ ${item.price * item.quantity}</td>
+                      </tr>
+                      
+                      ${
+                        index % 8 === 7
+                          ? '</tbody></table><table class="invoice-table"><thead><tr><th>Description</th><th>Quantity</th><th>Unit Price</th><th>Amount</th></tr></thead><tbody>'
+                          : ''
+                      }
+                    `
+                  )
+                  .join('')}
             </tbody>
           </table>
     
@@ -207,7 +249,7 @@ const generateHTML = (invoice: Invoice, subtotal: number, gst: number, total: nu
         </div>
       </body>
     </html>  
-    `;
+  `;
 
   return html;
 };

@@ -36,14 +36,20 @@ export default function GenerateInvoice() {
         <Text className="mb-5 text-2xl font-bold">New Contact</Text>
 
         <View className="gap-2">
-          <CustomTextInput name="name" label="Name" placeholder="Enter your name" />
+          <CustomTextInput name="name" label="Name" placeholder="Enter client's name" />
           <CustomTextInput
             name="address"
             label="Address"
-            placeholder="Enter your address"
+            placeholder="Enter client's address"
+            className="min-h-20"
+            textAlignVertical="top"
             multiline
           />
-          <CustomTextInput name="gst" label="GST No." placeholder="Enter your GST number" />
+          <CustomTextInput
+            name="gst"
+            label="GST No."
+            placeholder="Enter client's GST number (if any)"
+          />
         </View>
 
         <Button title="Next" className="mt-auto" onPress={form.handleSubmit(onSubmit)} />

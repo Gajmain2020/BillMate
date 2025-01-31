@@ -35,7 +35,8 @@ export default function Profile() {
   return (
     <KeyboardAwareScrollView>
       <FormProvider {...form}>
-        <Text className="mb-5 text-2xl font-bold">My Profile</Text>
+        <Text className=" text-2xl font-bold">My Business Info</Text>
+        <Text className="mb-5 text-gray-600">This information will be used on invoices</Text>
 
         <View className="gap-2">
           <CustomTextInput name="name" label="Name" placeholder="Enter your name" />
@@ -44,6 +45,9 @@ export default function Profile() {
             label="Address"
             placeholder="Enter your address"
             multiline
+            numberOfLines={3}
+            className="min-h-20"
+            textAlignVertical="top"
           />
 
           <CustomTextInput name="gst" label="GST No." placeholder="Enter your GST number" />
