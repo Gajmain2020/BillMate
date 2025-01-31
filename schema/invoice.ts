@@ -9,6 +9,19 @@ export const businessEntitySchema = z.object({
 
 export type BusinessEntityType = z.infer<typeof businessEntitySchema>;
 
+export const ownerEntitySchema = z.object({
+  id: z.string().uuid(),
+  name: z.string({ required_error: 'Name is required.' }).min(1, 'Name is required'),
+  address: z.string().min(1, 'Address is required'),
+  email: z.string().min(1, 'Email is required'),
+  contact: z.string().min(1, 'Contact number is required'),
+  altContact: z.string().optional(),
+  website: z.string().optional(),
+  gst: z.string().min(1, 'GST No. is required'),
+});
+
+export type OwnerEntityType = z.infer<typeof ownerEntitySchema>;
+
 export const invoiceInfoSchema = z.object({
   invoiceNumber: z
     .string({ required_error: 'Invoice Number is required.' })
@@ -25,6 +38,7 @@ export const invoiceItemSchema = z.object({
   name: z.string({ required_error: 'Name is required.' }).min(1, 'Name is required.'),
   quantity: z.number({ required_error: 'Quantity is required.' }).min(1, 'Quantity is required.'),
   price: z.number({ required_error: 'Price is required.' }).min(1, 'Price is required.'),
+  total: z.number({ required_error: 'Total is required.' }).min(1, 'Total is required.'),
 });
 
 export type InvoiceItemType = z.infer<typeof invoiceItemSchema>;
@@ -35,7 +49,7 @@ export type InvoiceItemType = z.infer<typeof invoiceItemSchema>;
 
 export type Invoice = InvoiceInfoType & {
   id: string;
-  sender: BusinessEntityType;
+  sender: OwnerEntityType;
   recipient: BusinessEntityType;
   items: InvoiceItemType[];
 };
