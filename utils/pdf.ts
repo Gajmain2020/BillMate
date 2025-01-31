@@ -4,17 +4,19 @@ import { printToFileAsync } from 'expo-print';
 import { Invoice } from '~/schema/invoice';
 
 const generateHTML = (invoice: Invoice, subtotal: number, gst: number, total: number) => {
-  const html = `
+  const itemsPerPage = 20;
+  let html = `
     <!doctype html>
     <html>
       <head>
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
         <style>
           @page {
-            size: A5;
+            size: A4;
             margin: 0.5in;
+          }
+          *{
+            background-color: white;
           }
 
           body {
@@ -28,8 +30,8 @@ const generateHTML = (invoice: Invoice, subtotal: number, gst: number, total: nu
 
           .invoice-container {
             width: 100%;
-            max-width: 5.8in;
-            min-height: 8.3in;
+            max-width: 8.3in;
+            min-height: 11.7in;
             background-color: #fff;
             padding: 0.5in;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -48,11 +50,6 @@ const generateHTML = (invoice: Invoice, subtotal: number, gst: number, total: nu
           .invoice-header h1 {
             font-size: 20px;
             margin: 0;
-          }
-
-          .company-logo {
-            width: 100px;
-            height: auto;
           }
 
           .info {
@@ -146,6 +143,15 @@ const generateHTML = (invoice: Invoice, subtotal: number, gst: number, total: nu
             font-size: 12px;
             margin-bottom: 8px;
           }
+
+          .contd {
+            position: absolute;
+            bottom: 10px;
+            right: 20px;
+            font-size: 12px;
+            color: #888;
+            font-style: italic;
+          }
         </style>
       </head>
       <body>
@@ -157,20 +163,15 @@ const generateHTML = (invoice: Invoice, subtotal: number, gst: number, total: nu
               <p>Date: ${invoice.date.toLocaleDateString()}</p>
               ${
                 invoice.dueDate &&
-                `<p>Due Date: ${invoice?.dueDate?.toLocaleDateString('en-GB', {
+                `<p>Due Date: ${invoice.dueDate.toLocaleDateString('en-GB', {
                   day: '2-digit',
                   month: '2-digit',
                   year: 'numeric',
                 })}</p>`
               }
             </div>
-            <!--
-             <div class="company-info">
-              <img src="[YOUR_LOGO_PATH]" alt="Company Logo" class="company-logo" />
-            </div>
-            -->
           </div>
-    
+
           <div class="info">
             <div class="client-info">
               <h1>Bill to:</h1>
@@ -179,44 +180,53 @@ const generateHTML = (invoice: Invoice, subtotal: number, gst: number, total: nu
               <p>GST No.: ${invoice.recipient.gst}</p>
             </div>
             <div class="client-info">
-              <h2>Your Company Name</h2>
-              <p>${invoice.recipient.name}</p>
-              <p>${invoice.recipient.address}</p>
-              <p>GST No.: ${invoice.recipient.gst}</p>
+              <h1>From:</h1>
+              <p>${invoice.sender.name}</p>
+              <p>${invoice.sender.address}</p>
+              <p>GST No.: ${invoice.sender.gst}</p>
             </div>
           </div>
-    
-          <table class="invoice-table">
-            <thead>
-              <tr>
-                <th>Description</th>
-                <th>Quantity</th>
-                <th>Unit Price</th>
-                <th>Amount</th>
-              </tr>
-            </thead>
-            <tbody>
-                ${invoice.items
-                  .map(
-                    (item, index) => `
+
+          ${invoice.items
+            .reduce((acc: string[], item, index) => {
+              const pageBreak =
+                index === itemsPerPage - 1 ? '<div class="contd">Contd...</div>' : '';
+              if (index % itemsPerPage === 0) {
+                if (acc.length > 0) {
+                  acc.push('</table>');
+                }
+                acc.push(`
+                  <table class="invoice-table">
+                    <thead>
                       <tr>
-                        <td>${item.name}</td>
-                        <td>${item.quantity}</td>
-                        <td>$ ${item.price}</td>
-                        <td>$ ${item.price * item.quantity}</td>
+                        <th>Description</th>
+                        <th>Quantity</th>
+                        <th>Unit Price</th>
+                        <th>Amount</th>
                       </tr>
-                      
-                      ${
-                        index % 8 === 7
-                          ? '</tbody></table><table class="invoice-table"><thead><tr><th>Description</th><th>Quantity</th><th>Unit Price</th><th>Amount</th></tr></thead><tbody>'
-                          : ''
-                      }
-                    `
-                  )
-                  .join('')}
-            </tbody>
-          </table>
-    
+                    </thead>
+                    <tbody>
+                `);
+              }
+
+              acc.push(`
+                <tr>
+                  <td>${item.name}</td>
+                  <td>${item.quantity}</td>
+                  <td>$ ${item.price}</td>
+                  <td>$ ${item.price * item.quantity}</td>
+                </tr>
+              `);
+
+              if (index % itemsPerPage === itemsPerPage - 1) {
+                acc.push(`${pageBreak}`);
+                acc.push('</tbody></table>');
+              }
+
+              return acc;
+            }, [])
+            .join('')}
+
           <div class="totals">
             <div class="totals-row">
               <span>Subtotal:</span>
@@ -232,12 +242,12 @@ const generateHTML = (invoice: Invoice, subtotal: number, gst: number, total: nu
               <span>₹ ${total.toFixed()}</span>
             </div>
           </div>
-    
+
           <div class="signature">
             <h3>Authorized Signature</h3>
             <p>Your Organization Name</p>
           </div>
-    
+
           <div class="footer">
             <h3>Payment Terms</h3>
             <ul>
@@ -263,6 +273,8 @@ export const generateInvoicePdf = async (
   try {
     // On iOS/android prints the given html. On web prints the HTML from the current page.
     const { uri } = await printToFileAsync({ html: generateHTML(invoice, subtotal, gst, total) });
+
+    console.log('hello', invoice);
 
     const safeInvoiceNumber = invoice.invoiceNumber.replace(/[\/\\:*?"<>|]/g, '-');
     const permanentUri = FileSystem.documentDirectory + `invoice-${safeInvoiceNumber}.pdf`;
