@@ -1,5 +1,5 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Crypto from 'expo-crypto';
-import Storage from 'expo-sqlite/kv-store';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
@@ -156,6 +156,6 @@ export const useStore = create<InvoiceState>()(
       },
     }),
 
-    { name: 'billmate-store', getStorage: () => Storage }
+    { name: 'billmate-store', getStorage: () => AsyncStorage }
   )
 );
