@@ -18,6 +18,7 @@ export const ownerEntitySchema = z.object({
   altContact: z.string().optional(),
   website: z.string().optional(),
   gst: z.string().min(1, 'GST No. is required'),
+  logo: z.string().optional(),
 });
 
 export type OwnerEntityType = z.infer<typeof ownerEntitySchema>;

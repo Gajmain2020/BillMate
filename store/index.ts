@@ -15,7 +15,8 @@ import { generateInvoiceNumber, getLastInvoice } from '~/utils/invoice';
 // TODO: ADD TOTAL AND ITS ROUND OFF FUNCTION
 
 export type InvoiceState = {
-  profile: OwnerEntityType;
+  profile: OwnerEntityType & { logo: string | null };
+  setLogo: (uri: string) => void;
   onboardingCompleted: boolean;
   invoiceNumberFormat: string;
 
@@ -55,6 +56,7 @@ export const useStore = create<InvoiceState>()(
         altContact: '',
         website: '',
         gst: '',
+        logo: '',
       },
       onboardingCompleted: false,
       invoiceNumberFormat: 'INV-XXX',
@@ -66,9 +68,18 @@ export const useStore = create<InvoiceState>()(
 
       // PROFILE
       setProfile: (profile) =>
-        set(() => ({
-          profile: { ...profile, gst: profile.gst || '' },
-          onboardingCompleted: false,
+        set((state) => ({
+          profile: {
+            ...state.profile,
+            ...profile,
+            gst: profile.gst || state.profile.gst, // Ensure it's never an empty string
+            logo: profile?.logo ?? state.profile.logo, // Change null to undefined if needed
+          },
+          onboardingCompleted: true,
+        })),
+      setLogo: (uri) =>
+        set((state) => ({
+          profile: { ...state.profile, logo: uri }, // Update the logo
         })),
       setOnboardingCompleted: () => set(() => ({ onboardingCompleted: true })),
       setInvoiceNumberFormat: (format) => set(() => ({ invoiceNumberFormat: format })),
@@ -146,6 +157,7 @@ export const useStore = create<InvoiceState>()(
             altContact: '',
             website: '',
             gst: '',
+            logo: '',
           },
           onboardingCompleted: false,
           invoiceNumberFormat: 'INV-XXX',

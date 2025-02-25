@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { randomUUID } from 'expo-crypto';
 import { router } from 'expo-router';
 import { FormProvider, useForm } from 'react-hook-form';
-import { Keyboard, KeyboardAvoidingView, Platform, ScrollView, Text, View } from 'react-native';
+import { Keyboard, Text, View } from 'react-native';
 
 import { Button } from '~/components/Button';
 import CustomTextInput from '~/components/CustomTextInput';
@@ -19,9 +19,13 @@ export default function Profile() {
     resolver: zodResolver(ownerEntitySchema),
     defaultValues: {
       id: profile?.id || randomUUID(),
-      name: profile?.name,
-      address: profile?.address,
-      gst: profile?.gst,
+      name: profile?.name || '',
+      address: profile?.address || '',
+      gst: profile?.gst || '',
+      contact: profile?.contact || '',
+      altContact: profile?.altContact || '',
+      email: profile?.email || '',
+      website: profile?.website || '',
     },
   });
 
@@ -54,17 +58,17 @@ export default function Profile() {
             textAlignVertical="top"
           />
 
-          <CustomTextInput name="email" label="Email ID" placeholder="Enter your GST number" />
+          <CustomTextInput name="email" label="Email ID" placeholder="Enter your email id" />
 
           <CustomTextInput
             name="contact"
             label="Contact Number"
-            placeholder="Enter your GST number"
+            placeholder="Enter your contact number"
           />
           <CustomTextInput
             name="altContact"
             label="Alternate Contact Number"
-            placeholder="Enter your GST number"
+            placeholder="Enter your alternate contact number"
           />
 
           <CustomTextInput name="website" label="Website" placeholder="Enter your website link" />
