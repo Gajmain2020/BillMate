@@ -1,7 +1,7 @@
 import { Entypo } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { Pressable, Text, View, Modal, ActivityIndicator, ScrollView } from 'react-native';
+import { Pressable, Text, View, Modal, ActivityIndicator, ScrollView, Image } from 'react-native';
 
 import { Button } from '~/components/Button';
 import ReviewModal from '~/components/Review';
@@ -31,18 +31,8 @@ function DeleteConfirmationModal({ visible, loading, onCancel, onConfirm }: Dele
                 Are you sure you want to delete your account? This action cannot be undone.
               </Text>
               <View className="flex-row justify-end gap-4">
-                <Button
-                  className="flex-1 items-center justify-center py-2"
-                  title="Cancel"
-                  variant="link"
-                  onPress={onCancel}
-                />
-                <Button
-                  title="Delete"
-                  variant="danger"
-                  className=" flex-1 items-center justify-center py-2 "
-                  onPress={onConfirm}
-                />
+                <Button title="Cancel" variant="link" onPress={onCancel} />
+                <Button title="Delete" variant="danger" onPress={onConfirm} />
               </View>
             </>
           )}
@@ -79,28 +69,6 @@ function ListItem({
   );
 }
 
-// function ListItem({
-//   title,
-//   labelRight = '',
-//   onPress,
-// }: {
-//   title: string;
-//   labelRight: string;
-//   onPress: () => void;
-// }) {
-//   return (
-//     <Pressable
-//       onPress={onPress}
-//       className="flex-row items-center justify-between border-b border-gray-200 bg-white p-4">
-//       <Text className="text-lg">{title}</Text>
-//       <View className="flex-row items-center gap-2">
-//         <Text className="text-base text-gray-500">{labelRight}</Text>
-//         <Entypo name="chevron-right" size={24} color="gray" />
-//       </View>
-//     </Pressable>
-//   );
-// }
-
 export default function ProfileScreen() {
   const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -122,10 +90,19 @@ export default function ProfileScreen() {
 
   return (
     <ScrollView>
-      <ScrollView className="flex-1  bg-gray-50 p-4">
-        <View className="mb-1 py-8">
-          <Text className="text-3xl font-bold ">{profile?.name || 'My Business'}</Text>
-          <Text className="mt-1 text-gray-500">GST No.: {profile.gst}</Text>
+      <ScrollView className="flex-1 bg-gray-50 p-4">
+        <View className="mb-1 flex-row items-center justify-between py-8">
+          {/* Business Details (Left Side) */}
+          <View className="flex-1">
+            <Text className="text-3xl font-bold">{profile?.name || 'My Business'}</Text>
+            {profile?.email && <Text className="mt-1 text-gray-500">Email: {profile.email}</Text>}
+            {profile?.gst && <Text className="mt-1 text-gray-500">GST No.: {profile.gst}</Text>}
+          </View>
+
+          {/* Logo (Right Side) */}
+          {profile?.logo && (
+            <Image source={{ uri: profile.logo }} className="h-16 w-16 rounded-full" />
+          )}
         </View>
 
         <View className="gap-5">
