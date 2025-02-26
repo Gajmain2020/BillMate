@@ -55,6 +55,7 @@
 //   );
 // }
 
+import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import React, { useRef, useState } from 'react';
 import { View, Text, Dimensions, FlatList, Image, Platform, StatusBar } from 'react-native';
@@ -65,24 +66,35 @@ import { Button } from '~/components/Button';
 const slides = [
   {
     id: '1',
-    title: 'Welcome to AppName',
-    description: 'Your all-in-one solution for managing daily tasks and staying productive',
+    title: 'Effortless Billing for Local Shops',
+    description:
+      'Say goodbye to pen and paper! Billmate makes billing seamless, quick, and hassle-free for your customers.',
     image:
-      'https://amoeboids.com/wp-content/uploads/2020/11/Software-Feature-Request-process-Banner.webp',
+      'https://images.unsplash.com/photo-1544005313-94ddf0286df2?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cG9ydHJhaXR8ZW58MHx8MHx8fDA%3D',
   },
   {
     id: '2',
-    title: 'Powerful Features',
-    description: 'Access all the tools you need to succeed, right at your fingertips',
+    title: 'Completely Free, Always!',
+    description:
+      'No hidden costs, no subscriptions. Generate and manage bills effortlessly—free of charge.',
     image:
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHZqj-XReJ2R76nji51cZl4ETk6-eHRmZBRw&s',
+      'https://cdn.expertphotography.com/wp-content/uploads/2022/03/Portrait-Photographers-Manny-Librodo-Girl.jpg',
   },
   {
     id: '3',
-    title: "Let's Get Started",
-    description: 'Set up your profile and start your journey with us',
+    title: 'Store and Share Instantly',
+    description:
+      'Save bills on your phone and share them as PDFs directly with customers—no extra steps needed!',
     image:
-      'https://amoeboids.com/wp-content/uploads/2020/11/Software-Feature-Request-process-Banner.webp',
+      'https://i0.wp.com/digital-photography-school.com/wp-content/uploads/flickr/4235362473_82798c77a5_z.jpg?resize=443%2C640&ssl=1',
+  },
+  {
+    id: '4',
+    title: 'Set Up Your Profile',
+    description:
+      'Customize your shop details and start generating bills in seconds. Let’s get started!',
+    image:
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSiwXa84G1ThzA7lpv-KBACOiNkRBTbk12S4g&s',
   },
 ];
 
@@ -95,24 +107,40 @@ function Slide({
 }) {
   return (
     <View
-      className="items-center justify-center px-5"
+      className="relative items-center justify-center px-5"
       style={{
         width: windowWidth,
-        height: windowHeight * 0.85,
+        height: windowHeight * 0.95, // Increased height
       }}>
-      <Image
-        source={{ uri: data.image }}
-        className="mb-5 rounded-lg"
-        style={{
-          width: windowWidth * 0.85,
-          height: windowHeight * 0.6,
-          resizeMode: 'contain',
-        }}
-      />
-      <Text style={{ fontSize: 24, fontWeight: 'bold', textAlign: 'center', marginBottom: 10 }}>
-        {data.title}
-      </Text>
-      <Text style={{ fontSize: 16, textAlign: 'center', color: '#666' }}>{data.description}</Text>
+      {/* Image with Overlay */}
+      <View className="relative">
+        <Image
+          source={{ uri: data.image }}
+          className="rounded-lg"
+          style={{
+            width: windowWidth * 0.9,
+            height: windowHeight * 0.75, // Increased height
+            resizeMode: 'cover',
+            borderRadius: 10,
+          }}
+        />
+        {/* Gradient Overlay */}
+        <LinearGradient
+          colors={['transparent', 'rgba(0,0,0,0.7)']} // Transparent to dark
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            width: '100%',
+            height: '40%', // Covers the bottom part
+            borderRadius: 10,
+          }}
+        />
+        {/* Text Overlay */}
+        <View className="absolute bottom-3 mx-auto w-full  px-2">
+          <Text className="mb-1 text-center text-3xl font-bold text-white">{data.title}</Text>
+          <Text className="text-center text-lg text-gray-200">{data.description}</Text>
+        </View>
+      </View>
     </View>
   );
 }

@@ -1,18 +1,9 @@
 import { router } from 'expo-router';
-import { useState, useRef } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Dimensions,
-  TouchableOpacity,
-  FlatList,
-  Image,
-} from 'react-native';
-import Animated, { useAnimatedStyle, withSpring } from 'react-native-reanimated';
-import KeyboardAwareScrollView from '~/components/KeyboardAwareScrollView';
+import React, { useRef, useState } from 'react';
+import { View, Text, Dimensions, FlatList, Image, Platform, StatusBar } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-const { width, height } = Dimensions.get('window');
+import { Button } from '~/components/Button';
 
 const slides = [
   {
@@ -20,7 +11,7 @@ const slides = [
     title: 'Welcome to AppName',
     description: 'Your all-in-one solution for managing daily tasks and staying productive',
     image:
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHZqj-XReJ2R76nji51cZl4ETk6-eHRmZBRw&s',
+      'https://amoeboids.com/wp-content/uploads/2020/11/Software-Feature-Request-process-Banner.webp',
   },
   {
     id: '2',
@@ -34,153 +25,112 @@ const slides = [
     title: "Let's Get Started",
     description: 'Set up your profile and start your journey with us',
     image:
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHZqj-XReJ2R76nji51cZl4ETk6-eHRmZBRw&s',
+      'https://amoeboids.com/wp-content/uploads/2020/11/Software-Feature-Request-process-Banner.webp',
   },
 ];
 
-const DotIndicator = ({ isActive }: { isActive: boolean }) => {
-  const animatedStyle = useAnimatedStyle(() => {
-    return {
-      width: withSpring(isActive ? 20 : 10),
-      opacity: withSpring(isActive ? 1 : 0.5),
-    };
-  });
+const { width: windowWidth, height: windowHeight } = Dimensions.get('window');
 
-  return <Animated.View className="w-10" style={[styles.dot, animatedStyle]} />;
-};
-
-export default function AppIntro() {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const slidesRef = useRef<FlatList>(null);
-
-  const viewabilityConfig = useRef({
-    itemVisiblePercentThreshold: 50,
-  }).current;
-
-  const onViewableItemsChanged = useRef(
-    ({ viewableItems }: { viewableItems: Array<{ index: number | null }> }) => {
-      if (viewableItems[0] && viewableItems[0].index !== null) {
-        setCurrentIndex(viewableItems[0].index);
-      }
-    }
-  ).current;
-
-  const scrollToNextSlide = () => {
-    if (currentIndex < slides.length - 1) {
-      slidesRef.current?.scrollToIndex({
-        index: currentIndex + 1,
-        animated: true,
-      });
-    } else {
-      router.push('/onboarding/profile');
-    }
-  };
-
-  const renderSlide = ({
-    item,
-  }: {
-    item: { id: string; title: string; description: string; image: string };
-  }) => {
-    return (
-      <View style={styles.slide}>
-        <Image source={{ uri: item.image }} className="aspect-video" style={styles.image} />
-        <Text style={styles.title}>{item.title}</Text>
-        <Text style={styles.description}>{item.description}</Text>
-      </View>
-    );
-  };
-
-  const Pagination = () => (
-    <View style={styles.paginationContainer}>
-      {slides.map((_, index) => (
-        <DotIndicator key={index} isActive={currentIndex === index} />
-      ))}
-    </View>
-  );
-
+function Slide({
+  data,
+}: {
+  data: { id: string; title: string; description: string; image: string };
+}) {
   return (
-    <KeyboardAwareScrollView>
-      <View style={styles.container}>
-        <FlatList
-          ref={slidesRef}
-          data={slides}
-          renderItem={renderSlide}
-          horizontal
-          pagingEnabled
-          showsHorizontalScrollIndicator={false}
-          onViewableItemsChanged={onViewableItemsChanged}
-          viewabilityConfig={viewabilityConfig}
-          keyExtractor={(item) => item.id}
-        />
-        <Pagination />
-        <TouchableOpacity style={styles.button} onPress={scrollToNextSlide}>
-          <Text style={styles.buttonText}>
-            {currentIndex === slides.length - 1 ? 'Setup Profile' : 'Next'}
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </KeyboardAwareScrollView>
+    <View
+      className="items-center justify-center px-5"
+      style={{
+        width: windowWidth,
+        height: windowHeight * 0.85,
+      }}>
+      <Image
+        source={{ uri: data.image }}
+        className="mb-5 rounded-lg"
+        style={{
+          width: windowWidth * 0.85,
+          height: windowHeight * 0.6,
+          resizeMode: 'contain',
+        }}
+      />
+      <Text style={{ fontSize: 24, fontWeight: 'bold', textAlign: 'center', marginBottom: 10 }}>
+        {data.title}
+      </Text>
+      <Text style={{ fontSize: 16, textAlign: 'center', color: '#666' }}>{data.description}</Text>
+    </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  slide: {
-    width,
-    height,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 20,
-  },
-  image: {
-    width: width * 0.8,
-    height: height * 0.75,
-    resizeMode: 'contain',
-    marginBottom: 40,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    marginBottom: 10,
-    textAlign: 'center',
-    color: '#333',
-  },
-  description: {
-    fontSize: 16,
-    textAlign: 'center',
-    color: '#666',
-    paddingHorizontal: 20,
-  },
-  paginationContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'absolute',
-    bottom: 150,
-    width: '100%',
-  },
-  dot: {
-    height: 10,
-    borderRadius: 5,
-    backgroundColor: '#00bc7d',
-    marginHorizontal: 3,
-  },
-  button: {
-    position: 'absolute',
-    bottom: 50,
-    width: width * 0.8,
-    alignSelf: 'center',
-    backgroundColor: '#00bc7d',
-    padding: 15,
-    borderRadius: 10,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-});
+export default function Carousel() {
+  const flatListRef = useRef<FlatList>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const viewabilityConfig = { viewAreaCoveragePercentThreshold: 50 };
+
+  const onViewableItemsChanged = useRef(({ viewableItems }: { viewableItems: any[] }) => {
+    if (viewableItems.length > 0) {
+      setCurrentIndex(viewableItems[0].index);
+    }
+  }).current;
+
+  const handleNextPress = () => {
+    if (currentIndex < slides.length - 1) {
+      const newIndex = currentIndex + 1;
+      setCurrentIndex(newIndex);
+      flatListRef?.current?.scrollToIndex({ index: newIndex, animated: true });
+    } else {
+      router.push('/onboarding/profile');
+    }
+    console.log(currentIndex);
+  };
+
+  return (
+    <SafeAreaView className="flex-1 bg-white">
+      <StatusBar
+        barStyle={Platform.select({ ios: 'dark-content', android: 'dark-content' })}
+        backgroundColor="white"
+      />
+      <FlatList
+        ref={flatListRef}
+        data={slides}
+        keyExtractor={(item) => item.id}
+        horizontal
+        pagingEnabled
+        showsHorizontalScrollIndicator={false}
+        snapToAlignment="center"
+        snapToInterval={windowWidth}
+        decelerationRate="fast"
+        getItemLayout={(_, index) => ({
+          length: windowWidth,
+          offset: windowWidth * index,
+          index,
+        })}
+        renderItem={({ item }) => <Slide data={item} />}
+        viewabilityConfig={viewabilityConfig}
+        onViewableItemsChanged={onViewableItemsChanged}
+      />
+
+      {/* Pagination Dots */}
+      <View className="mb-2">
+        <View className="my-2 flex-row justify-center">
+          {slides.map((_, index) => (
+            <View
+              key={index}
+              className={`mx-1 transition-all duration-300 ${
+                currentIndex === index
+                  ? 'w-6 rounded-md bg-emerald-500'
+                  : 'w-2 rounded-full bg-emerald-200'
+              } h-2`}
+            />
+          ))}
+        </View>
+        {/* NEXT OR SETUP BUTTON */}
+        <Button
+          className="mx-auto  w-[80%]"
+          title={currentIndex === slides.length - 1 ? 'Setup Profile' : 'Next'}
+          variant={currentIndex !== slides.length - 1 ? 'secondary' : 'primary'}
+          onPress={handleNextPress}
+        />
+      </View>
+    </SafeAreaView>
+  );
+}
