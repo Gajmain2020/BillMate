@@ -40,34 +40,16 @@ export default function Profile() {
     router.replace('/');
   };
 
-  const pickLogo = async () => {
-    const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (!permission.granted) {
-      alert('Permission to access media library is required!');
-      return;
-    }
-
+  const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      aspect: [1, 1], // Square aspect ratio
+      aspect: [1, 1],
       quality: 1,
     });
 
     if (!result.canceled) {
-      const newUri = result.assets[0].uri;
-      const fileName = newUri.split('/').pop(); // Extract filename
-      const localUri = `${FileSystem.documentDirectory}${fileName}`; // Store inside app storage
-
-      try {
-        await FileSystem.copyAsync({
-          from: newUri,
-          to: localUri,
-        });
-        setLogo(localUri); // Save the persistent path in Zustand
-      } catch (error) {
-        console.error('Error saving logo:', error);
-      }
+      form.setValue('logo', result.assets[0].uri);
     }
   };
 
@@ -78,15 +60,17 @@ export default function Profile() {
         <Text className="mb-2 text-gray-600">This information will be used on invoices</Text>
 
         {/* Logo Selection */}
-        <TouchableOpacity onPress={pickLogo} className="mb-4 items-center">
-          {profile.logo ? (
-            <Image source={{ uri: profile.logo }} className="h-24 w-24 rounded-full" />
-          ) : (
-            <View className="h-24 w-24 items-center justify-center rounded-full bg-gray-300">
-              <Text className="text-gray-600">Select Logo</Text>
-            </View>
-          )}
-        </TouchableOpacity>
+        <View className="mb-4 items-center">
+          <TouchableOpacity onPress={pickImage}>
+            {form.watch('logo') ? (
+              <Image source={{ uri: form.watch('logo') }} className="h-24 w-24 rounded-full" />
+            ) : (
+              <View className="flex h-24 w-24 items-center justify-center rounded-full bg-gray-300">
+                <Text className="text-gray-500">Select Logo</Text>
+              </View>
+            )}
+          </TouchableOpacity>
+        </View>
 
         <View className="gap-2">
           <CustomTextInput
@@ -109,6 +93,7 @@ export default function Profile() {
           <CustomTextInput
             name="contact"
             label="Contact Number*"
+            isNumeric
             placeholder="Enter your contact number"
           />
           <CustomTextInput

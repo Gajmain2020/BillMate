@@ -10,7 +10,7 @@ type KeyboardAwareScrollViewProps = PropsWithChildren<{
 
 export default function KeyboardAwareScrollView({
   children,
-  keyboardVerticalOffset = 0,
+  keyboardVerticalOffset = 50,
   behavior = Platform.OS === 'ios' ? 'padding' : 'height',
   contentContainerStyle = {},
 }: KeyboardAwareScrollViewProps) {

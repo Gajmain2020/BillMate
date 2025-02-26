@@ -130,7 +130,6 @@ export default function AppIntro() {
     } else {
       router.push('/onboarding/profile');
     }
-    console.log(currentIndex);
   };
 
   return (
