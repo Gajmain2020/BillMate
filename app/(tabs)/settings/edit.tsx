@@ -1,16 +1,53 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { randomUUID } from 'expo-crypto';
-import * as ImagePicker from 'expo-image-picker';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { router } from 'expo-router';
-import { FormProvider, useForm } from 'react-hook-form';
-import { Image, Keyboard, Text, TouchableOpacity, View } from 'react-native';
+import { useForm, FormProvider } from 'react-hook-form';
+import { View, Text, TouchableOpacity } from 'react-native';
+
+import InfoSection from './InfoSection';
+import LogoSection from './LogoSection';
+import OptionalSection from './OptionalSection';
 
 import { Button } from '~/components/Button';
-import CustomTextInput from '~/components/CustomTextInput';
 import KeyboardAwareScrollView from '~/components/KeyboardAwareScrollView';
 import { ownerEntitySchema, OwnerEntityType } from '~/schema/invoice';
 import { useStore } from '~/store';
+import { useNavigation } from '@react-navigation/native';
 
+const Tab = createMaterialTopTabNavigator();
+
+const CustomTabBar = ({
+  state,
+  descriptors,
+  navigation,
+}: {
+  state: any;
+  descriptors: any;
+  navigation: any;
+}) => {
+  return (
+    <View className="flex-row justify-between border-b border-gray-300 bg-white">
+      {state.routes.map((route: { key: string; name: string }, index: number) => {
+        const isFocused = state.index === index;
+
+        return (
+          <TouchableOpacity
+            key={route.key}
+            onPress={() => navigation.navigate(route.name)}
+            className={`flex-1 items-center p-3 ${
+              isFocused
+                ? 'rounded border-b-2 border-emerald-500 bg-gray-300/60'
+                : 'border-b-2 border-transparent'
+            }`}>
+            <Text className={isFocused ? 'font-bold text-emerald-500' : 'text-gray-500'}>
+              {route.name}
+            </Text>
+          </TouchableOpacity>
+        );
+      })}
+    </View>
+  );
+};
 export default function Profile() {
   const setProfile = useStore((data) => data.setProfile);
   const profile = useStore((data) => data.profile);
@@ -18,7 +55,7 @@ export default function Profile() {
   const form = useForm<OwnerEntityType>({
     resolver: zodResolver(ownerEntitySchema),
     defaultValues: {
-      id: profile?.id || randomUUID(),
+      id: profile?.id || '',
       name: profile?.name || '',
       address: profile?.address || '',
       gst: profile?.gst || '',
@@ -26,83 +63,34 @@ export default function Profile() {
       altContact: profile?.altContact || '',
       email: profile?.email || '',
       website: profile?.website || '',
-      logo: profile?.logo || '', // Store the logo URI
+      logo: profile?.logo || '',
     },
   });
 
-  // Function to pick an image
-  const pickImage = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 1,
-    });
-
-    if (!result.canceled) {
-      form.setValue('logo', result.assets[0].uri);
-    }
-  };
+  const navigation = useNavigation();
 
   const onSubmit = (data: OwnerEntityType) => {
-    Keyboard.dismiss();
-    setProfile(data); // Save profile with logo
-    router.back();
+    setProfile(data);
+    navigation.goBack();
   };
 
   return (
-    <KeyboardAwareScrollView>
-      <FormProvider {...form}>
-        <Text className="text-2xl font-bold">My Business</Text>
-        <Text className="mb-4 text-gray-600">
-          This information will appear on all your invoices as the sender's details. Make sure it's
-          accurate and up to date.
-        </Text>
+    <FormProvider {...form}>
+      <KeyboardAwareScrollView>
+        <Text className="text-2xl font-bold">Edit Profile</Text>
+        <Text className="mb-4 text-gray-600">Update your business details</Text>
 
-        {/* Logo Picker */}
-        <View className="mb-4 items-center">
-          <TouchableOpacity onPress={pickImage}>
-            {form.watch('logo') ? (
-              <Image source={{ uri: form.watch('logo') }} className="h-24 w-24 rounded-full" />
-            ) : (
-              <View className="flex h-24 w-24 items-center justify-center rounded-full bg-gray-300">
-                <Text className="text-gray-500">Select Logo</Text>
-              </View>
-            )}
-          </TouchableOpacity>
+        {/* Tab Navigation */}
+        <Tab.Navigator tabBar={(props) => <CustomTabBar {...props} />}>
+          <Tab.Screen name="Info" component={InfoSection} />
+          <Tab.Screen name="Optional" component={OptionalSection} />
+          <Tab.Screen name="Logo" component={LogoSection} />
+        </Tab.Navigator>
+
+        <View className="p-4">
+          <Button title="Save Changes" onPress={form.handleSubmit(onSubmit)} />
         </View>
-
-        {/* Business Info Fields */}
-        <View className="gap-2">
-          <CustomTextInput
-            name="name"
-            label="Business Name"
-            placeholder="Enter your business name"
-          />
-          <CustomTextInput
-            name="address"
-            label="Address"
-            placeholder="Enter your address"
-            multiline
-          />
-          <CustomTextInput name="gst" label="GST No." placeholder="Enter your GST number" />
-          <CustomTextInput name="contact" label="Contact" placeholder="Enter your contact number" />
-          <CustomTextInput
-            name="altContact"
-            label="Alternate Contact"
-            placeholder="Enter alternate contact number"
-          />
-          <CustomTextInput
-            name="email"
-            label="Email"
-            placeholder="Enter your email"
-            keyboardType="email-address"
-          />
-          <CustomTextInput name="website" label="Website" placeholder="Enter your website" />
-        </View>
-
-        <Button title="Save" className="mt-auto" onPress={form.handleSubmit(onSubmit)} />
-      </FormProvider>
-    </KeyboardAwareScrollView>
+      </KeyboardAwareScrollView>
+    </FormProvider>
   );
 }
