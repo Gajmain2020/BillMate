@@ -4,6 +4,7 @@ export default function OnboardingLayout() {
   return (
     <Stack>
       <Stack.Screen name="index" options={{ headerShown: false }} />
+      <Stack.Screen name="app-intro" options={{ headerShown: false }} /> {/* ✅ Add this */}
       <Stack.Screen
         name="profile"
         options={{
