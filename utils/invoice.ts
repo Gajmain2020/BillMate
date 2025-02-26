@@ -52,3 +52,24 @@ export const generateInvoiceNumber = (
   // Return new invoice number
   return `${staticPrefix}${paddedNumber}${staticSuffix}`;
 };
+
+export const slides = [
+  {
+    image:
+      'https://gratisography.com/wp-content/uploads/2024/11/gratisography-augmented-reality-800x525.jpg',
+    title: 'Create & Share Invoices',
+    description: 'Easily generate and send invoices to clients within seconds.',
+  },
+  {
+    image:
+      'https://gratisography.com/wp-content/uploads/2024/11/gratisography-augmented-reality-800x525.jpg',
+    title: 'Track Payments Easily',
+    description: 'Monitor incoming and outgoing payments efficiently.',
+  },
+  {
+    image:
+      'https://gratisography.com/wp-content/uploads/2024/11/gratisography-augmented-reality-800x525.jpg',
+    title: 'Manage Clients & Reports',
+    description: 'Keep track of all clients and analyze detailed reports.',
+  },
+];

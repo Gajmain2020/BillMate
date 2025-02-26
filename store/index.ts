@@ -1,15 +1,22 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Crypto from 'expo-crypto';
-import Storage from 'expo-sqlite/kv-store';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-import { Invoice, BusinessEntityType, InvoiceInfoType, InvoiceItemType } from '~/schema/invoice';
+import {
+  Invoice,
+  BusinessEntityType,
+  InvoiceInfoType,
+  InvoiceItemType,
+  OwnerEntityType,
+} from '~/schema/invoice';
 import { generateInvoiceNumber, getLastInvoice } from '~/utils/invoice';
 
 // TODO: ADD TOTAL AND ITS ROUND OFF FUNCTION
 
 export type InvoiceState = {
-  profile: BusinessEntityType;
+  profile: OwnerEntityType & { logo: string | null };
+  setLogo: (uri: string) => void;
   onboardingCompleted: boolean;
   invoiceNumberFormat: string;
 
@@ -22,7 +29,7 @@ export type InvoiceState = {
   deleteContact: (id: string) => void;
   updateContact: (contact: BusinessEntityType) => void;
 
-  setProfile: (profile: BusinessEntityType) => void;
+  setProfile: (profile: OwnerEntityType) => void;
   setOnboardingCompleted: () => void;
   setInvoiceNumberFormat: (format: string) => void;
   deleteAccount: () => void;
@@ -44,7 +51,14 @@ export const useStore = create<InvoiceState>()(
         id: Crypto.randomUUID(),
         name: '',
         address: '',
+        email: '',
+        contact: '',
+        altContact: '',
+        website: '',
         gst: '',
+        logo: '',
+        pan: '',
+        upi: '',
       },
       onboardingCompleted: false,
       invoiceNumberFormat: 'INV-XXX',
@@ -56,9 +70,18 @@ export const useStore = create<InvoiceState>()(
 
       // PROFILE
       setProfile: (profile) =>
-        set(() => ({
-          profile: { ...profile, gst: profile.gst || '' },
-          onboardingCompleted: false,
+        set((state) => ({
+          profile: {
+            ...state.profile,
+            ...profile,
+            gst: profile.gst || state.profile.gst, // Ensure it's never an empty string
+            logo: profile?.logo ?? state.profile.logo, // Change null to undefined if needed
+          },
+          onboardingCompleted: true,
+        })),
+      setLogo: (uri) =>
+        set((state) => ({
+          profile: { ...state.profile, logo: uri }, // Update the logo
         })),
       setOnboardingCompleted: () => set(() => ({ onboardingCompleted: true })),
       setInvoiceNumberFormat: (format) => set(() => ({ invoiceNumberFormat: format })),
@@ -67,12 +90,13 @@ export const useStore = create<InvoiceState>()(
       startNewInvoice: () => {
         const lastInvoice = getLastInvoice(get().invoices);
         const invoiceNumberFormat = get().invoiceNumberFormat;
+
         set(() => ({
           newInvoice: {
             id: Crypto.randomUUID(),
             invoiceNumber: generateInvoiceNumber(lastInvoice, invoiceNumberFormat),
             sender: get().profile,
-            items: [{ name: 'Example', quantity: 1, price: 20 }],
+            items: [{ name: 'Example', quantity: 1, price: 20, total: 1 * 20 }],
             date: new Date(),
             // dueDate: new Date(new Date().setDate(new Date().getDate() + 14)).toLocaleDateString(),
           },
@@ -130,7 +154,14 @@ export const useStore = create<InvoiceState>()(
             id: Crypto.randomUUID(),
             name: '',
             address: '',
+            email: '',
+            contact: '',
+            altContact: '',
+            website: '',
             gst: '',
+            logo: '',
+            pan: '',
+            upi: '',
           },
           onboardingCompleted: false,
           invoiceNumberFormat: 'INV-XXX',
@@ -141,6 +172,6 @@ export const useStore = create<InvoiceState>()(
       },
     }),
 
-    { name: 'billmate-store', getStorage: () => Storage }
+    { name: 'billmate-store', getStorage: () => AsyncStorage }
   )
 );

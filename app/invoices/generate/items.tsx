@@ -28,6 +28,8 @@ export default function GenerateInvoice() {
   const addItems = useStore((data) => data.addItems);
   const items = useStore((data) => data.newInvoice?.items);
 
+  const profile = useStore((data) => data.profile);
+
   const [visible, setVisible] = useState(false);
 
   const [menuVisible, setMenuVisible] = useState(false);
@@ -63,6 +65,7 @@ export default function GenerateInvoice() {
       alert('Please add at least one item');
       return;
     }
+
     router.push('/invoices/generate/summary');
   };
 
@@ -168,6 +171,7 @@ export default function GenerateInvoice() {
               name: 'item',
               quantity: 1,
               price: 10,
+              total: 10,
             });
           }}
         />

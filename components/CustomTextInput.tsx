@@ -19,17 +19,16 @@ export default function CustomTextInput({
   } = useController({ name, rules: { required: 'Field is required.' } });
 
   return (
-    <View className="gap-2">
+    <View className="gap-1">
       <Text>{label}</Text>
 
       <TextInput
         {...props}
-        className={`rounded border border-gray-200 p-2 ${props.className}`}
+        className={`rounded border border-gray-200 px-2 py-3 ${props.className}`}
         value={value?.toString()} // Ensure value is a string for TextInput
         onChangeText={(text) => {
           if (isNumeric) {
-            const numericValue = parseFloat(text) || 0; // Convert to number or fallback to 0
-            onChange(numericValue); // Pass the number to the form state
+            onChange(text); // Pass the number to the form state
           } else {
             onChange(text); // Pass the string to the form state
           }

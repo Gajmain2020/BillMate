@@ -1,58 +1,96 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { randomUUID } from 'expo-crypto';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { router } from 'expo-router';
-import { FormProvider, useForm } from 'react-hook-form';
-import { Keyboard, Text, View } from 'react-native';
+import { useForm, FormProvider } from 'react-hook-form';
+import { View, Text, TouchableOpacity } from 'react-native';
+
+import InfoSection from './InfoSection';
+import LogoSection from './LogoSection';
+import OptionalSection from './OptionalSection';
 
 import { Button } from '~/components/Button';
-import CustomTextInput from '~/components/CustomTextInput';
 import KeyboardAwareScrollView from '~/components/KeyboardAwareScrollView';
-import { businessEntitySchema, BusinessEntityType } from '~/schema/invoice';
+import { ownerEntitySchema, OwnerEntityType } from '~/schema/invoice';
 import { useStore } from '~/store';
+import { useNavigation } from '@react-navigation/native';
 
+const Tab = createMaterialTopTabNavigator();
+
+const CustomTabBar = ({
+  state,
+  descriptors,
+  navigation,
+}: {
+  state: any;
+  descriptors: any;
+  navigation: any;
+}) => {
+  return (
+    <View className="flex-row justify-between border-b border-gray-300 bg-white">
+      {state.routes.map((route: { key: string; name: string }, index: number) => {
+        const isFocused = state.index === index;
+
+        return (
+          <TouchableOpacity
+            key={route.key}
+            onPress={() => navigation.navigate(route.name)}
+            className={`flex-1 items-center p-3 ${
+              isFocused
+                ? 'rounded border-b-2 border-emerald-500 bg-gray-300/60'
+                : 'border-b-2 border-transparent'
+            }`}>
+            <Text className={isFocused ? 'font-bold text-emerald-500' : 'text-gray-500'}>
+              {route.name}
+            </Text>
+          </TouchableOpacity>
+        );
+      })}
+    </View>
+  );
+};
 export default function Profile() {
   const setProfile = useStore((data) => data.setProfile);
   const profile = useStore((data) => data.profile);
 
-  const form = useForm<BusinessEntityType>({
-    resolver: zodResolver(businessEntitySchema),
+  const form = useForm<OwnerEntityType>({
+    resolver: zodResolver(ownerEntitySchema),
     defaultValues: {
-      id: profile?.id || randomUUID(),
-      name: profile?.name,
-      address: profile?.address,
-      gst: profile?.gst,
+      id: profile?.id || '',
+      name: profile?.name || '',
+      address: profile?.address || '',
+      gst: profile?.gst || '',
+      contact: profile?.contact || '',
+      altContact: profile?.altContact || '',
+      email: profile?.email || '',
+      website: profile?.website || '',
+      logo: profile?.logo || '',
     },
   });
 
-  const onSubmit = (data: any) => {
-    Keyboard.dismiss();
-    setProfile(data); //TODO: maybe auto save
-    router.back();
-    // show ui feedback:
+  const navigation = useNavigation();
+
+  const onSubmit = (data: OwnerEntityType) => {
+    setProfile(data);
+    navigation.goBack();
   };
 
   return (
-    <KeyboardAwareScrollView>
-      <FormProvider {...form}>
-        <Text className="mb-1 text-2xl font-bold">My Business</Text>
-        <Text className="mb-4 text-gray-600">
-          This information will appear on all your invoices as the sender's details. Make sure it's
-          accurate and up to date
-        </Text>
+    <FormProvider {...form}>
+      <KeyboardAwareScrollView>
+        <Text className="text-2xl font-bold">Edit Profile</Text>
+        <Text className="mb-4 text-gray-600">Update your business details</Text>
 
-        <View className="gap-2">
-          <CustomTextInput name="name" label="Name" placeholder="Enter your name" />
-          <CustomTextInput
-            name="address"
-            label="Address"
-            placeholder="Enter your address"
-            multiline
-          />
-          <CustomTextInput name="gst" label="GST No." placeholder="Enter your GST number" />
+        {/* Tab Navigation */}
+        <Tab.Navigator tabBar={(props) => <CustomTabBar {...props} />}>
+          <Tab.Screen name="Info" component={InfoSection} />
+          <Tab.Screen name="Optional" component={OptionalSection} />
+          <Tab.Screen name="Logo" component={LogoSection} />
+        </Tab.Navigator>
+
+        <View className="p-4">
+          <Button title="Save Changes" onPress={form.handleSubmit(onSubmit)} />
         </View>
-
-        <Button title="Save" className="mt-auto" onPress={form.handleSubmit(onSubmit)} />
-      </FormProvider>
-    </KeyboardAwareScrollView>
+      </KeyboardAwareScrollView>
+    </FormProvider>
   );
 }
