@@ -110,7 +110,7 @@ function Slide({
       className="relative items-center justify-center px-5"
       style={{
         width: windowWidth,
-        height: windowHeight * 0.95, // Increased height
+        height: windowHeight * 0.85, // Increased height
       }}>
       {/* Image with Overlay */}
       <View className="relative">
@@ -119,7 +119,7 @@ function Slide({
           className="rounded-lg"
           style={{
             width: windowWidth * 0.9,
-            height: windowHeight * 0.75, // Increased height
+            height: windowHeight * 0.8, // Increased height
             resizeMode: 'cover',
             borderRadius: 10,
           }}
@@ -169,7 +169,7 @@ export default function Carousel() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1">
       <StatusBar
         barStyle={Platform.select({ ios: 'dark-content', android: 'dark-content' })}
         backgroundColor="white"
@@ -195,7 +195,7 @@ export default function Carousel() {
       />
 
       {/* Pagination Dots */}
-      <View className="mb-2">
+      <View className="mb-2 gap-3">
         <View className="my-2 flex-row justify-center">
           {slides.map((_, index) => (
             <View
