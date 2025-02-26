@@ -40,7 +40,6 @@ export default function LogoSelection() {
   const onSubmit = (data: OwnerEntityType) => {
     Keyboard.dismiss();
     setProfile(data);
-    setOnboardingCompleted();
     router.replace('/');
   };
 
@@ -60,16 +59,18 @@ export default function LogoSelection() {
   return (
     <KeyboardAwareScrollView>
       <FormProvider {...form}>
-        <Text className="text-2xl font-bold">Your Business Info</Text>
-        <Text className="mb-2 text-gray-600">This information will be used on invoices</Text>
+        <Text className="text-2xl font-bold">Your Business Logo</Text>
+        <Text className="mb-2 text-gray-600">
+          This logo will be used on invoices as letter head
+        </Text>
 
         {/* Logo Selection */}
-        <View className="mb-4 items-center">
+        <View className="mb-4 flex-1 items-center justify-center ">
           <TouchableOpacity onPress={pickImage}>
             {form.watch('logo') ? (
-              <Image source={{ uri: form.watch('logo') }} className="h-24 w-24 rounded-full" />
+              <Image source={{ uri: form.watch('logo') }} className="h-72 w-72 rounded-full" />
             ) : (
-              <View className="flex h-24 w-24 items-center justify-center rounded-full bg-gray-300">
+              <View className="flex h-72 w-72 items-center justify-center rounded-full bg-gray-300">
                 <Text className="text-gray-500">Select Logo</Text>
               </View>
             )}

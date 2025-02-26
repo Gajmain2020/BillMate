@@ -34,12 +34,7 @@ export default function OptionalDetails() {
     },
   });
 
-  useEffect(() => {
-    console.log(form.formState.errors);
-  }, [form.formState.errors]);
-
   const onSubmit = (data: OwnerEntityType) => {
-    console.log('hello');
     Keyboard.dismiss();
     setProfile({ ...profile, ...data });
     router.replace('/onboarding/logo-selection');
@@ -70,7 +65,7 @@ export default function OptionalDetails() {
             variant="secondary"
             className="flex-1 py-2"
             title="Skip"
-            onPress={() => console.log('skip clicked')}
+            onPress={() => router.push('/onboarding/logo-selection')}
           />
           <Button
             title="Save"
