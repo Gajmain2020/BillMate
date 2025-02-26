@@ -1,19 +1,19 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { randomUUID } from 'expo-crypto';
+import * as ImagePicker from 'expo-image-picker';
 import { router } from 'expo-router';
-import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { Keyboard, Text, View } from 'react-native';
+import { Keyboard, Text, View, Image, TouchableOpacity } from 'react-native';
 
 import { Button } from '~/components/Button';
-import CustomTextInput from '~/components/CustomTextInput';
 import KeyboardAwareScrollView from '~/components/KeyboardAwareScrollView';
 import { ownerEntitySchema, OwnerEntityType } from '~/schema/invoice';
 import { useStore } from '~/store';
 
-export default function OptionalDetails() {
+export default function LogoSelection() {
   const setProfile = useStore((data) => data.setProfile);
   const profile = useStore((data) => data.profile);
+  const setOnboardingCompleted = useStore((data) => data.setOnboardingCompleted);
 
   const form = useForm<OwnerEntityType>({
     resolver: zodResolver(ownerEntitySchema),
@@ -31,18 +31,30 @@ export default function OptionalDetails() {
       website: profile?.website || '',
       pan: profile?.pan || '',
       upi: profile?.upi || '',
+
+      //Req logo
+      logo: profile?.logo || '',
     },
   });
 
-  useEffect(() => {
-    console.log(form.formState.errors);
-  }, [form.formState.errors]);
-
   const onSubmit = (data: OwnerEntityType) => {
-    console.log('hello');
     Keyboard.dismiss();
-    setProfile({ ...profile, ...data });
-    router.replace('/onboarding/logo-selection');
+    setProfile(data);
+    setOnboardingCompleted();
+    router.replace('/');
+  };
+
+  const pickImage = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      form.setValue('logo', result.assets[0].uri);
+    }
   };
 
   return (
@@ -51,26 +63,24 @@ export default function OptionalDetails() {
         <Text className="text-2xl font-bold">Your Business Info</Text>
         <Text className="mb-2 text-gray-600">This information will be used on invoices</Text>
 
-        <View className="flex-1 gap-2">
-          <CustomTextInput
-            name="altContact"
-            label="Alternate Contact Number"
-            placeholder="Enter your alternate contact number"
-          />
-
-          <CustomTextInput name="website" label="Website" placeholder="Enter your website link" />
-
-          <CustomTextInput name="pan" label="PAN Number" placeholder="Enter your PAN number." />
-
-          <CustomTextInput name="upi" label="UPI" placeholder="Enter your UPI." />
+        {/* Logo Selection */}
+        <View className="mb-4 items-center">
+          <TouchableOpacity onPress={pickImage}>
+            {form.watch('logo') ? (
+              <Image source={{ uri: form.watch('logo') }} className="h-24 w-24 rounded-full" />
+            ) : (
+              <View className="flex h-24 w-24 items-center justify-center rounded-full bg-gray-300">
+                <Text className="text-gray-500">Select Logo</Text>
+              </View>
+            )}
+          </TouchableOpacity>
         </View>
-
         <View className="flex-row gap-4">
           <Button
             variant="secondary"
             className="flex-1 py-2"
             title="Skip"
-            onPress={() => console.log('skip clicked')}
+            onPress={() => router.push('/')}
           />
           <Button
             title="Save"

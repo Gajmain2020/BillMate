@@ -13,6 +13,22 @@ export default function OnboardingLayout() {
           headerTitleAlign: 'center',
         }}
       />
+      <Stack.Screen
+        name="optional-details"
+        options={{
+          title: 'Optional Details',
+          headerBackVisible: false,
+          headerTitleAlign: 'center',
+        }}
+      />
+      <Stack.Screen
+        name="logo-selection"
+        options={{
+          title: 'Business Logo',
+          headerBackVisible: false,
+          headerTitleAlign: 'center',
+        }}
+      />
     </Stack>
   );
 }
