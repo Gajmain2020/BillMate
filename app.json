@@ -39,6 +39,14 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.anonymous.InvoiceGenerator"
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "a80058f9-ee76-4852-b431-7585f6521c57"
+      }
     }
   }
 }

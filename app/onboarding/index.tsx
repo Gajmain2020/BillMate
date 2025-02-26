@@ -2,7 +2,7 @@ import { router } from 'expo-router';
 import LottieView from 'lottie-react-native';
 import { MotiText, MotiView } from 'moti';
 import { useEffect, useState } from 'react';
-import { Text, View } from 'react-native';
+import { Platform, StatusBar, Text, View } from 'react-native';
 
 import { Button } from '~/components/Button';
 import KeyboardAwareScrollView from '~/components/KeyboardAwareScrollView';
@@ -21,6 +21,10 @@ export default function Welcome() {
     return (
       <View className="flex-1 items-center justify-center bg-white">
         {/* Lottie Animation */}
+        <StatusBar
+          barStyle={Platform.select({ ios: 'dark-content', android: 'dark-content' })}
+          backgroundColor="white"
+        />
         <MotiView
           from={{ scale: 0.7, opacity: 0 }}
           animate={{ scale: 1.3, opacity: 1 }}
