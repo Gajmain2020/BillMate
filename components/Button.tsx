@@ -9,7 +9,7 @@ const styles = {
     text: 'text-white text-lg font-semibold text-center',
   },
   secondary: {
-    button: 'items-center border-2 border-emerald-500 rounded-[28px] shadow-md p-4',
+    button: 'items-center border border-emerald-500 rounded-[28px] shadow-md p-4',
     text: 'text-emerald-500 text-lg font-semibold text-center',
   },
   link: {

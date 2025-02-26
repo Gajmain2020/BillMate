@@ -95,21 +95,18 @@ function Slide({
 }) {
   return (
     <View
+      className="items-center justify-center px-5"
       style={{
         width: windowWidth,
         height: windowHeight * 0.85,
-        justifyContent: 'center',
-        alignItems: 'center',
-        paddingHorizontal: 20,
       }}>
       <Image
         source={{ uri: data.image }}
+        className="mb-5 rounded-lg"
         style={{
           width: windowWidth * 0.85,
           height: windowHeight * 0.6,
           resizeMode: 'contain',
-          borderRadius: 10,
-          marginBottom: 20,
         }}
       />
       <Text style={{ fontSize: 24, fontWeight: 'bold', textAlign: 'center', marginBottom: 10 }}>
@@ -187,7 +184,7 @@ export default function Carousel() {
         <Button
           className="mx-auto  w-[80%]"
           title={currentIndex === slides.length - 1 ? 'Setup Profile' : 'Next'}
-          variant="secondary"
+          variant={currentIndex !== slides.length - 1 ? 'secondary' : 'primary'}
           onPress={handleNextPress}
         />
       </View>
