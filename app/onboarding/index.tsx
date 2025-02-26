@@ -57,8 +57,9 @@
 
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
+import { MotiView, MotiText } from 'moti';
 import React, { useRef, useState } from 'react';
-import { View, Text, Dimensions, FlatList, Image, Platform, StatusBar } from 'react-native';
+import { View, Dimensions, FlatList, Image, Platform, StatusBar } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button } from '~/components/Button';
@@ -106,11 +107,15 @@ function Slide({
   data: { id: string; title: string; description: string; image: string };
 }) {
   return (
-    <View
+    <MotiView
+      key={data.id} // Forces re-render on slide change
+      from={{ opacity: 0, translateY: 50 }}
+      animate={{ opacity: 1, translateY: 0 }}
+      transition={{ type: 'spring', damping: 15, stiffness: 150 }}
       className="relative items-center justify-center px-5"
       style={{
         width: windowWidth,
-        height: windowHeight * 0.85, // Increased height
+        height: windowHeight * 0.85, // Adjusted height
       }}>
       {/* Image with Overlay */}
       <View className="relative">
@@ -119,7 +124,7 @@ function Slide({
           className="rounded-lg"
           style={{
             width: windowWidth * 0.9,
-            height: windowHeight * 0.8, // Increased height
+            height: windowHeight * 0.8, // Adjusted height
             resizeMode: 'cover',
             borderRadius: 10,
           }}
@@ -136,16 +141,33 @@ function Slide({
           }}
         />
         {/* Text Overlay */}
-        <View className="absolute bottom-3 mx-auto w-full  px-2">
-          <Text className="mb-1 text-center text-3xl font-bold text-white">{data.title}</Text>
-          <Text className="text-center text-lg text-gray-200">{data.description}</Text>
+        <View className="absolute bottom-3 mx-auto w-full px-2">
+          {/* Animated Title */}
+          <MotiText
+            key={`${data.id}-title`} // Ensures animation restarts
+            from={{ opacity: 0, translateY: 20 }}
+            animate={{ opacity: 1, translateY: 0 }}
+            transition={{ delay: 200, type: 'timing', duration: 500 }}
+            className="mb-1 text-center text-3xl font-bold text-white">
+            {data.title}
+          </MotiText>
+
+          {/* Animated Description */}
+          <MotiText
+            key={`${data.id}-desc`} // Ensures animation restarts
+            from={{ opacity: 0, translateY: 20 }}
+            animate={{ opacity: 1, translateY: 0 }}
+            transition={{ delay: 400, type: 'timing', duration: 500 }}
+            className="text-center text-lg text-gray-200">
+            {data.description}
+          </MotiText>
         </View>
       </View>
-    </View>
+    </MotiView>
   );
 }
 
-export default function Carousel() {
+export default function AppIntro() {
   const flatListRef = useRef<FlatList>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -189,7 +211,7 @@ export default function Carousel() {
           offset: windowWidth * index,
           index,
         })}
-        renderItem={({ item }) => <Slide data={item} />}
+        renderItem={({ item, index }) => <Slide key={index} data={item} />}
         viewabilityConfig={viewabilityConfig}
         onViewableItemsChanged={onViewableItemsChanged}
       />
