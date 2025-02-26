@@ -10,6 +10,7 @@ import {
   Image,
 } from 'react-native';
 import Animated, { useAnimatedStyle, withSpring } from 'react-native-reanimated';
+import KeyboardAwareScrollView from '~/components/KeyboardAwareScrollView';
 
 const { width, height } = Dimensions.get('window');
 
@@ -82,7 +83,7 @@ export default function AppIntro() {
   }) => {
     return (
       <View style={styles.slide}>
-        <Image source={{ uri: item.image }} style={styles.image} />
+        <Image source={{ uri: item.image }} className="aspect-video" style={styles.image} />
         <Text style={styles.title}>{item.title}</Text>
         <Text style={styles.description}>{item.description}</Text>
       </View>
@@ -98,25 +99,27 @@ export default function AppIntro() {
   );
 
   return (
-    <View style={styles.container}>
-      <FlatList
-        ref={slidesRef}
-        data={slides}
-        renderItem={renderSlide}
-        horizontal
-        pagingEnabled
-        showsHorizontalScrollIndicator={false}
-        onViewableItemsChanged={onViewableItemsChanged}
-        viewabilityConfig={viewabilityConfig}
-        keyExtractor={(item) => item.id}
-      />
-      <Pagination />
-      <TouchableOpacity style={styles.button} onPress={scrollToNextSlide}>
-        <Text style={styles.buttonText}>
-          {currentIndex === slides.length - 1 ? 'Setup Profile' : 'Next'}
-        </Text>
-      </TouchableOpacity>
-    </View>
+    <KeyboardAwareScrollView>
+      <View style={styles.container}>
+        <FlatList
+          ref={slidesRef}
+          data={slides}
+          renderItem={renderSlide}
+          horizontal
+          pagingEnabled
+          showsHorizontalScrollIndicator={false}
+          onViewableItemsChanged={onViewableItemsChanged}
+          viewabilityConfig={viewabilityConfig}
+          keyExtractor={(item) => item.id}
+        />
+        <Pagination />
+        <TouchableOpacity style={styles.button} onPress={scrollToNextSlide}>
+          <Text style={styles.buttonText}>
+            {currentIndex === slides.length - 1 ? 'Setup Profile' : 'Next'}
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </KeyboardAwareScrollView>
   );
 }
 
@@ -134,7 +137,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: width * 0.8,
-    height: height * 0.4,
+    height: height * 0.75,
     resizeMode: 'contain',
     marginBottom: 40,
   },
