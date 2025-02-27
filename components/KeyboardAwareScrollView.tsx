@@ -1,5 +1,14 @@
-import React, { PropsWithChildren } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, StatusBar, StyleSheet } from 'react-native';
+import React, { PropsWithChildren, useEffect, useState } from 'react';
+import {
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Keyboard,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 type KeyboardAwareScrollViewProps = PropsWithChildren<{
@@ -10,28 +19,47 @@ type KeyboardAwareScrollViewProps = PropsWithChildren<{
 
 export default function KeyboardAwareScrollView({
   children,
-  keyboardVerticalOffset = 50,
-  behavior = Platform.OS === 'ios' ? 'padding' : 'height',
+  keyboardVerticalOffset = Platform.OS === 'ios' ? 120 : 0,
+  behavior = 'padding',
   contentContainerStyle = {},
 }: KeyboardAwareScrollViewProps) {
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
+
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener('keyboardDidShow', () =>
+      setKeyboardVisible(true)
+    );
+    const hideSubscription = Keyboard.addListener('keyboardDidHide', () =>
+      setKeyboardVisible(false)
+    );
+
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar
         barStyle={Platform.select({ ios: 'dark-content', android: 'dark-content' })}
         backgroundColor="white"
       />
+
       <KeyboardAvoidingView
         behavior={behavior}
-        style={styles.avoidingView}
-        keyboardVerticalOffset={keyboardVerticalOffset}>
-        <ScrollView
-          contentContainerStyle={StyleSheet.flatten([
-            styles.scrollViewContent,
-            contentContainerStyle,
-          ])}
-          keyboardShouldPersistTaps="handled">
-          {children}
-        </ScrollView>
+        keyboardVerticalOffset={keyboardVerticalOffset}
+        style={styles.avoidingView}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+          <ScrollView
+            contentContainerStyle={[styles.scrollViewContent, contentContainerStyle]}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}>
+            {children}
+            {keyboardVisible && <View style={{ height: 60 }} />}
+            {/* Ensure enough space after closing */}
+          </ScrollView>
+        </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );

@@ -76,21 +76,19 @@ export default function Profile() {
 
   return (
     <FormProvider {...form}>
-      <KeyboardAwareScrollView>
-        <Text className="text-2xl font-bold">Edit Profile</Text>
-        <Text className="mb-4 text-gray-600">Update your business details</Text>
+      <Text className="text-2xl font-bold">Edit Profile</Text>
+      <Text className="mb-4 text-gray-600">Update your business details</Text>
 
-        {/* Tab Navigation */}
-        <Tab.Navigator tabBar={(props) => <CustomTabBar {...props} />}>
-          <Tab.Screen name="Info" component={InfoSection} />
-          <Tab.Screen name="Optional" component={OptionalSection} />
-          <Tab.Screen name="Logo" component={LogoSection} />
-        </Tab.Navigator>
+      {/* Tab Navigation */}
+      <Tab.Navigator tabBar={(props) => <CustomTabBar {...props} />}>
+        <Tab.Screen name="Info" component={InfoSection} />
+        <Tab.Screen name="Optional" component={OptionalSection} />
+        <Tab.Screen name="Logo" component={LogoSection} />
+      </Tab.Navigator>
 
-        <View className="p-4">
-          <Button title="Save Changes" onPress={form.handleSubmit(onSubmit)} />
-        </View>
-      </KeyboardAwareScrollView>
+      <View className="p-4">
+        <Button title="Save Changes" onPress={form.handleSubmit(onSubmit)} />
+      </View>
     </FormProvider>
   );
 }

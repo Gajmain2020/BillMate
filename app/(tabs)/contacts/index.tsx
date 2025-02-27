@@ -168,7 +168,7 @@ export default function ContactScreen() {
             </Text>
             <Text className="mb-8 text-center text-gray-600">
               Your contacts will appear here after you create invoices.
-            </Text>{' '}
+            </Text>
           </Animated.View>
         }
         entering={SlideInRight.duration(300)} // Slide in the list
