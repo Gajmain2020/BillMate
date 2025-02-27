@@ -16,11 +16,11 @@ To install InvoiceGenerator, follow these steps:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/InvoiceGenerator.git
+   git clone https://github.com/gajmain2020/BillMate.git
    ```
 2. Navigate to the project directory:
    ```bash
-   cd InvoiceGenerator
+   cd BillMate
    ```
 3. Install the required dependencies:
    ```bash
