@@ -53,7 +53,7 @@ export const useStore = create<InvoiceState>()(
         address: '',
         email: '',
         contact: '',
-        altContact: '',
+        altContact: '' as string,
         website: '',
         gst: '',
         logo: '',
@@ -104,14 +104,17 @@ export const useStore = create<InvoiceState>()(
       },
       resetNewInvoice: () => set(() => ({ newInvoice: null })),
       saveInvoice: () => {
-        const newInvoice = get().newInvoice as Invoice; //TODO: fix this
+        const newInvoice = get().newInvoice as Invoice;
         if (!newInvoice) return;
 
         set((state) => ({
           invoices: [newInvoice, ...state.invoices],
           newInvoice: null,
         }));
-        if (newInvoice?.recipient) get().addContact(newInvoice.recipient);
+
+        if (newInvoice.recipient) {
+          get().addContact(newInvoice.recipient); // Ensures recipient is stored as a contact
+        }
       },
       deleteInvoice: (id) => {
         set((state) => ({
@@ -119,10 +122,18 @@ export const useStore = create<InvoiceState>()(
         }));
       },
 
-      addRecipientInfo: (recipient) =>
+      addRecipientInfo: (recipient) => {
+        if (!recipient) return;
         set((state) => ({
-          newInvoice: { ...state.newInvoice, recipient: recipient || undefined },
-        })),
+          newInvoice: {
+            ...state.newInvoice,
+            recipient: {
+              ...recipient,
+              contact: recipient.contact || '', // Ensure contact is set
+            },
+          },
+        }));
+      },
       addInvoiceInfo: (invoiceInfo) =>
         set((state) => ({ newInvoice: { ...state.newInvoice, ...invoiceInfo } })),
       addItems: (items) => set((state) => ({ newInvoice: { ...state.newInvoice, items } })), //todo: may be we should append items

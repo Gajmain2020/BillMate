@@ -5,6 +5,7 @@ export const businessEntitySchema = z.object({
   name: z.string({ required_error: 'Name is required.' }).min(1, 'Name is required'),
   address: z.string({ required_error: 'Address is required.' }).min(1, 'Address is required'),
   gst: z.string().optional(),
+  contact: z.string({ required_error: 'Contact is required.' }).min(1, 'Contact is required'),
 });
 
 export type BusinessEntityType = z.infer<typeof businessEntitySchema>;
