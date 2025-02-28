@@ -53,6 +53,8 @@ export const generateInvoiceNumber = (
   return `${staticPrefix}${paddedNumber}${staticSuffix}`;
 };
 
+export const deleteInvoice = () => {};
+
 export const slides = [
   {
     image:
