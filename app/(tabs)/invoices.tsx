@@ -36,6 +36,7 @@ function RenderInvoiceItem({ item }: { item: Invoice }) {
         exiting={SlideOutLeft.duration(300)} // Fade out when the item is removed
       >
         <TouchableOpacity
+          onPress={() => router.push(`/invoices/${item.id}`)}
           onLongPress={() => {
             setSelectedId(item.id);
             setVisible(true);
