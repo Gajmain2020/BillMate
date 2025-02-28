@@ -101,6 +101,11 @@ export default function InvoicesScreen() {
         renderItem={({ item }) => <InvoiceItem item={item} />}
         keyExtractor={(item) => item.id}
         itemLayoutAnimation={LinearTransition}
+        ListEmptyComponent={
+          <View className="flex-1 items-center justify-center p-4">
+            <Text className="mb-2 text-xl font-bold">No Invoice Found</Text>
+          </View>
+        }
       />
 
       <Button title="New Invoice" onPress={handleNewInvoice} className="mb-2 mt-4" />
