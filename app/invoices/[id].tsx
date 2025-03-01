@@ -45,7 +45,7 @@ export default function InvoiceDetails() {
 
   return (
     <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }}>
-      <ScrollView contentContainerStyle={{ flexGrow: 1, padding: 16 }}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1, padding: 8 }}>
         {/* Invoice Details */}
         <View className="mb-4">
           <Text className="text-4xl font-bold">#{invoice.invoiceNumber}</Text>

@@ -47,6 +47,7 @@ export default function EditContactScreen() {
           />
           <CustomTextInput
             name="contact"
+            isNumeric
             label="Contact Number"
             placeholder="Enter your contact number"
           />

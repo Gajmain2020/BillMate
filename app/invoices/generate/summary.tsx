@@ -12,17 +12,14 @@ export default function Summary() {
   const { subtotal, gst, total } = getTotals(invoice || {});
 
   const saveInvoice = useStore((data) => data.saveInvoice);
-  // const saveInvoice = useStore((data) => data.saveInvoice);
 
   if (!invoice) return <Redirect href="/" />;
 
   const handleGenerateInvoice = () => {
     // save invoice to database
-
     if (invoice?.recipient) {
       saveInvoice();
     }
-
     router.push(`/invoices/${invoice?.id}/success`);
   };
 
@@ -41,11 +38,7 @@ export default function Summary() {
             <View>
               <Text className="text-sm text-gray-500">Due Date</Text>
               <Text className="text-sm text-gray-500">
-                {invoice?.dueDate?.toLocaleDateString('en-GB', {
-                  day: '2-digit',
-                  month: '2-digit',
-                  year: 'numeric',
-                }) || ''}
+                {invoice.dueDate ? new Date(invoice.dueDate).toLocaleDateString('en-GB') : 'N/A'}
               </Text>
             </View>
           </View>
@@ -124,11 +117,10 @@ export default function Summary() {
             </View>
           </View>
         </View>
-
-        {/* GENERATE INVOICE BUTTON */}
-
-        <Button title="Generate Invoice" className="mt-auto" onPress={handleGenerateInvoice} />
       </View>
+
+      {/* GENERATE INVOICE BUTTON */}
+      <Button title="Generate Invoice" className="mt-auto" onPress={handleGenerateInvoice} />
     </KeyboardAwareScrollView>
   );
 }

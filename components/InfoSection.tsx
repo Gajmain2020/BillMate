@@ -11,7 +11,12 @@ export default function InfoSection() {
         <CustomTextInput name="address" label="Address" placeholder="Enter address" multiline />
         <CustomTextInput name="address" label="Address" placeholder="Enter business Email" />
         <CustomTextInput name="gst" label="GST No." placeholder="Enter GST number" />
-        <CustomTextInput name="contact" label="Contact" placeholder="Enter contact number" />
+        <CustomTextInput
+          isNumber
+          name="contact"
+          label="Contact"
+          placeholder="Enter contact number"
+        />
       </View>
     </KeyboardAwareScrollView>
   );

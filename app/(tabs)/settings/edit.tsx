@@ -1,18 +1,15 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import { router } from 'expo-router';
+import { useNavigation } from '@react-navigation/native';
 import { useForm, FormProvider } from 'react-hook-form';
 import { View, Text, TouchableOpacity } from 'react-native';
 
-import InfoSection from './InfoSection';
-import LogoSection from './LogoSection';
-import OptionalSection from './OptionalSection';
-
 import { Button } from '~/components/Button';
-import KeyboardAwareScrollView from '~/components/KeyboardAwareScrollView';
+import InfoSection from '~/components/InfoSection';
+import LogoSection from '~/components/LogoSection';
+import OptionalSection from '~/components/OptionalSection';
 import { ownerEntitySchema, OwnerEntityType } from '~/schema/invoice';
 import { useStore } from '~/store';
-import { useNavigation } from '@react-navigation/native';
 
 const Tab = createMaterialTopTabNavigator();
 
