@@ -37,8 +37,10 @@ export default function Profile() {
   return (
     <KeyboardAwareScrollView>
       <FormProvider {...form}>
-        <Text className="text-2xl font-bold">Your Business Info</Text>
-        <Text className="mb-2 text-gray-600">This information will be used on invoices</Text>
+        <View className="flex items-center justify-center border-b border-gray-200 py-4">
+          <Text className="text-2xl font-bold">Your Business Info</Text>
+          <Text className="mb-2 text-gray-600">This information will be used on invoices</Text>
+        </View>
 
         <View className="gap-2">
           <CustomTextInput
