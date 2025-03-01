@@ -11,6 +11,7 @@ export default function OptionalSection() {
           name="altContact"
           label="Alternate Contact"
           placeholder="Enter alternate contact"
+          isNumber
         />
         <CustomTextInput name="upi" label="UPI" placeholder="Enter your UPI." />
         <CustomTextInput name="pan" label="PAN" placeholder="Enter your PAN Number." />
