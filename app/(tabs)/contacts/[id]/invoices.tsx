@@ -18,6 +18,7 @@ export default function ContactInvoicesScreen() {
 
   const [search, setSearch] = useState('');
 
+  //! Filters for invoice items
   const [modalVisible, setModalVisible] = useState(false);
   const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'price'>('newest');
   const [dateRange, setDateRange] = useState<{ from: Date | null; to: Date | null }>({
@@ -29,6 +30,7 @@ export default function ContactInvoicesScreen() {
     max: '',
   });
 
+  //! Filter logic
   const filteredInvoices = invoices
     .filter((invoice) => invoice.recipient.name.toLowerCase() === contact?.name.toLowerCase()) // Ensure only invoices of this contact are considered
     .filter((invoice) => {
@@ -51,6 +53,7 @@ export default function ContactInvoicesScreen() {
 
   return (
     <View className="flex-1">
+      {/* Header*/}
       <Stack.Screen options={{ title: `${contact?.name}'s Invoices` }} />
 
       {/* Search & Filter */}
