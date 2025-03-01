@@ -160,7 +160,7 @@ const generateHTML = (invoice: Invoice, subtotal: number, gst: number, total: nu
             <div class="invoice-info">
               <h1>Invoice</h1>
               <p>Invoice #: ${invoice.invoiceNumber}</p>
-              <p>Date: ${invoice.date.toLocaleDateString()}</p>
+              <p>Date: ${new Date(invoice.date).toLocaleDateString('en-GB')}</p>
               ${
                 invoice.dueDate &&
                 `<p>Due Date: ${invoice.dueDate.toLocaleDateString('en-GB', {
@@ -272,9 +272,8 @@ export const generateInvoicePdf = async (
 ) => {
   try {
     // On iOS/android prints the given html. On web prints the HTML from the current page.
-    const { uri } = await printToFileAsync({ html: generateHTML(invoice, subtotal, gst, total) });
 
-    console.log('hello', invoice);
+    const { uri } = await printToFileAsync({ html: generateHTML(invoice, subtotal, gst, total) });
 
     const safeInvoiceNumber = invoice.invoiceNumber.replace(/[\/\\:*?"<>|]/g, '-');
     const permanentUri = FileSystem.documentDirectory + `invoice-${safeInvoiceNumber}.pdf`;

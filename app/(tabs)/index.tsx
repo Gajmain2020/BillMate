@@ -19,9 +19,9 @@ export default function Home() {
   };
 
   return (
-    <KeyboardAwareScrollView>
+    <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <Stack.Screen options={{ headerShown: false }} />
-      <View className="flex-1 justify-center gap-8 ">
+      <View className="flex-1 justify-center gap-8 p-5">
         <ImageBackground
           className="absolute h-full w-full opacity-10"
           source={require('../../assets/bg.jpg')}
@@ -35,9 +35,8 @@ export default function Home() {
         </View>
         <View className="gap-5">
           <Button onPress={onNewPress} title="Start New Invoice" />
-
           {existingNewInvoice && (
-            <View className="items-center justify-center gap-0 ">
+            <View className="items-center justify-center">
               <Button variant="link" onPress={onResumeInvoice} title="Resume Invoice" />
             </View>
           )}

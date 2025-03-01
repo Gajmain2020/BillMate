@@ -1,108 +1,29 @@
+import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { useState } from 'react';
-import {
-  FlatList,
-  Modal,
-  Text,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
-import Animated, {
-  LinearTransition,
-  SlideInRight,
-  SlideOutLeft,
-  ZoomIn,
-  ZoomOut,
-} from 'react-native-reanimated';
+import { Text, TextInput, TouchableOpacity, View } from 'react-native';
+import Animated, { LinearTransition } from 'react-native-reanimated';
 
 import { Button } from '~/components/Button';
-import { Invoice } from '~/schema/invoice';
+import InvoiceFilterModal from '~/components/InvoiceFilterModel';
+import { InvoiceItem } from '~/components/InvoiceItem';
 import { useStore } from '~/store';
 import { getTotals } from '~/utils/invoice';
 
-function RenderInvoiceItem({ item }: { item: Invoice }) {
-  const { total } = getTotals(item);
-
-  const deleteInvoice = useStore((data) => data.deleteInvoice);
-
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [visible, setVisible] = useState(false);
-
-  return (
-    <>
-      <Animated.View
-        entering={SlideInRight.duration(300)} // Fade in when the item appears
-        exiting={SlideOutLeft.duration(300)} // Fade out when the item is removed
-      >
-        <TouchableOpacity
-          onLongPress={() => {
-            setSelectedId(item.id);
-            setVisible(true);
-          }}>
-          <View className="mb-2 rounded-lg bg-white p-4 shadow-sm">
-            <View className="flex-row justify-between">
-              <Text className="text-bold text-lg">#{item.invoiceNumber}</Text>
-              <Text className="text-bold">₹{total.toFixed(2)}</Text>
-            </View>
-            <View className="border-t border-t-gray-200" />
-            <View className="mt-1">
-              <View className="flex-row">
-                <Text>To: </Text>
-                <Text className=" font-bold text-gray-600">{item.recipient.name}</Text>
-              </View>
-              <Text className="text-sm text-gray-500">
-                {new Date(item.date).toLocaleDateString('en-GB', {
-                  day: '2-digit',
-                  month: '2-digit',
-                  year: 'numeric',
-                })}
-              </Text>
-            </View>
-          </View>
-        </TouchableOpacity>
-      </Animated.View>
-      <Modal transparent visible={visible} onRequestClose={() => setVisible(false)}>
-        <TouchableWithoutFeedback onPress={() => setVisible(false)}>
-          <View className=" flex-1 items-center justify-center bg-gray-800/50">
-            <TouchableWithoutFeedback>
-              <Animated.View
-                entering={ZoomIn.duration(400)} // Scale the modal in
-                exiting={ZoomOut.duration(400)} // Scale the modal out
-                className="w-4/5 rounded-lg bg-white p-6 shadow-lg">
-                <Text className="mb-4 text-center text-lg font-semibold">Are you sure?</Text>
-                <Text className="mb-6 text-center text-gray-500">
-                  Do you want to delete contact?
-                </Text>
-                <View className="flex-row justify-between">
-                  <Button
-                    className="h-10 flex-1 items-center justify-center py-0 "
-                    title="Cancel"
-                    variant="link"
-                    onPress={() => setVisible(false)}
-                  />
-                  <Button
-                    title="Delete"
-                    className="h-10 flex-1 items-center justify-center bg-red-400 py-0"
-                    onPress={() => {
-                      if (selectedId !== null) {
-                        deleteInvoice(selectedId);
-                        setSelectedId(null);
-                      }
-                      setVisible(false);
-                    }}
-                  />
-                </View>
-              </Animated.View>
-            </TouchableWithoutFeedback>
-          </View>
-        </TouchableWithoutFeedback>
-      </Modal>
-    </>
-  );
-}
-
 export default function InvoicesScreen() {
+  const [search, setSearch] = useState<string>('');
+  const [searchByRecipient, setSearchByRecipient] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'price'>('newest');
+  const [dateRange, setDateRange] = useState<{ from: Date | null; to: Date | null }>({
+    from: null,
+    to: null,
+  });
+  const [amountRange, setAmountRange] = useState<{ min: string; max: string }>({
+    min: '',
+    max: '',
+  });
+
   const invoices = useStore((state) =>
     state.invoices.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
   );
@@ -113,32 +34,81 @@ export default function InvoicesScreen() {
     router.push('/invoices/generate');
   };
 
-  if (invoices.length === 0) {
-    return (
-      <View className="flex-1 items-center justify-center p-4">
-        <Text className="mb-2 text-2xl font-semibold text-gray-800">No Invoices Yet</Text>
-        <Text className="text-center text-gray-500">Create your first invoice to get started.</Text>
-      </View>
-    );
-  }
+  const filteredInvoices = invoices
+    .filter((invoice) => {
+      if (searchByRecipient) {
+        return invoice.recipient.name.toLowerCase().includes(search.toLowerCase());
+      }
+      return invoice.invoiceNumber.toLowerCase().includes(search.toLowerCase());
+    })
+    .filter((invoice) => {
+      if (dateRange.from && new Date(invoice.date) < dateRange.from) return false;
+      if (dateRange.to && new Date(invoice.date) > dateRange.to) return false;
+      return true;
+    })
+    .filter((invoice) => {
+      const { total } = getTotals(invoice);
+      if (amountRange.min && total < parseFloat(amountRange.min)) return false;
+      if (amountRange.max && total > parseFloat(amountRange.max)) return false;
+      return true;
+    })
+    .sort((a, b) => {
+      if (sortBy === 'newest') return new Date(b.date).getTime() - new Date(a.date).getTime();
+      if (sortBy === 'oldest') return new Date(a.date).getTime() - new Date(b.date).getTime();
+      if (sortBy === 'price') return getTotals(b).total - getTotals(a).total;
+      return 0;
+    });
+
   return (
-    <View className="flex-1 p-2">
+    <View className="flex-1">
+      {/* Search Input */}
+      <View className="flex-row items-center rounded border border-gray-300 p-2">
+        <TouchableOpacity
+          className={`mr-2 items-center justify-center rounded border px-3 py-2 ${searchByRecipient ? 'border-emerald-500 bg-emerald-500' : 'border-gray-300'}`}
+          onPress={() => setSearchByRecipient(!searchByRecipient)}>
+          <Text className={`${searchByRecipient ? 'text-white' : 'text-gray-600'}`}>To:</Text>
+        </TouchableOpacity>
+
+        <TextInput
+          value={search}
+          onChangeText={setSearch}
+          placeholder={
+            searchByRecipient ? 'Search by Recipient Name...' : 'Search by Invoice Number...'
+          }
+          className="flex-1 rounded border border-gray-300 py-2"
+        />
+
+        <TouchableOpacity onPress={() => setModalVisible(true)} className="ml-2">
+          <Ionicons name="filter" size={24} color="black" />
+        </TouchableOpacity>
+      </View>
+
+      {/* Filter Modal */}
+      <InvoiceFilterModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        sortBy={sortBy}
+        setSortBy={setSortBy}
+        dateRange={dateRange}
+        setDateRange={setDateRange}
+        amountRange={amountRange}
+        setAmountRange={setAmountRange}
+      />
+
       <Animated.FlatList
-        data={invoices}
-        renderItem={({ item }) => <RenderInvoiceItem item={item} />}
+        contentContainerClassName="p-2 gap-1"
+        data={filteredInvoices}
+        renderItem={({ item }) => <InvoiceItem item={item} />}
         keyExtractor={(item) => item.id}
         itemLayoutAnimation={LinearTransition}
         ListEmptyComponent={
           <View className="flex-1 items-center justify-center p-4">
-            <Text className="mb-2 text-2xl text-gray-600">No Invoices Yet</Text>
-            <Text className="text-center text-gray-500">
-              Create your first invoice to get started.
-            </Text>
+            <Text className="mb-2 text-xl font-bold">No Invoice Found</Text>
           </View>
         }
       />
 
-      <Button title="New Invoice" onPress={handleNewInvoice} className="mt-4" />
+      <Button title="New Invoice" onPress={handleNewInvoice} className="mb-2 mt-4" />
     </View>
   );
 }

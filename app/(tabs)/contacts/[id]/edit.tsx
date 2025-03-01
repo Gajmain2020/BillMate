@@ -22,6 +22,7 @@ export default function EditContactScreen() {
       name: contact?.name,
       address: contact?.address,
       gst: contact?.gst,
+      contact: contact?.contact,
     },
   });
 
@@ -43,6 +44,11 @@ export default function EditContactScreen() {
             label="Address"
             placeholder="Enter your address"
             multiline
+          />
+          <CustomTextInput
+            name="contact"
+            label="Contact Number"
+            placeholder="Enter your contact number"
           />
           <CustomTextInput name="gst" label="GST No." placeholder="Enter your GST number" />
         </View>

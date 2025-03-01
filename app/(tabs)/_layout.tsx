@@ -27,6 +27,7 @@ export default function Layout() {
           headerTitleAlign: 'center',
         }}
       />
+
       <Tabs.Screen
         name="contacts"
         options={{

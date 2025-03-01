@@ -2,6 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { router } from 'expo-router';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Keyboard, Text, View } from 'react-native';
+import { useEffect, useState } from 'react';
 
 import { Button } from '~/components/Button';
 import CustomDatePicker from '~/components/CustomDatePicker';
@@ -33,11 +34,9 @@ export default function GenerateInvoice() {
       return;
     }
 
-    if (numberOfContacts === 0) {
-      router.push('/invoices/generate/new-contact');
-    } else {
-      router.push('/invoices/generate/contact');
-    }
+    router.push(
+      numberOfContacts === 0 ? '/invoices/generate/new-contact' : '/invoices/generate/contact'
+    );
   };
 
   return (
