@@ -3,8 +3,8 @@ import { Stack, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import Animated, { LinearTransition } from 'react-native-reanimated';
-import InvoiceFilterModal from '~/components/InvoiceFilterModel';
 
+import InvoiceFilterModal from '~/components/InvoiceFilterModel';
 import { InvoiceItem } from '~/components/InvoiceItem';
 import { useStore } from '~/store';
 import { getTotals } from '~/utils/invoice';
@@ -17,7 +17,6 @@ export default function ContactInvoicesScreen() {
   const contact = contacts.find((c) => c.id === id);
 
   const [search, setSearch] = useState('');
-  const [searchByRecipient, setSearchByRecipient] = useState(false);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'price'>('newest');
@@ -32,12 +31,6 @@ export default function ContactInvoicesScreen() {
 
   const filteredInvoices = invoices
     .filter((invoice) => invoice.recipient.name.toLowerCase() === contact?.name.toLowerCase()) // Ensure only invoices of this contact are considered
-    .filter((invoice) => {
-      if (searchByRecipient) {
-        return invoice.recipient.name.toLowerCase().includes(search.toLowerCase());
-      }
-      return invoice.invoiceNumber.toLowerCase().includes(search.toLowerCase());
-    })
     .filter((invoice) => {
       if (dateRange.from && new Date(invoice.date) < dateRange.from) return false;
       if (dateRange.to && new Date(invoice.date) > dateRange.to) return false;
