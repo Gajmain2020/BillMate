@@ -26,25 +26,22 @@ export default function KeyboardAwareScrollView({
   const [keyboardVisible, setKeyboardVisible] = useState(false);
 
   useEffect(() => {
-    const showSubscription = Keyboard.addListener('keyboardDidShow', () =>
+    const keyboardShowListener = Keyboard.addListener('keyboardDidShow', () =>
       setKeyboardVisible(true)
     );
-    const hideSubscription = Keyboard.addListener('keyboardDidHide', () =>
+    const keyboardHideListener = Keyboard.addListener('keyboardDidHide', () =>
       setKeyboardVisible(false)
     );
 
     return () => {
-      showSubscription.remove();
-      hideSubscription.remove();
+      keyboardShowListener.remove();
+      keyboardHideListener.remove();
     };
   }, []);
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <StatusBar
-        barStyle={Platform.select({ ios: 'dark-content', android: 'dark-content' })}
-        backgroundColor="white"
-      />
+      <StatusBar barStyle="dark-content" backgroundColor="white" />
 
       <KeyboardAvoidingView
         behavior={behavior}
@@ -52,12 +49,14 @@ export default function KeyboardAwareScrollView({
         style={styles.avoidingView}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
           <ScrollView
-            contentContainerStyle={[styles.scrollViewContent, contentContainerStyle]}
-            keyboardShouldPersistTaps="handled"
+            contentContainerStyle={[
+              styles.scrollViewContent,
+              contentContainerStyle,
+              keyboardVisible ? { paddingBottom: keyboardVerticalOffset } : {},
+            ]}
+            keyboardShouldPersistTaps="always"
             showsVerticalScrollIndicator={false}>
             {children}
-            {keyboardVisible && <View style={{ height: 60 }} />}
-            {/* Ensure enough space after closing */}
           </ScrollView>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>

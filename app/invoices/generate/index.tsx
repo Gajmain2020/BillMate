@@ -2,7 +2,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { router } from 'expo-router';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Keyboard, Text, View } from 'react-native';
-import { useEffect, useState } from 'react';
 
 import { Button } from '~/components/Button';
 import CustomDatePicker from '~/components/CustomDatePicker';

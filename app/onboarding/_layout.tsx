@@ -8,25 +8,19 @@ export default function OnboardingLayout() {
       <Stack.Screen
         name="profile"
         options={{
-          title: 'Profile Setup',
-          headerBackVisible: false,
-          headerTitleAlign: 'center',
+          headerShown: false,
         }}
       />
       <Stack.Screen
         name="optional-details"
         options={{
-          title: 'Optional Details',
-          headerBackVisible: false,
-          headerTitleAlign: 'center',
+          headerShown: false,
         }}
       />
       <Stack.Screen
         name="logo-selection"
         options={{
-          title: 'Business Logo',
-          headerBackVisible: false,
-          headerTitleAlign: 'center',
+          headerShown: false,
         }}
       />
     </Stack>

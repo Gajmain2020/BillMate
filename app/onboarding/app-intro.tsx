@@ -133,7 +133,7 @@ export default function AppIntro() {
   };
 
   return (
-    <SafeAreaView className="flex-1">
+    <SafeAreaView className="flex-1 ">
       <StatusBar
         barStyle={Platform.select({ ios: 'dark-content', android: 'dark-content' })}
         backgroundColor="white"

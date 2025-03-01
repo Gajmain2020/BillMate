@@ -13,7 +13,6 @@ import { useStore } from '~/store';
 export default function LogoSelection() {
   const setProfile = useStore((data) => data.setProfile);
   const profile = useStore((data) => data.profile);
-  const setOnboardingCompleted = useStore((data) => data.setOnboardingCompleted);
 
   const form = useForm<OwnerEntityType>({
     resolver: zodResolver(ownerEntitySchema),
@@ -59,10 +58,12 @@ export default function LogoSelection() {
   return (
     <KeyboardAwareScrollView>
       <FormProvider {...form}>
-        <Text className="text-2xl font-bold">Your Business Logo</Text>
-        <Text className="mb-2 text-gray-600">
-          This logo will be used on invoices as letter head
-        </Text>
+        <View className="flex items-center justify-center border-b border-gray-200 py-4">
+          <Text className="text-2xl font-bold">Your Business Logo</Text>
+          <Text className="mb-2 text-gray-600">
+            This logo will be used on invoices as letter head
+          </Text>
+        </View>
 
         {/* Logo Selection */}
         <View className="mb-4 flex-1 items-center justify-center ">

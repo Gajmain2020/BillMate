@@ -1,7 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { randomUUID } from 'expo-crypto';
 import { router } from 'expo-router';
-import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Keyboard, Text, View } from 'react-native';
 
@@ -43,9 +42,10 @@ export default function OptionalDetails() {
   return (
     <KeyboardAwareScrollView>
       <FormProvider {...form}>
-        <Text className="text-2xl font-bold">Your Business Info</Text>
-        <Text className="mb-2 text-gray-600">This information will be used on invoices</Text>
-
+        <View className="flex items-center justify-center border-b border-gray-200 py-4">
+          <Text className="text-2xl font-bold">Your Business Info</Text>
+          <Text className="mb-2 text-gray-600">This information will be used on invoices</Text>
+        </View>
         <View className="flex-1 gap-2">
           <CustomTextInput
             name="altContact"
@@ -60,7 +60,7 @@ export default function OptionalDetails() {
           <CustomTextInput name="upi" label="UPI" placeholder="Enter your UPI." />
         </View>
 
-        <View className="flex-row gap-4">
+        <View className=" flex-row gap-4">
           <Button
             variant="secondary"
             className="flex-1 py-2"
@@ -69,7 +69,7 @@ export default function OptionalDetails() {
           />
           <Button
             title="Save"
-            className="mt-auto flex-1 py-2"
+            className="mt-58 flex-1 py-2"
             onPress={form.handleSubmit(onSubmit)}
           />
         </View>
