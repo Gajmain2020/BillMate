@@ -18,9 +18,10 @@ export default function GenerateInvoice() {
     resolver: zodResolver(businessEntitySchema),
     defaultValues: {
       id: recipient?.id || Crypto.randomUUID(),
-      name: recipient?.name,
-      address: recipient?.address,
-      gst: recipient?.gst,
+      name: recipient?.name || '',
+      address: recipient?.address || '',
+      gst: recipient?.gst || '',
+      contact: recipient?.contact || '', // Ensure contact is never undefined
     },
   });
 
@@ -44,6 +45,11 @@ export default function GenerateInvoice() {
             className="min-h-20"
             textAlignVertical="top"
             multiline
+          />
+          <CustomTextInput
+            name="contact"
+            label="Contact Number"
+            placeholder="Enter client's contact number "
           />
           <CustomTextInput
             name="gst"
