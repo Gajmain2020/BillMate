@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { randomUUID } from 'expo-crypto';
 import { router } from 'expo-router';
 import { FormProvider, useForm } from 'react-hook-form';
-import { Keyboard, ScrollView, Text, View } from 'react-native';
+import { Keyboard, Text, View } from 'react-native';
 
 import { Button } from '~/components/Button';
 import CustomTextInput from '~/components/CustomTextInput';

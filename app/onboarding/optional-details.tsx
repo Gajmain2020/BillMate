@@ -1,7 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { randomUUID } from 'expo-crypto';
 import { router } from 'expo-router';
-import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Keyboard, Text, View } from 'react-native';
 
