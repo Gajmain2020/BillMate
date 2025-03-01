@@ -29,6 +29,7 @@ export default function ContactScreen() {
 
       {/* Contact List */}
       <Animated.FlatList
+        contentContainerClassName="p-2 gap-1"
         data={contacts.filter((c) => c.name.toLowerCase().includes(search.toLowerCase()))}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <ContactListItem contact={item} />}

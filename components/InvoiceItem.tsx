@@ -1,11 +1,12 @@
-import { useState } from 'react';
-import { Alert, Modal, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
-import Animated, { SlideInRight, SlideOutLeft, ZoomIn, ZoomOut } from 'react-native-reanimated';
 import { router } from 'expo-router';
+import { useState } from 'react';
+import { Modal, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import Animated, { SlideInRight, SlideOutLeft, ZoomIn, ZoomOut } from 'react-native-reanimated';
+
 import { Button } from '~/components/Button';
 import { Invoice } from '~/schema/invoice';
-import { getTotals } from '~/utils/invoice';
 import { useStore } from '~/store';
+import { getTotals } from '~/utils/invoice';
 
 export function InvoiceItem({ item }: { item: Invoice }) {
   const { total } = getTotals(item);
@@ -41,14 +42,15 @@ export function InvoiceItem({ item }: { item: Invoice }) {
           </View>
         </TouchableOpacity>
       </Animated.View>
-      <Modal transparent visible={visible} onRequestClose={() => setVisible(false)}>
+      <Modal
+        transparent
+        visible={visible}
+        animationType="slide"
+        onRequestClose={() => setVisible(false)}>
         <TouchableWithoutFeedback onPress={() => setVisible(false)}>
           <View className="flex-1 items-center justify-center bg-gray-800/50">
             <TouchableWithoutFeedback>
-              <Animated.View
-                entering={ZoomIn.duration(400)}
-                exiting={ZoomOut.duration(400)}
-                className="w-4/5 rounded-lg bg-white p-6 shadow-lg">
+              <View className="w-4/5 rounded-lg bg-white p-6 shadow-lg">
                 <Text className="mb-4 text-center text-lg font-semibold">Are you sure?</Text>
                 <Text className="mb-6 text-center text-gray-500">
                   Do you want to delete this invoice?
@@ -69,7 +71,7 @@ export function InvoiceItem({ item }: { item: Invoice }) {
                     }}
                   />
                 </View>
-              </Animated.View>
+              </View>
             </TouchableWithoutFeedback>
           </View>
         </TouchableWithoutFeedback>

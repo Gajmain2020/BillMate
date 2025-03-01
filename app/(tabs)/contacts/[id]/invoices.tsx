@@ -1,4 +1,4 @@
-import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
+import { Stack, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import Animated, { LinearTransition } from 'react-native-reanimated';
@@ -8,8 +8,6 @@ import { useStore } from '~/store';
 
 export default function ContactInvoicesScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
-
-  console.log('id', id);
 
   const contacts = useStore((state) => state.contacts);
   const invoices = useStore((state) => state.invoices);
