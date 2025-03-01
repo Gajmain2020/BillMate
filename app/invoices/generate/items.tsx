@@ -24,26 +24,13 @@ export const itemsSchema = z.object({
 
 export type ItemsType = z.infer<typeof itemsSchema>;
 
-export default function GenerateInvoice() {
+export default function InvoiceItems() {
   const addItems = useStore((data) => data.addItems);
   const items = useStore((data) => data.newInvoice?.items);
 
-  const profile = useStore((data) => data.profile);
-
   const [visible, setVisible] = useState(false);
 
-  const [menuVisible, setMenuVisible] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-
-  const handleMenuOpen = (index: number) => {
-    setSelectedIndex(index);
-    setMenuVisible(true);
-  };
-
-  const handleMenuClose = () => {
-    setMenuVisible(false);
-    setSelectedIndex(null);
-  };
 
   const form = useForm<ItemsType>({
     resolver: zodResolver(itemsSchema),
@@ -94,7 +81,7 @@ export default function GenerateInvoice() {
                       label={`Item ${index + 1} Price`}
                       placeholder="Price"
                       keyboardType="numeric"
-                      isNumeric
+                      isNumber
                       onChangeText={(value) => {
                         form.setValue(`items.${index}.price`, Number(value));
                       }}
@@ -107,7 +94,7 @@ export default function GenerateInvoice() {
                       label={`Item ${index + 1} Quantity`}
                       placeholder="Quantity"
                       keyboardType="numeric"
-                      isNumeric
+                      isNumber
                       onChangeText={(value) => {
                         form.setValue(`items.${index}.quantity`, Number(value));
                       }}

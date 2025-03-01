@@ -5,12 +5,14 @@ type CustomTextInputProps = {
   name: string;
   label: string;
   isNumeric?: boolean; // Add a prop to indicate numeric input
+  isNumber?: boolean; // Add a prop to indicate numeric input
 } & TextInputProps;
 
 export default function CustomTextInput({
   label,
   name,
   isNumeric = false, // Default to false for non-numeric inputs
+  isNumber = false, // Default to false for non-numeric inputs
   ...props
 }: CustomTextInputProps) {
   const {
@@ -27,15 +29,23 @@ export default function CustomTextInput({
         className={`rounded border border-gray-200 px-2 py-3 ${props.className}`}
         value={value?.toString()} // Ensure value is a string for TextInput
         onChangeText={(text) => {
-          if (isNumeric) {
-            onChange(text); // Pass the number to the form state
+          if (isNumber) {
+            if (text === '') {
+              onChange(''); // Keep it an empty string instead of resetting to 0
+            } else {
+              const numericValue = parseFloat(text);
+              if (!isNaN(numericValue)) {
+                onChange(numericValue);
+              }
+            }
           } else {
-            onChange(text); // Pass the string to the form state
+            onChange(text);
           }
         }}
         onBlur={onBlur}
-        keyboardType={isNumeric ? 'numeric' : props.keyboardType} // Set numeric keyboard if required
+        keyboardType={isNumeric || isNumber ? 'numeric' : props.keyboardType} // Set numeric keyboard if required
       />
+
       {error && <Text className="text-red-500">{error.message}</Text>}
     </View>
   );

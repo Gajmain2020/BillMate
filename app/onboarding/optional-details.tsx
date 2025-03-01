@@ -50,6 +50,7 @@ export default function OptionalDetails() {
           <CustomTextInput
             name="altContact"
             label="Alternate Contact Number"
+            isNumeric
             placeholder="Enter your alternate contact number"
           />
 

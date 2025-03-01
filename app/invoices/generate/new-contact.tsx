@@ -49,6 +49,7 @@ export default function GenerateInvoice() {
           <CustomTextInput
             name="contact"
             label="Contact Number"
+            isNumeric
             placeholder="Enter client's contact number "
           />
           <CustomTextInput
