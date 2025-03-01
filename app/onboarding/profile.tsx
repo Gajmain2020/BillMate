@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { randomUUID } from 'expo-crypto';
 import { router } from 'expo-router';
 import { FormProvider, useForm } from 'react-hook-form';
-import { Keyboard, Text, View } from 'react-native';
+import { Keyboard, ScrollView, Text, View } from 'react-native';
 
 import { Button } from '~/components/Button';
 import CustomTextInput from '~/components/CustomTextInput';
@@ -67,7 +67,6 @@ export default function Profile() {
 
           <CustomTextInput name="gst" label="GST No.*" placeholder="Enter your GST number" />
         </View>
-
         <Button title="Save" className="mt-auto" onPress={form.handleSubmit(onSubmit)} />
       </FormProvider>
     </KeyboardAwareScrollView>

@@ -60,7 +60,7 @@ export default function OptionalDetails() {
           <CustomTextInput name="upi" label="UPI" placeholder="Enter your UPI." />
         </View>
 
-        <View className="flex-row gap-4">
+        <View className=" flex-row gap-4">
           <Button
             variant="secondary"
             className="flex-1 py-2"
@@ -69,7 +69,7 @@ export default function OptionalDetails() {
           />
           <Button
             title="Save"
-            className="mt-auto flex-1 py-2"
+            className="mt-58 flex-1 py-2"
             onPress={form.handleSubmit(onSubmit)}
           />
         </View>
