@@ -155,10 +155,10 @@ export default function InvoiceItems() {
           variant="link"
           onPress={() => {
             append({
-              name: 'item',
-              quantity: 1,
-              price: 10,
-              total: 10,
+              name: '',
+              quantity: 0,
+              price: 0,
+              total: 0,
             });
           }}
         />
