@@ -128,12 +128,12 @@ export default function InvoiceItems() {
                     <Button
                       title="Cancel"
                       variant="link"
-                      className="mr-2 h-10 flex-1 p-1"
+                      className="mr-2 flex-1 py-2.5"
                       onPress={() => setVisible(false)}
                     />
                     <Button
                       title="Delete"
-                      className="h-10 flex-1 items-center bg-red-400 p-1.5"
+                      className="flex-1 items-center bg-red-400 py-2.5"
                       onPress={() => {
                         if (selectedIndex !== null) {
                           remove(selectedIndex);

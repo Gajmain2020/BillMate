@@ -40,14 +40,19 @@ export type InvoiceInfoType = z.infer<typeof invoiceInfoSchema>;
 
 export const invoiceItemSchema = z.object({
   name: z.string({ required_error: 'Name is required.' }).min(1, 'Name is required.'),
+
   quantity: z
     .union([z.number(), z.string().optional()])
     .refine((val) => val !== '' && !isNaN(Number(val)), { message: 'Quantity is required.' })
-    .transform((val) => Number(val)), // Convert to number after validation
+    .transform((val) => Number(val)) // Convert to number after validation
+    .refine((val) => val > 0, { message: 'Quantity must be greater than 0.' }), // Enforce positive number
+
   price: z
     .union([z.number(), z.string().optional()])
     .refine((val) => val !== '' && !isNaN(Number(val)), { message: 'Price is required.' })
-    .transform((val) => Number(val)), // Convert to number after validation
+    .transform((val) => Number(val)) // Convert to number after validation
+    .refine((val) => val > 0, { message: 'Price must be greater than 0.' }), // Enforce positive number
+
   total: z
     .union([z.number(), z.string().optional()])
     .refine((val) => val !== '' && !isNaN(Number(val)), { message: 'Total is required.' })

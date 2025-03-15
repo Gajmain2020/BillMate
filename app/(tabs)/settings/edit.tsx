@@ -6,6 +6,7 @@ import { View, Text, TouchableOpacity } from 'react-native';
 
 import { Button } from '~/components/Button';
 import InfoSection from '~/components/InfoSection';
+import KeyboardAwareScrollView from '~/components/KeyboardAwareScrollView';
 import LogoSection from '~/components/LogoSection';
 import OptionalSection from '~/components/OptionalSection';
 import { ownerEntitySchema, OwnerEntityType } from '~/schema/invoice';
@@ -72,20 +73,22 @@ export default function Profile() {
   };
 
   return (
-    <FormProvider {...form}>
-      <Text className="text-2xl font-bold">Edit Profile</Text>
-      <Text className="mb-4 text-gray-600">Update your business details</Text>
+    <KeyboardAwareScrollView>
+      <FormProvider {...form}>
+        <Text className="text-2xl font-bold">Edit Profile</Text>
+        <Text className="mb-4 text-gray-600">Update your business details</Text>
 
-      {/* Tab Navigation */}
-      <Tab.Navigator tabBar={(props) => <CustomTabBar {...props} />}>
-        <Tab.Screen name="Info" component={InfoSection} />
-        <Tab.Screen name="Optional" component={OptionalSection} />
-        <Tab.Screen name="Logo" component={LogoSection} />
-      </Tab.Navigator>
+        {/* Tab Navigation */}
+        <Tab.Navigator tabBar={(props) => <CustomTabBar {...props} />}>
+          <Tab.Screen name="Info" component={InfoSection} />
+          <Tab.Screen name="Optional" component={OptionalSection} />
+          <Tab.Screen name="Logo" component={LogoSection} />
+        </Tab.Navigator>
 
-      <View className="p-4">
-        <Button title="Save Changes" onPress={form.handleSubmit(onSubmit)} />
-      </View>
-    </FormProvider>
+        <View className="p-4">
+          <Button title="Save Changes" onPress={form.handleSubmit(onSubmit)} />
+        </View>
+      </FormProvider>
+    </KeyboardAwareScrollView>
   );
 }
