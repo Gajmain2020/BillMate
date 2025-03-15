@@ -35,7 +35,7 @@ export default function InvoiceItems() {
   const form = useForm<ItemsType>({
     resolver: zodResolver(itemsSchema),
     defaultValues: {
-      items: items || [],
+      items: items?.length ? items : [{ name: '', quantity: 0, price: 0, total: 0 }],
     },
   });
 
@@ -48,7 +48,7 @@ export default function InvoiceItems() {
     Keyboard.dismiss();
     addItems(data.items);
 
-    if (items?.length === 0) {
+    if (data.items.length === 0) {
       alert('Please add at least one item');
       return;
     }
@@ -83,7 +83,10 @@ export default function InvoiceItems() {
                       keyboardType="numeric"
                       isNumber
                       onChangeText={(value) => {
-                        form.setValue(`items.${index}.price`, Number(value));
+                        const price = Number(value);
+                        const quantity = form.watch(`items.${index}.quantity`) || 0;
+                        form.setValue(`items.${index}.price`, price);
+                        form.setValue(`items.${index}.total`, price * quantity);
                       }}
                     />
                   </View>
@@ -96,7 +99,10 @@ export default function InvoiceItems() {
                       keyboardType="numeric"
                       isNumber
                       onChangeText={(value) => {
-                        form.setValue(`items.${index}.quantity`, Number(value));
+                        const quantity = Number(value);
+                        const price = form.watch(`items.${index}.price`) || 0;
+                        form.setValue(`items.${index}.quantity`, quantity);
+                        form.setValue(`items.${index}.total`, price * quantity);
                       }}
                     />
                   </View>
@@ -115,7 +121,11 @@ export default function InvoiceItems() {
           ))}
         </View>
 
-        <Modal transparent visible={visible} onRequestClose={() => setVisible(false)}>
+        <Modal
+          transparent
+          animationType="slide"
+          visible={visible}
+          onRequestClose={() => setVisible(false)}>
           <TouchableWithoutFeedback onPress={() => setVisible(false)}>
             <View className=" flex-1 items-center justify-center bg-gray-800/50">
               <TouchableWithoutFeedback>

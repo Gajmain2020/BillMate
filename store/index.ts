@@ -20,8 +20,11 @@ export type InvoiceState = {
   onboardingCompleted: boolean;
   invoiceNumberFormat: string;
 
+  // Invoices
   newInvoice: Partial<Invoice> | null;
   invoices: Invoice[];
+
+  // Items
 
   // contacts
   contacts: BusinessEntityType[];
