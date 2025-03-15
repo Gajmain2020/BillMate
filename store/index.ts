@@ -20,8 +20,11 @@ export type InvoiceState = {
   onboardingCompleted: boolean;
   invoiceNumberFormat: string;
 
+  // Invoices
   newInvoice: Partial<Invoice> | null;
   invoices: Invoice[];
+
+  // Items
 
   // contacts
   contacts: BusinessEntityType[];
@@ -96,7 +99,7 @@ export const useStore = create<InvoiceState>()(
             id: Crypto.randomUUID(),
             invoiceNumber: generateInvoiceNumber(lastInvoice, invoiceNumberFormat),
             sender: get().profile,
-            items: [{ name: 'Example', quantity: 1, price: 20, total: 1 * 20 }],
+            items: [],
             date: new Date(),
             // dueDate: new Date(new Date().setDate(new Date().getDate() + 14)).toLocaleDateString(),
           },
