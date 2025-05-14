@@ -20,7 +20,7 @@ export default function Layout() {
       <Tabs.Screen
         name="invoices"
         options={{
-          title: 'Invoices',
+headerShown:false,
           tabBarIcon: ({ color, size }) => (
             <FontAwesome6 name="file-invoice" size={size} color={color} />
           ),

@@ -5,7 +5,7 @@ type ButtonVariant = 'primary' | 'secondary' | 'link' | 'danger';
 
 const styles = {
   primary: {
-    button: 'items-center bg-emerald-500 rounded-[28px] shadow-md p-4',
+    button: 'items-center bg-teal-500 rounded-[28px] shadow-md p-3',
     text: 'text-white text-lg font-semibold text-center',
   },
   secondary: {

@@ -1,7 +1,7 @@
-import { Entypo } from '@expo/vector-icons';
+import { AntDesign, Entypo, FontAwesome5 } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { Pressable, Text, View, Modal, ActivityIndicator, ScrollView, Image } from 'react-native';
+import { ActivityIndicator, Image, Modal, Pressable, ScrollView, Text, View } from 'react-native';
 
 import { Button } from '~/components/Button';
 import ReviewModal from '~/components/Review';
@@ -123,6 +123,35 @@ export default function ProfileScreen() {
               />
             </View>
           </View>
+
+          <View>
+            <Text className="mb-2 ml-2 font-medium text-gray-400">Sales</Text>
+            <View className="overflow-hidden rounded-lg">
+              <Pressable
+                onPress={() => router.push('/settings/inventory')}
+                className="flex-row items-center justify-between border-b border-gray-200 bg-white p-4">
+                <View className="flex-row items-center gap-2">
+                  <FontAwesome5 name="store" size={18} color="gray" />
+                  <Text className="text-lg">Inventory</Text>
+                </View>
+                <View className="flex-row items-center gap-1">
+                  <Entypo name="chevron-right" size={24} color="gray" />
+                </View>
+              </Pressable>
+              <Pressable
+                onPress={() => router.push('/settings/inventory/sale-summary')}
+                className="flex-row items-center justify-between border-b border-gray-200 bg-white p-4">
+                <View className="flex-row items-center gap-2">
+                  <AntDesign name="linechart" size={18} color="gray" />
+                  <Text className="text-lg">Sale Summary</Text>
+                </View>
+                <View className="flex-row items-center gap-1">
+                  <Entypo name="chevron-right" size={24} color="gray" />
+                </View>
+              </Pressable>
+            </View>
+          </View>
+
           <View>
             <Text className="mb-2 ml-2 font-medium text-gray-400">Support</Text>
             <View className="overflow-hidden rounded-lg">

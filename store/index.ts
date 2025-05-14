@@ -4,15 +4,14 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 import {
-  Invoice,
   BusinessEntityType,
+  InventoryItemType,
+  Invoice,
   InvoiceInfoType,
   InvoiceItemType,
   OwnerEntityType,
 } from '~/schema/invoice';
 import { generateInvoiceNumber, getLastInvoice } from '~/utils/invoice';
-
-// TODO: ADD TOTAL AND ITS ROUND OFF FUNCTION
 
 export type InvoiceState = {
   profile: OwnerEntityType & { logo: string | null };
@@ -24,7 +23,11 @@ export type InvoiceState = {
   newInvoice: Partial<Invoice> | null;
   invoices: Invoice[];
 
-  // Items
+  // Inventory Items
+  inventoryItems: InventoryItemType[];
+  addInventoryItem: (item: InventoryItemType) => void;
+  deleteInventoryItem: (id: string) => void;
+  updateInventoryItem: (item: InventoryItemType) => void;
 
   // contacts
   contacts: BusinessEntityType[];
@@ -65,6 +68,17 @@ export const useStore = create<InvoiceState>()(
       },
       onboardingCompleted: false,
       invoiceNumberFormat: 'INV-XXX',
+
+      //inventory item
+      inventoryItems: [],
+      addInventoryItem: (item: InventoryItemType) =>
+        set((state) => ({ inventoryItems: [...state.inventoryItems, item] })),
+      deleteInventoryItem: (id: string) =>
+        set((state) => ({ inventoryItems: state.inventoryItems.filter((i) => i.itemId !== id) })),
+      updateInventoryItem: (item: InventoryItemType) =>
+        set((state) => ({
+          inventoryItems: state.inventoryItems.map((i) => (i.itemId === item.itemId ? item : i)),
+        })),
 
       newInvoice: null,
       invoices: [],

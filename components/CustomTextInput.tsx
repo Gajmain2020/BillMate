@@ -27,7 +27,7 @@ export default function CustomTextInput({
       <TextInput
         {...props}
         className={`rounded border border-gray-200 px-2 py-3 ${props.className}`}
-        value={value?.toString()} // Ensure value is a string for TextInput
+        value={value !== undefined && value !== null ? value.toString() : ''} // Ensure value is a string for TextInput
         onChangeText={(text) => {
           if (isNumber) {
             if (text === '') {

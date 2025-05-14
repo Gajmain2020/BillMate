@@ -10,6 +10,20 @@ export const businessEntitySchema = z.object({
 
 export type BusinessEntityType = z.infer<typeof businessEntitySchema>;
 
+export const inventoryItemSchema = z.object({
+  itemId: z.string({ required_error: 'Item ID is required.' }).min(1, 'Item ID is required'),
+  name: z.string({ required_error: 'Item Name is required.' }).min(1, 'Item Name is required'),
+  price: z.string({ required_error: 'Item Price is required.' }).min(1, 'Item Price is required'),
+  quantity: z
+    .string({ required_error: 'Item Quantity is required.' })
+    .min(1, 'Item Quantity is required'),
+  sellPrice: z
+    .string({ required_error: 'Item Sell Price is required.' })
+    .min(1, 'Item Sell Price is required'),
+});
+
+export type InventoryItemType = z.infer<typeof inventoryItemSchema>;
+
 export const ownerEntitySchema = z.object({
   id: z.string().uuid(),
   name: z.string({ required_error: 'Name is required.' }).min(1, 'Name is required'),
