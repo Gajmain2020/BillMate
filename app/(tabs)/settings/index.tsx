@@ -89,100 +89,98 @@ export default function ProfileScreen() {
   }
 
   return (
-    <ScrollView>
-      <ScrollView className="flex-1 bg-gray-50 p-4">
-        <View className="mb-1 flex-row items-center justify-between py-8">
-          {/* Business Details (Left Side) */}
-          <View className="flex-1">
-            <Text className="text-3xl font-bold">{profile?.name || 'My Business'}</Text>
-            {profile?.email && <Text className="mt-1 text-gray-500">Email: {profile.email}</Text>}
-            {profile?.gst && <Text className="mt-1 text-gray-500">GST No.: {profile.gst}</Text>}
-          </View>
-
-          {/* Logo (Right Side) */}
-          {profile?.logo && (
-            <Image source={{ uri: profile.logo }} className="h-16 w-16 rounded-full" />
-          )}
+    <ScrollView className="flex-1 bg-gray-50 p-4">
+      <View className="mb-1 flex-row items-center justify-between py-8">
+        {/* Business Details (Left Side) */}
+        <View className="flex-1">
+          <Text className="text-3xl font-bold">{profile?.name || 'My Business'}</Text>
+          {profile?.email && <Text className="mt-1 text-gray-500">Email: {profile.email}</Text>}
+          {profile?.gst && <Text className="mt-1 text-gray-500">GST No.: {profile.gst}</Text>}
         </View>
 
-        <View className="gap-5">
-          <View>
-            <Text className="mb-2 ml-2 font-medium text-gray-400">SETTINGS</Text>
-            <View className="overflow-hidden rounded-lg">
-              <ListItem
-                title="Edit Business Details"
-                icon="briefcase"
-                onPress={() => router.push('/settings/edit')}
-                labelRight=""
-              />
-              <ListItem
-                labelRight={invoiceNumberFormat}
-                icon="new-message"
-                title="Invoice Number"
-                onPress={() => router.push('/settings/invoice-format')}
-              />
-            </View>
-          </View>
+        {/* Logo (Right Side) */}
+        {profile?.logo && (
+          <Image source={{ uri: profile.logo }} className="h-16 w-16 rounded-full" />
+        )}
+      </View>
 
-          <View>
-            <Text className="mb-2 ml-2 font-medium text-gray-400">Sales</Text>
-            <View className="overflow-hidden rounded-lg">
-              <Pressable
-                onPress={() => router.push('/settings/inventory')}
-                className="flex-row items-center justify-between border-b border-gray-200 bg-white p-4">
-                <View className="flex-row items-center gap-2">
-                  <FontAwesome5 name="store" size={18} color="gray" />
-                  <Text className="text-lg">Inventory</Text>
-                </View>
-                <View className="flex-row items-center gap-1">
-                  <Entypo name="chevron-right" size={24} color="gray" />
-                </View>
-              </Pressable>
-              <Pressable
-                onPress={() => router.push('/settings/inventory/sale-summary')}
-                className="flex-row items-center justify-between border-b border-gray-200 bg-white p-4">
-                <View className="flex-row items-center gap-2">
-                  <AntDesign name="linechart" size={18} color="gray" />
-                  <Text className="text-lg">Sale Summary</Text>
-                </View>
-                <View className="flex-row items-center gap-1">
-                  <Entypo name="chevron-right" size={24} color="gray" />
-                </View>
-              </Pressable>
-            </View>
-          </View>
-
-          <View>
-            <Text className="mb-2 ml-2 font-medium text-gray-400">Support</Text>
-            <View className="overflow-hidden rounded-lg">
-              <ListItem
-                title="Review App"
-                icon="sound"
-                onPress={() => setReviewModalVisible(true)}
-                labelRight=""
-              />
-              <ListItem
-                title="Help & Contacts"
-                icon="help"
-                onPress={() => router.push('/settings/help')}
-                labelRight=""
-              />
-              <ReviewModal
-                visible={reviewModalVisible}
-                onClose={() => setReviewModalVisible(false)}
-              />
-            </View>
-          </View>
-          <View className="px-2">
-            <Button
-              className="mb-2 py-3"
-              variant="danger"
-              title="Delete Account"
-              onPress={() => setModalVisible(true)}
+      <View className="gap-5">
+        <View>
+          <Text className="mb-2 ml-2 font-medium text-gray-400">SETTINGS</Text>
+          <View className="overflow-hidden rounded-lg">
+            <ListItem
+              title="Edit Business Details"
+              icon="briefcase"
+              onPress={() => router.push('/settings/edit')}
+              labelRight=""
+            />
+            <ListItem
+              labelRight={invoiceNumberFormat}
+              icon="new-message"
+              title="Invoice Number"
+              onPress={() => router.push('/settings/invoice-format')}
             />
           </View>
         </View>
-      </ScrollView>
+
+        <View>
+          <Text className="mb-2 ml-2 font-medium text-gray-400">Sales</Text>
+          <View className="overflow-hidden rounded-lg">
+            <Pressable
+              onPress={() => router.push('/settings/inventory')}
+              className="flex-row items-center justify-between border-b border-gray-200 bg-white p-4">
+              <View className="flex-row items-center gap-2">
+                <FontAwesome5 name="store" size={18} color="gray" />
+                <Text className="text-lg">Inventory</Text>
+              </View>
+              <View className="flex-row items-center gap-1">
+                <Entypo name="chevron-right" size={24} color="gray" />
+              </View>
+            </Pressable>
+            <Pressable
+              onPress={() => router.push('/settings/inventory/sale-summary')}
+              className="flex-row items-center justify-between border-b border-gray-200 bg-white p-4">
+              <View className="flex-row items-center gap-2">
+                <AntDesign name="linechart" size={18} color="gray" />
+                <Text className="text-lg">Sale Summary</Text>
+              </View>
+              <View className="flex-row items-center gap-1">
+                <Entypo name="chevron-right" size={24} color="gray" />
+              </View>
+            </Pressable>
+          </View>
+        </View>
+
+        <View>
+          <Text className="mb-2 ml-2 font-medium text-gray-400">Support</Text>
+          <View className="overflow-hidden rounded-lg">
+            <ListItem
+              title="Review App"
+              icon="sound"
+              onPress={() => setReviewModalVisible(true)}
+              labelRight=""
+            />
+            <ListItem
+              title="Help & Contacts"
+              icon="help"
+              onPress={() => router.push('/settings/help')}
+              labelRight=""
+            />
+            <ReviewModal
+              visible={reviewModalVisible}
+              onClose={() => setReviewModalVisible(false)}
+            />
+          </View>
+        </View>
+        <View className="px-2">
+          <Button
+            className="mb-2 py-3"
+            variant="danger"
+            title="Delete Account"
+            onPress={() => setModalVisible(true)}
+          />
+        </View>
+      </View>
 
       <DeleteConfirmationModal
         visible={modalVisible}

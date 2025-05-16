@@ -5,15 +5,15 @@ type ButtonVariant = 'primary' | 'secondary' | 'link' | 'danger';
 
 const styles = {
   primary: {
-    button: 'items-center bg-teal-500 rounded-[28px] shadow-md p-3',
+    button: 'items-center bg-teal-500 rounded-[28px] shadow-md p-4',
     text: 'text-white text-lg font-semibold text-center',
   },
   secondary: {
-    button: 'items-center border border-emerald-500 rounded-[28px] shadow-md p-4',
+    button: 'items-center border border-emerald-500 rounded-[28px] shadow-md px-4 py-2',
     text: 'text-emerald-500 text-lg font-semibold text-center',
   },
   link: {
-    button: 'items-center p-4',
+    button: 'items-center px-4 py-2',
     text: 'text-emerald-500 text-lg font-bold text-center',
   },
   danger: {
