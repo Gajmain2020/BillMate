@@ -1,12 +1,11 @@
 import { Ionicons } from '@expo/vector-icons';
 import { zodResolver } from '@hookform/resolvers/zod';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import {
   KeyboardAvoidingView,
   Modal,
   Platform,
-  Pressable,
   SafeAreaView,
   ScrollView,
   Text,
@@ -28,7 +27,33 @@ export default function Inventory() {
 
   const [deleteItem, setDeleteItem] = useState('');
 
+  const [editItem, setEditItem] = useState('');
+
   const { inventoryItems, addInventoryItem, deleteInventoryItem } = useStore();
+
+  useEffect(() => {
+    if (editItem !== '') {
+      const item = inventoryItems.find((i) => i.itemId === editItem);
+      if (item) {
+        newItemForm.reset({
+          itemId: item.itemId,
+          name: item.name,
+          quantity: String(item.quantity),
+          price: String(item.price),
+          sellPrice: String(item.sellPrice),
+        });
+      }
+    } else {
+      // Reset form when closing edit mode
+      newItemForm.reset({
+        itemId: '',
+        name: '',
+        quantity: '',
+        price: '',
+        sellPrice: '',
+      });
+    }
+  }, [editItem]);
 
   const newItemForm = useForm({
     resolver: zodResolver(inventoryItemSchema),
@@ -58,19 +83,34 @@ export default function Inventory() {
     setAddNewItem(false);
   };
 
+  const handleEditItem = (itemId: string) => {
+    const item = inventoryItems.find((i) => i.itemId === itemId);
+    if (item) {
+      newItemForm.reset({
+        itemId: item.itemId,
+        name: item.name,
+        quantity: String(item.quantity),
+        price: String(item.price),
+        sellPrice: String(item.sellPrice),
+      });
+      setEditItem(itemId);
+    }
+  };
+
   return (
     <View className="flex-1">
       {/* Search Bar */}
-      <View className="flex-row items-center rounded border border-gray-300 p-2 ">
+      <View className="mb-4 flex-row items-center rounded-full bg-white px-4 py-1 shadow-md">
+        <Ionicons name="search" size={20} color="#6b7280" className="mr-2" />
         <TextInput
-          placeholder="Search by name or ID..."
+          placeholder="Search by Name or ID..."
           placeholderTextColor="#6b7280"
           value={searchQuery}
           onChangeText={handleSearchValueChange}
-          className="flex-1 rounded border border-gray-300 py-2"
+          className="flex-1 text-base text-gray-800"
         />
         {searchQuery.length > 0 && (
-          <TouchableOpacity onPress={() => setSearchQuery('')} className="ml-2">
+          <TouchableOpacity onPress={() => setSearchQuery('')}>
             <Ionicons name="close-circle" size={20} color="gray" />
           </TouchableOpacity>
         )}
@@ -81,12 +121,31 @@ export default function Inventory() {
         data={filteredInventory}
         keyExtractor={(item) => item.itemId}
         renderItem={({ item }) => (
-          <Pressable
+          <TouchableOpacity
             onLongPress={() => setDeleteItem(item.itemId)}
-            className="mb-2 rounded-lg bg-white px-4 py-2 shadow-sm">
-            <Text className="text-lg font-semibold">{item.name}</Text>
-            <Text className="text-gray-600">{item.itemId}</Text>
-          </Pressable>
+            className="relative mb-4 rounded-xl bg-white p-4 shadow-lg">
+            {/* Edit Button at Top-Right */}
+            <TouchableOpacity
+              onPress={() => handleEditItem(item.itemId)}
+              className="absolute right-3 top-3 z-10 p-1">
+              <Ionicons name="create-outline" size={20} color="#4B5563" />
+            </TouchableOpacity>
+
+            {/* Card Content */}
+            <View className="gap-3">
+              <View className="flex-row items-baseline gap-1">
+                <Text className="text-xl font-bold text-gray-800">{item.name}</Text>
+                <Text className="text-sm text-gray-500">({item.itemId})</Text>
+              </View>
+
+              {/* Quantity, Price, Sell Price in one row */}
+              <View className=" flex-row justify-between">
+                <Text className="text-base text-gray-700">Qty: {item.quantity}</Text>
+                <Text className="text-base text-gray-700">Price: ₹{item.price}</Text>
+                <Text className="text-base text-gray-700">Sell: ₹{item.sellPrice}</Text>
+              </View>
+            </View>
+          </TouchableOpacity>
         )}
         ListEmptyComponent={
           <Animated.View
@@ -103,7 +162,10 @@ export default function Inventory() {
       {/* Fixed Button */}
       <View className="absolute bottom-4 left-4 right-4">
         <TouchableOpacity
-          onPress={() => setAddNewItem(true)}
+          onPress={() => {
+            newItemForm.reset();
+            setAddNewItem(true);
+          }}
           className="items-center rounded-full bg-teal-500 py-3 shadow-md">
           <Text className="text-lg font-semibold text-white">Add New Item</Text>
         </TouchableOpacity>
@@ -111,13 +173,17 @@ export default function Inventory() {
 
       {/* Add New Item Modal */}
       <Modal
-        visible={addNewItem}
-        onRequestClose={() => setAddNewItem(false)}
+        visible={addNewItem || editItem !== ''}
+        onRequestClose={() => {
+          setAddNewItem(false);
+          setEditItem('');
+        }}
         animationType="slide"
         transparent>
         <TouchableWithoutFeedback
           onPress={() => {
             setAddNewItem(false);
+            setEditItem('');
             newItemForm.reset();
           }}>
           <View className="flex-1 bg-gray-400/60">
@@ -170,9 +236,20 @@ export default function Inventory() {
                       </FormProvider>
 
                       <Button
-                        title="Add Item"
+                        title={editItem !== '' ? 'Update Item' : 'Add Item'}
                         className="mt-4"
-                        onPress={() => newItemForm.handleSubmit(onAddNewItemPress)()}
+                        onPress={() =>
+                          newItemForm.handleSubmit(() => {
+                            if (editItem !== '') {
+                              // implement update logic here if needed
+                              // e.g., updateInventoryItem(editItem, newItemForm.getValues());
+                              console.log(editItem, newItemForm.getValues());
+                            } else {
+                              onAddNewItemPress();
+                            }
+                            setEditItem('');
+                          })()
+                        }
                       />
                     </View>
                   </TouchableWithoutFeedback>
