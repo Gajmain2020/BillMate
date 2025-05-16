@@ -43,7 +43,7 @@ export default function CustomTextInput({
           }
         }}
         onBlur={onBlur}
-        keyboardType={isNumeric || isNumber ? 'numeric' : props.keyboardType} // Set numeric keyboard if required
+        keyboardType={isNumeric || isNumber ? 'number-pad' : props.keyboardType} // Set numeric keyboard if required
       />
 
       {error && <Text className="text-red-500">{error.message}</Text>}
