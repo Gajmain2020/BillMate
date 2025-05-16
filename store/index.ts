@@ -27,7 +27,7 @@ export type InvoiceState = {
   inventoryItems: InventoryItemType[];
   addInventoryItem: (item: InventoryItemType) => void;
   deleteInventoryItem: (id: string) => void;
-  updateInventoryItem: (item: InventoryItemType) => void;
+  updateInventoryItem: (itemId: string, item: InventoryItemType) => void;
 
   // contacts
   contacts: BusinessEntityType[];
@@ -75,9 +75,9 @@ export const useStore = create<InvoiceState>()(
         set((state) => ({ inventoryItems: [...state.inventoryItems, item] })),
       deleteInventoryItem: (id: string) =>
         set((state) => ({ inventoryItems: state.inventoryItems.filter((i) => i.itemId !== id) })),
-      updateInventoryItem: (item: InventoryItemType) =>
+      updateInventoryItem: (itemId: string, item: InventoryItemType) =>
         set((state) => ({
-          inventoryItems: state.inventoryItems.map((i) => (i.itemId === item.itemId ? item : i)),
+          inventoryItems: state.inventoryItems.map((i) => (i.itemId === itemId ? item : i)),
         })),
 
       newInvoice: null,

@@ -29,7 +29,7 @@ export default function Inventory() {
 
   const [editItem, setEditItem] = useState('');
 
-  const { inventoryItems, addInventoryItem, deleteInventoryItem } = useStore();
+  const { inventoryItems, addInventoryItem, deleteInventoryItem, updateInventoryItem } = useStore();
 
   useEffect(() => {
     if (editItem !== '') {
@@ -77,12 +77,6 @@ export default function Inventory() {
     setSearchQuery(text);
   };
 
-  const onAddNewItemPress = () => {
-    addInventoryItem(newItemForm.getValues());
-    newItemForm.reset();
-    setAddNewItem(false);
-  };
-
   const handleEditItem = (itemId: string) => {
     const item = inventoryItems.find((i) => i.itemId === itemId);
     if (item) {
@@ -120,10 +114,11 @@ export default function Inventory() {
         itemLayoutAnimation={LinearTransition}
         data={filteredInventory}
         keyExtractor={(item) => item.itemId}
+        contentContainerClassName="px-2 py-0 gap-2"
         renderItem={({ item }) => (
           <TouchableOpacity
             onLongPress={() => setDeleteItem(item.itemId)}
-            className="relative mb-4 rounded-xl bg-white p-4 shadow-lg">
+            className="relative rounded-xl bg-white p-4 shadow-lg">
             {/* Edit Button at Top-Right */}
             <TouchableOpacity
               onPress={() => handleEditItem(item.itemId)}
@@ -238,18 +233,50 @@ export default function Inventory() {
                       <Button
                         title={editItem !== '' ? 'Update Item' : 'Add Item'}
                         className="mt-4"
-                        onPress={() =>
-                          newItemForm.handleSubmit(() => {
-                            if (editItem !== '') {
-                              // implement update logic here if needed
-                              // e.g., updateInventoryItem(editItem, newItemForm.getValues());
-                              console.log(editItem, newItemForm.getValues());
-                            } else {
-                              onAddNewItemPress();
+                        onPress={newItemForm.handleSubmit((data) => {
+                          if (editItem !== '') {
+                            // Check duplicate itemId only if changed
+                            const isDuplicate =
+                              data.itemId !== editItem &&
+                              inventoryItems.some((i) => i.itemId === data.itemId);
+
+                            if (isDuplicate) {
+                              newItemForm.setError('itemId', {
+                                type: 'manual',
+                                message: 'Item ID already exists.',
+                              });
+                              return;
                             }
+
+                            // Update item
+                            updateInventoryItem(editItem, {
+                              ...data,
+                              quantity: data.quantity,
+                              price: data.price,
+                              sellPrice: data.sellPrice,
+                            });
+
+                            newItemForm.reset();
                             setEditItem('');
-                          })()
-                        }
+                            setAddNewItem(false);
+                          } else {
+                            // Add new item logic
+                            const isDuplicate = inventoryItems.some(
+                              (i) => i.itemId === data.itemId
+                            );
+                            if (isDuplicate) {
+                              newItemForm.setError('itemId', {
+                                type: 'manual',
+                                message: 'Item ID already exists.',
+                              });
+                              return;
+                            }
+
+                            addInventoryItem(data);
+                            newItemForm.reset();
+                            setAddNewItem(false);
+                          }
+                        })}
                       />
                     </View>
                   </TouchableWithoutFeedback>
